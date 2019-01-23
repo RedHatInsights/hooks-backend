@@ -13,7 +13,6 @@
 !/log/.keep
 !/tmp/.keep
 
-
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
@@ -21,3 +20,6 @@
 
 .ruby-version
 Gemfile.lock
+
+/config/database.yml
+/db/schema.rb
