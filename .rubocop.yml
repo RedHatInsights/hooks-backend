@@ -1,4 +1,12 @@
 inherit_from: .rubocop_todo.yml
 
+AllCops:
+  Excludes:
+    - db/schema.rb
+
+Style/FileName:
+  Exclude:
+    - 'config/initializers/rswag-api.rb'
+
 Style/HashSyntax:
   Enabled: false
