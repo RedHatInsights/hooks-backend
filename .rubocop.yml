@@ -3,6 +3,7 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   Excludes:
     - db/schema.rb
+    - db/migrate/*
 
 Style/Documentation:
   Enabled: false
