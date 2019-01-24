@@ -18,13 +18,3 @@ Metrics/LineLength:
 Style/ClassAndModuleChildren:
   Exclude:
     - 'test/test_helper.rb'
-
-# Offense count: 4
-Style/Documentation:
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
-    - 'app/models/app.rb'
-    - 'app/models/application_record.rb'
-    - 'config/application.rb'
-    - 'db/migrate/20190123110912_create_apps.rb'

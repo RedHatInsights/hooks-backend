@@ -4,6 +4,9 @@ AllCops:
   Excludes:
     - db/schema.rb
 
+Style/Documentation:
+  Enabled: false
+
 Style/FileName:
   Exclude:
     - 'config/initializers/rswag-api.rb'
