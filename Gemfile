@@ -38,6 +38,8 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot'
   gem 'minitest-reporters'
+  gem 'minitest', '~> 5.1'
+  gem 'minitest-spec-rails', '~> 5.3'
   gem 'mocha'
   gem 'pry'
   gem 'rspec-rails'
