@@ -6,6 +6,9 @@ require 'minitest/reporters'
 require 'minitest/mock'
 require 'mocha/minitest'
 
+FactoryBot.definition_file_paths = ["#{Rails.root}/test/factories"]
+FactoryBot.find_definitions
+
 Minitest::Reporters.use!(
   Minitest::Reporters::ProgressReporter.new,
   ENV,
@@ -20,7 +23,5 @@ Shoulda::Matchers.configure do |config|
 end
 
 class ActiveSupport::TestCase
-  fixtures :all
-
   self.use_transactional_tests = true
 end
