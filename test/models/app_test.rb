@@ -8,4 +8,6 @@ class AppTest < ActiveSupport::TestCase
 
   should validate_uniqueness_of :name
   should validate_presence_of :name
+
+  should have_many(:event_types).dependent(:destroy)
 end
