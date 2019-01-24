@@ -7,4 +7,5 @@ class AccountTest < ActiveSupport::TestCase
     FactoryBot.create(:account)
   end
   should have_many :users
+  should have_many :endpoints
 end
