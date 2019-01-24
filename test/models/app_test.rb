@@ -10,4 +10,7 @@ class AppTest < ActiveSupport::TestCase
   should validate_presence_of :name
 
   should have_many(:event_types).dependent(:destroy)
+
+  should have_many(:app_filters)
+  should have_many(:filters).through(:app_filters)
 end

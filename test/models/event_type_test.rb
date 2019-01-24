@@ -8,4 +8,7 @@ class EventTypeTest < ActiveSupport::TestCase
   should belong_to(:app)
   should validate_presence_of(:name)
   should validate_uniqueness_of(:name).scoped_to(:app_id)
+
+  should have_many(:event_type_filters)
+  should have_many(:filters).through(:event_type_filters)
 end

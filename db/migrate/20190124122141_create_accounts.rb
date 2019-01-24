@@ -2,6 +2,8 @@
 
 class CreateAccounts < ActiveRecord::Migration[5.2]
   def change
+    enable_extension 'pgcrypto'
+
     create_table :accounts, id: :uuid do |t|
       t.string :account_id
       t.string :account_number
