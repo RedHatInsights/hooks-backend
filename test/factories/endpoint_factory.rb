@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :endpoint, :class => ::Endpoint do
     sequence(:name) { |i| "endpoint#{i}" }

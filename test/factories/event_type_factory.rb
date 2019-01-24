@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :event_type, :class => ::EventType do
     sequence(:name) { |i| "event_type-#{i}" }

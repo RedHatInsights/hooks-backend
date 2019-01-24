@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Endpoint < ApplicationRecord
   belongs_to :account
   validates_associated :account

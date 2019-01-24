@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FilterTest < ActiveSupport::TestCase
   should have_many :endpoint_filters
   should have_many(:endpoints).through(:endpoint_filters)
