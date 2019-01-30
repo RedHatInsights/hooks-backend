@@ -25,7 +25,7 @@ module Builder
       args.each { |arg| severity(arg) }
     end
 
-    def build!(arg = nil)
+    def build!
       filter = ::Filter.new
       filter.save!
 
@@ -36,7 +36,7 @@ module Builder
     end
 
     def self.build!
-      builder = self.new
+      builder = new
       yield builder
       builder.build!
     end
@@ -57,7 +57,7 @@ module Builder
         @name = ANY
       end
 
-      def build!(filter)
+      def build!(_filter)
         raise NotImplementedError
       end
     end
@@ -65,7 +65,7 @@ module Builder
     class Application < Common
       def initialize(name = nil, *event_types)
         super(name)
-        event_types.each { |type| self.event_type type }
+        event_types.each { |type| event_type type }
       end
 
       def event_type(name = nil)
