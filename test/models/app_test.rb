@@ -29,7 +29,7 @@ class AppBuilderTest < ActiveSupport::TestCase
   end
 
   it 'build an application with event types' do
-    event_types = %w(something something-else yet-something-else)
+    event_types = %w[something something-else yet-something-else]
     app = Builder::App.build! do |b|
       b.name name
       event_types.each { |type| b.event_type type }

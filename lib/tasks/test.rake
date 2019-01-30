@@ -13,5 +13,5 @@ end
 
 task :rubocop do
   require 'rubocop'
-  RuboCop::CLI.new.run(%w(--rails))
+  RuboCop::CLI.new.run(%w[--rails])
 end

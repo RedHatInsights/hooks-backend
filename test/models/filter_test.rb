@@ -23,7 +23,7 @@ class FilterTest < ActiveSupport::TestCase
   let(:msg) do
     { :application => app.name, :type => app.event_types.first.name, :severity => 'critical' }
   end
-  let(:event_types) { %w(something something-else yet-something-else) }
+  let(:event_types) { %w[something something-else yet-something-else] }
   let(:app_name) { 'filter-test-app-1' }
   let(:app) do
     Builder::App.build! do |a|
