@@ -11,9 +11,11 @@ module Builder
       @event_types << name
     end
 
+    # rubocop:disable Style/TrivialAccessors
     def name(name)
       @name = name
     end
+    # rubocop:enable Style/TrivialAccessors
 
     def build!
       app = ::App.new(:name => @name)

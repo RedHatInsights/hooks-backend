@@ -49,9 +49,11 @@ module Builder
         @children = []
       end
 
+      # rubocop:disable Style/TrivialAccessors
       def name(name)
         @name = name
       end
+      # rubocop:enable Style/TrivialAccessors
 
       def any!
         @name = ANY

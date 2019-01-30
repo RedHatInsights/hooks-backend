@@ -8,7 +8,7 @@ require 'minitest/reporters'
 require 'minitest/mock'
 require 'mocha/minitest'
 
-FactoryBot.definition_file_paths = ["#{Rails.root}/test/factories"]
+FactoryBot.definition_file_paths = [Rails.root.join('test', 'factories')]
 FactoryBot.find_definitions
 
 Minitest::Reporters.use!(

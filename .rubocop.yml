@@ -4,7 +4,15 @@ AllCops:
   Excludes:
     - db/schema.rb
     - db/migrate/*
+    - bin/bundle
+    - bin/rails
+    - bin/rake
+    - bin/setup
+    - bin/update
   TargetRubyVersion: 2.3
+
+Lint/ShadowingOuterLocalVariable:
+  Enabled: false
 
 Style/Documentation:
   Enabled: false

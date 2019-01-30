@@ -15,6 +15,7 @@ class Filter < ApplicationRecord
   has_many :event_types, :through => :event_type_filters, :dependent => :destroy
 
   class << self
+    # rubocop:disable Metrics/MethodLength
     def matching_message(message)
       sql = <<~SQL
         SELECT filters.* FROM filters
@@ -41,5 +42,6 @@ class Filter < ApplicationRecord
       SQL
       Filter.find_by_sql sanitize_sql_array([sql, message[:application], message[:type], message[:severity]])
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end
