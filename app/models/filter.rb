@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Filter < ApplicationRecord
-  has_many :accounts, :through => :endpoints
+  belongs_to :account
+  validates_associated :account
 
   has_many :endpoint_filters, :dependent => :destroy
   has_many :endpoints, :through => :endpoint_filters

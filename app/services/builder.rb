@@ -25,8 +25,9 @@ module Builder
       args.each { |arg| severity(arg) }
     end
 
-    def build!
+    def build!(account)
       filter = ::Filter.new
+      filter.account = account
       filter.save!
 
       [@apps, @severities].each do |group|
@@ -35,10 +36,10 @@ module Builder
       filter
     end
 
-    def self.build!
+    def self.build!(account)
       builder = new
       yield builder
-      builder.build!
+      builder.build!(account)
     end
 
     class Common

@@ -11,6 +11,9 @@
 app_count = ENV['APP_COUNT'] || 100
 type_count = ENV['TYPE_COUNT'] || 10
 
+account = Account.new
+account.save!
+
 ActiveRecord::Base.transaction do
   app_count.times do |app_id|
     app = Builder::App.build! do |app|
@@ -21,7 +24,7 @@ ActiveRecord::Base.transaction do
       end
     end
 
-    Builder::Filter.build! do |filter|
+    Builder::Filter.build!(account) do |filter|
       filter.application(app.name)
             .event_types(app.event_types.pluck(:name))
     end

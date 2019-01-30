@@ -3,7 +3,6 @@
 class FilterTest < ActiveSupport::TestCase
   should have_many :endpoint_filters
   should have_many(:endpoints).through(:endpoint_filters)
-  should have_many(:accounts).through(:endpoints)
 
   should have_many :severity_filters
 
@@ -13,6 +12,8 @@ class FilterTest < ActiveSupport::TestCase
   should have_many(:event_type_filters)
   should have_many(:event_types).through(:event_type_filters)
 
+  should belong_to(:account)
+
   before do
     Builder::App.build! do |a|
       a.name 'not_useful'
@@ -20,6 +21,7 @@ class FilterTest < ActiveSupport::TestCase
     end
   end
 
+  let(:account) { FactoryBot.create(:account) }
   let(:msg) do
     { :application => app.name, :type => app.event_types.first.name, :severity => 'critical' }
   end
@@ -33,12 +35,12 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   it 'allows matching by application name, event type and severity' do
-    Builder::Filter.build! do |b|
+    Builder::Filter.build!(account) do |b|
       b.application(app.name, app.event_types.first.name)
       b.severity 'low'
     end
 
-    filter = Builder::Filter.build! do |b|
+    filter = Builder::Filter.build!(account) do |b|
       b.application app.name, app.event_types.first.name
       b.severities 'critical', 'high'
     end
@@ -47,7 +49,7 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   it 'allows matching by application name, event type and severity wildcard' do
-    filter = Builder::Filter.build! do |b|
+    filter = Builder::Filter.build!(account) do |b|
       b.application app.name, app.event_types.first.name
       b.severity.any!
     end
@@ -56,7 +58,7 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   it 'allows matching by application name, event type wildcard and severity wildcard' do
-    filter = Builder::Filter.build! do |b|
+    filter = Builder::Filter.build!(account) do |b|
       b.application(app.name).event_type.any!
       b.severities 'critical', 'high'
     end
@@ -65,7 +67,7 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   it 'allows matching by application name wildcard, event type wildcard and severity' do
-    filter = Builder::Filter.build! do |b|
+    filter = Builder::Filter.build!(account) do |b|
       b.application.any!
       b.severities 'critical', 'high'
     end

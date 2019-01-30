@@ -7,6 +7,8 @@ class User < ApplicationRecord
   belongs_to :account
   validates_associated :account
 
+  has_many :filters, :through => :account
+
   class << self
     def current
       Thread.current[:user]

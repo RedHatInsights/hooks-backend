@@ -8,4 +8,5 @@ class AccountTest < ActiveSupport::TestCase
   end
   should have_many :users
   should have_many :endpoints
+  should have_many :filters
 end

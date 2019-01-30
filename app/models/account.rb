@@ -4,4 +4,5 @@
 class Account < ApplicationRecord
   has_many :users, dependent: :nullify
   has_many :endpoints, :dependent => :destroy
+  has_many :filters, :dependent => :destroy
 end

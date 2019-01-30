@@ -6,6 +6,7 @@ class UserTest < ActiveSupport::TestCase
   should validate_uniqueness_of(:username).scoped_to(:account_id)
   should validate_presence_of :username
   should belong_to :account
+  should have_many(:filters).through(:account)
 
   test 'can be created from a X-RH-IDENTITY JSON' do
     Account.create(account_number: '1333331')
