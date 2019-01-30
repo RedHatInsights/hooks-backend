@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventType < ApplicationRecord
   belongs_to :app
   validates_associated :app

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EndpointFilter < ApplicationRecord
   belongs_to :endpoint
   validates_associated :endpoint

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Filter < ApplicationRecord
   has_many :accounts, :through => :endpoints
 

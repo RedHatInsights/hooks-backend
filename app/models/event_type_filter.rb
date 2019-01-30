@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventTypeFilter < ApplicationRecord
   belongs_to :event_type, :optional => true
 

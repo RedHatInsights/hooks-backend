@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AppFilter < ApplicationRecord
   belongs_to :app, :optional => true
 
