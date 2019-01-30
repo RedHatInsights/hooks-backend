@@ -73,6 +73,10 @@ module Builder
         builder
       end
 
+      def event_types(types)
+        types.each { |type| event_type(type) }
+      end
+
       def build!(filter)
         if @name == ANY
           filter.app_filters.create
