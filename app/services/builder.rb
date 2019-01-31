@@ -5,6 +5,7 @@ module Builder
     def initialize
       @apps = []
       @severities = []
+      @enabled = true
     end
 
     def application(name = nil, *event_types)
@@ -12,6 +13,10 @@ module Builder
       @apps << builder
       yield builder if block_given?
       builder
+    end
+
+    def disabled!
+      @enabled = false
     end
 
     def severity(name = nil)
@@ -26,7 +31,7 @@ module Builder
     end
 
     def build!(account)
-      filter = ::Filter.new
+      filter = ::Filter.new(:enabled => @enabled)
       filter.account = account
       filter.save!
 
@@ -58,6 +63,7 @@ module Builder
 
       def any!
         @name = ANY
+        self
       end
 
       def build!(_filter)
@@ -83,24 +89,20 @@ module Builder
       end
 
       def build!(filter)
-        if @name == ANY
-          filter.app_filters.create
-        else
-          app = ::App.find_by(:name => @name)
-          filter.apps << app
-          @children.each { |builder| builder.build!(filter, app) }
-        end
+        return if @name == ANY
+
+        app = ::App.find_by(:name => @name)
+        filter.apps << app
+        @children.each { |builder| builder.build!(filter, app) }
       end
     end
 
     class EventType < Common
       def build!(filter, app)
-        if @name == ANY
-          filter.event_type_filters.create
-        else
-          filter.event_types << app.event_types.where(:name => @name).first
-          @children.each { |builder| builder.build!(filter) }
-        end
+        return if @name == ANY
+
+        filter.event_types << app.event_types.where(:name => @name).first
+        @children.each { |builder| builder.build!(filter) }
       end
     end
 
@@ -108,11 +110,7 @@ module Builder
       alias severity name
 
       def build!(filter)
-        if @name == ANY
-          filter.severity_filters.create
-        else
-          filter.severity_filters.create(:severity => @name)
-        end
+        filter.severity_filters.create(:severity => @name) if @name != ANY
       end
     end
   end

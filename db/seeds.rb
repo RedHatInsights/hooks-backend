@@ -27,6 +27,7 @@ ActiveRecord::Base.transaction do
     Builder::Filter.build!(account) do |filter|
       filter.application(app.name)
             .event_types(app.event_types.pluck(:name))
+      filter.severity.any!
     end
   end
 end

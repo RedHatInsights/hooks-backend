@@ -46,6 +46,9 @@ class FilterTest < ActiveSupport::TestCase
     end
 
     Filter.matching_message(msg).must_equal [filter]
+    Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:type => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:severity => 'missing')).must_equal []
   end
 
   it 'allows matching by application name, event type and severity wildcard' do
@@ -55,24 +58,50 @@ class FilterTest < ActiveSupport::TestCase
     end
 
     Filter.matching_message(msg).must_equal [filter]
+    Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:type => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:severity => 'missing')).must_equal [filter]
   end
 
   it 'allows matching by application name, event type wildcard and severity wildcard' do
     filter = Builder::Filter.build!(account) do |b|
       b.application(app.name).event_type.any!
-      b.severities 'critical', 'high'
+      b.severity.any!
     end
 
     Filter.matching_message(msg).must_equal [filter]
+    Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:type => 'missing')).must_equal [filter]
+    Filter.matching_message(msg.merge(:severity => 'missing')).must_equal [filter]
   end
 
   it 'allows matching by application name wildcard, event type wildcard and severity' do
     filter = Builder::Filter.build!(account) do |b|
       b.application.any!
+       .event_type.any!
       b.severities 'critical', 'high'
     end
 
     Filter.matching_message(msg).must_equal [filter]
+    Filter.matching_message(msg.merge(:application => 'missing')).must_equal [filter]
+    Filter.matching_message(msg.merge(:type => 'missing')).must_equal [filter]
+    Filter.matching_message(msg.merge(:severity => 'missing')).must_equal []
+  end
+
+  it 'does not allow matching by disabled filters' do
+    filter = Builder::Filter.build!(account) do |b|
+      b.application do |a|
+        a.any!
+        a.event_type.any!
+      end
+    end
+
+    Filter.matching_message(msg).must_equal [filter]
+
+    filter.enabled = false
+    filter.save!
+
+    Filter.matching_message(msg).must_equal []
   end
 end
 

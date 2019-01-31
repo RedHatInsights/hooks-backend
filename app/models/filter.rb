@@ -16,33 +16,13 @@ class Filter < ApplicationRecord
   has_many :event_types, :through => :event_type_filters, :dependent => :destroy, :inverse_of => :filters
 
   class << self
-    # rubocop:disable Metrics/MethodLength
     def matching_message(message)
-      sql = <<~SQL
-        SELECT filters.* FROM filters
-          LEFT OUTER JOIN app_filters
-            ON app_filters.filter_id = filters.id
-          LEFT OUTER JOIN event_type_filters
-            ON event_type_filters.filter_id = filters.id
-          LEFT OUTER JOIN severity_filters
-            ON severity_filters.filter_id = filters.id
-          LEFT OUTER JOIN apps
-            ON apps.id = app_filters.app_id
-          LEFT OUTER JOIN event_types
-            ON event_types.id = event_type_filters.event_type_id AND event_types.app_id = apps.id
-          WHERE
-            (app_filters.app_id IS NULL
-              OR
-              (apps.name = ?
-                AND
-                (event_type_filters.event_type_id IS NULL
-                  OR event_types.name = ?)))
-             AND (severity_filters.filter_id IS NOT NULL
-                   AND (severity_filters.severity IN (?)
-                         OR severity_filters.severity IS NULL))
-      SQL
-      Filter.find_by_sql sanitize_sql_array([sql, message[:application], message[:type], message[:severity]])
+      Filter.left_outer_joins(:apps, :event_types, :severity_filters)
+            .where(:enabled => true)
+            .merge(App.where(:name => [message[:application], nil]))
+            .merge(EventType.where(:name => [message[:type], nil]))
+            .merge(SeverityFilter.where(:severity => [message[:severity], nil]))
+            .distinct
     end
-    # rubocop:enable Metrics/MethodLength
   end
 end

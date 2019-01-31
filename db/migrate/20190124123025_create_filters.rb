@@ -1,6 +1,7 @@
 class CreateFilters < ActiveRecord::Migration[5.2]
   def change
     create_table :filters do |t|
+      t.boolean :enabled, :default => true
       t.timestamps
     end
 
@@ -19,7 +20,7 @@ class CreateFilters < ActiveRecord::Migration[5.2]
   def generate_join_table(*tables)
     create_table("#{tables.join('_')}s") do |t|
       tables.each do |table_name|
-        t.references table_name
+        t.references table_name, :null => false
       end
       t.index tables.map { |table| "#{table}_id" }
     end
