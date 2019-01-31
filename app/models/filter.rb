@@ -5,15 +5,15 @@ class Filter < ApplicationRecord
   validates_associated :account
 
   has_many :endpoint_filters, :dependent => :destroy
-  has_many :endpoints, :through => :endpoint_filters
+  has_many :endpoints, :through => :endpoint_filters, :inverse_of => :filters
 
   has_many :severity_filters, :dependent => :destroy
 
   has_many :app_filters, :dependent => :destroy
-  has_many :apps, :through => :app_filters, :dependent => :destroy
+  has_many :apps, :through => :app_filters, :dependent => :destroy, :inverse_of => :filters
 
   has_many :event_type_filters, :dependent => :destroy
-  has_many :event_types, :through => :event_type_filters, :dependent => :destroy
+  has_many :event_types, :through => :event_type_filters, :dependent => :destroy, :inverse_of => :filters
 
   class << self
     # rubocop:disable Metrics/MethodLength

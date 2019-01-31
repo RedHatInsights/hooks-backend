@@ -6,5 +6,5 @@ class App < ApplicationRecord
   has_many :event_types, :dependent => :destroy
 
   has_many :app_filters, :dependent => :destroy
-  has_many :filters, :through => :app_filters
+  has_many :filters, :through => :app_filters, :inverse_of => :filters
 end
