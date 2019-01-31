@@ -1,5 +1,9 @@
 # README
 
+## Usage
+
+The main entry point to send messages is a predefined Kafka topic: `notifications.outbox`. Messages from that topic would be processed by notifications backend and sent to different services according to user's preferences.
+
 ## Architecture
 
 This is a microservice responsible for dispatching preformatted notifications to
@@ -33,3 +37,52 @@ send and _endpoint_ properties.
 The job is responsible to initiate a web request with _endpoint_'s details,
 format the _message_ to fit into _endpoint_'s API and make sure the message has
 arrived to the recipient (_endpoint_).
+
+## Development setup
+
+Start from cloning this repository
+
+``` sh
+git clone https://github.com/RedHatInsights/notifications-backend.git
+```
+
+Install all relevant gems
+
+``` sh
+bundle install
+```
+
+### Spin up docker containers
+Make sure you have working docker and [docker-compose](https://docs.docker.com/compose/install/) already set up.
+
+From project's root you can simply run
+
+``` sh
+bin/setup_dev
+```
+it will spin up zookeper, kafka and redis containers ready and waiting for connections.
+
+For more details look at `docker/docker-compose.yml`.
+
+
+### Start listeners
+
+To start kafka listener run
+
+``` sh
+racecar JobCreatorConsumer
+```
+
+To start resque job consumer run
+``` sh
+QUEUE=unsorted_notifications rake environment resque:work
+```
+
+### Inject test messages
+
+There is a rake task to inject messages into a dev setup:
+
+``` sh
+rake notifications:send
+```
+add `--help` to see more options.
