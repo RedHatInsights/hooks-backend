@@ -45,9 +45,6 @@ group :development, :test do
   gem 'rubocop'
   gem 'shoulda-context'
   gem 'shoulda-matchers'
-
-  #enable quick testing (in-memory db)
-  gem 'sqlite3'
 end
 
 group :development do
