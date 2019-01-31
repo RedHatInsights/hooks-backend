@@ -2,7 +2,6 @@
 
 class Endpoint < ApplicationRecord
   belongs_to :account
-  validates_associated :account
 
   has_many :endpoint_filters, :dependent => :destroy
   has_many :filters, :through => :endpoint_filters, :dependent => :destroy

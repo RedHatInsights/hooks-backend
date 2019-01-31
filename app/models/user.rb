@@ -5,7 +5,6 @@ class User < ApplicationRecord
   validates :username, :uniqueness => { :scope => :account_id }, :presence => true
 
   belongs_to :account
-  validates_associated :account
 
   has_many :filters, :through => :account
 

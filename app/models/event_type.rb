@@ -2,7 +2,6 @@
 
 class EventType < ApplicationRecord
   belongs_to :app
-  validates_associated :app
 
   has_many :event_type_filters, :dependent => :destroy
   has_many :filters, :through => :event_type_filters
