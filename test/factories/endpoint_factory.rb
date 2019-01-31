@@ -6,9 +6,7 @@ FactoryBot.define do
     sequence(:url) { |i| "https://something.somewhere.com?foo=#{i}" }
 
     trait :with_account do
-      after(:build) do |instance|
-        instance.account = FactoryBot.create(:account)
-      end
+      association :account, :factory => :account
     end
   end
 end

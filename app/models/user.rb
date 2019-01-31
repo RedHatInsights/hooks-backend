@@ -24,7 +24,6 @@ class User < ApplicationRecord
         :account => Account.find_by(
           :account_number => identity['account_number']
         ),
-        # :redhat_id => identity['id'] || identity['user_id'],
         :redhat_org_id => (identity['internal']['org_id'] if identity['internal']),
         :email => identity['user']['email'],
         :first_name => identity['user']['first_name'],

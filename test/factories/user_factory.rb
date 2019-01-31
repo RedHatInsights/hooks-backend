@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :user, :class => ::User do
     sequence(:username) { |i| "testuser#{i}@redhat.com" }
-    sequence(:account_id) { |i| format('%07d', i) }
     sequence(:redhat_id) { |i| "rh#{i}" }
+    association :account, :factory => :account
   end
 end

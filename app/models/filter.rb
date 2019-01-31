@@ -18,7 +18,7 @@ class Filter < ApplicationRecord
   class << self
     def matching_message(message)
       Filter.left_outer_joins(:apps, :event_types, :severity_filters)
-            .where(:enabled => true)
+            .where(:enabled => true, :account_id => message[:account_id])
             .merge(App.where(:name => [message[:application], nil]))
             .merge(EventType.where(:name => [message[:type], nil]))
             .merge(SeverityFilter.where(:severity => [message[:severity], nil]))

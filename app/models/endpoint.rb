@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Endpoint < ApplicationRecord
-  belongs_to :account
+  belongs_to :account, :inverse_of => :endpoints
 
   has_many :endpoint_filters, :dependent => :destroy
   has_many :filters, :through => :endpoint_filters, :dependent => :destroy, :inverse_of => :endpoints

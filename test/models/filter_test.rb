@@ -23,7 +23,8 @@ class FilterTest < ActiveSupport::TestCase
 
   let(:account) { FactoryBot.create(:account) }
   let(:msg) do
-    { :application => app.name, :type => app.event_types.first.name, :severity => 'critical' }
+    { :application => app.name, :type => app.event_types.first.name,
+      :severity => 'critical', :account_id => account.id }
   end
   let(:event_types) { %w[something something-else yet-something-else] }
   let(:app_name) { 'filter-test-app-1' }
