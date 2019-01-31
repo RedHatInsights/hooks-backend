@@ -19,6 +19,7 @@
 /config/master.key
 
 .ruby-version
+.ruby-gemset
 Gemfile.lock
 
 /config/database.yml

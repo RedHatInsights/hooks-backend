@@ -45,11 +45,26 @@ group :development, :test do
   gem 'rubocop'
   gem 'shoulda-context'
   gem 'shoulda-matchers'
+
+  #enable quick testing (in-memory db)
+  gem 'sqlite3'
 end
 
 group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem "pry-rails"
+  gem "pry-byebug"
+  gem "pry-doc"
+  gem "pry-stack_explorer"
+  gem "pry-rescue"
+
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+# Active job adapter
+gem 'resque'
+
+# Kafka connector
+gem 'racecar'
