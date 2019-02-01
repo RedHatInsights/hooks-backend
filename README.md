@@ -86,3 +86,7 @@ There is a rake task to inject messages into a dev setup:
 rake notifications:send
 ```
 add `--help` to see more options.
+
+### PG extensions
+
+This project uses UUID-typed columns, which relies on `pgcrypto` extension which may not be shipped with PostgreSQL by default. On Fedora this extension lives in the `postgresql-contrib` package. Official postgres docker image come bundled with this extension.
