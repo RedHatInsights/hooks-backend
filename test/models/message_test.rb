@@ -9,7 +9,8 @@ class MessageTest < ActiveSupport::TestCase
       event_type: 'event_type',
       severity: 'severity',
       timestamp: 'timestamp',
-      message: 'message'
+      message: 'message',
+      account_id: 'uuid'
     }
 
     message = Message.new(properties)
@@ -19,6 +20,7 @@ class MessageTest < ActiveSupport::TestCase
     assert_equal 'severity', message.severity
     assert_equal 'timestamp', message.timestamp
     assert_equal 'message', message.message
+    assert_equal 'uuid', message.account_id
   end
 
   test 'from_json' do
@@ -27,7 +29,8 @@ class MessageTest < ActiveSupport::TestCase
       event_type: 'event_type',
       severity: 'severity',
       timestamp: 'timestamp',
-      message: 'message'
+      message: 'message',
+      account_id: 'uuid'
     }.to_json
 
     message = Message.from_json(properties)
@@ -37,5 +40,36 @@ class MessageTest < ActiveSupport::TestCase
     assert_equal 'severity', message.severity
     assert_equal 'timestamp', message.timestamp
     assert_equal 'message', message.message
+    assert_equal 'uuid', message.account_id
+  end
+
+  test 'to_h' do
+    properties = {
+      application: 'application',
+      event_type: 'event_type',
+      severity: 'severity',
+      timestamp: 'timestamp',
+      message: 'message',
+      account_id: 'uuid'
+    }
+    message = Message.new(properties)
+
+    assert_equal properties, message.to_h
+  end
+
+  test 'merge' do
+    properties = {
+      application: 'application',
+      event_type: 'event_type',
+      severity: 'severity',
+      timestamp: 'timestamp',
+      message: 'message',
+      account_id: 'uuid'
+    }
+    message = Message.new(properties)
+
+    properties.each do |key, _value|
+      assert_equal properties.merge(key => 'custom_value'), message.merge(key => 'custom_value').to_h
+    end
   end
 end

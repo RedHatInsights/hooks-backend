@@ -17,10 +17,10 @@ class Filter < ApplicationRecord
 
   scope(:matching_message, lambda do |message|
     left_outer_joins(:apps, :event_types, :severity_filters)
-      .where(:enabled => true, :account_id => message[:account_id])
-      .merge(App.where(:name => [message[:application], nil]))
-      .merge(EventType.where(:name => [message[:type], nil]))
-      .merge(SeverityFilter.where(:severity => [message[:severity], nil]))
+      .where(:enabled => true, :account_id => message.account_id)
+      .merge(App.where(:name => [message.application, nil]))
+      .merge(EventType.where(:name => [message.event_type, nil]))
+      .merge(SeverityFilter.where(:severity => [message.severity, nil]))
       .distinct
   end)
 end

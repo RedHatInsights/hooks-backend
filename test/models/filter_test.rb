@@ -23,8 +23,9 @@ class FilterTest < ActiveSupport::TestCase
 
   let(:account) { FactoryBot.create(:account) }
   let(:msg) do
-    { :application => app.name, :type => app.event_types.first.name,
-      :severity => 'critical', :account_id => account.id }
+    Message.new :application => app.name, :event_type => app.event_types.first.name,
+                :severity => 'critical', :account_id => account.id, :timestamp => Time.zone.now,
+                :message => 'hello'
   end
   let(:event_types) { %w[something something-else yet-something-else] }
   let(:app_name) { 'filter-test-app-1' }
@@ -48,7 +49,7 @@ class FilterTest < ActiveSupport::TestCase
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
-    Filter.matching_message(msg.merge(:type => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:event_type => 'missing')).must_equal []
     Filter.matching_message(msg.merge(:severity => 'missing')).must_equal []
   end
 
@@ -60,7 +61,7 @@ class FilterTest < ActiveSupport::TestCase
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
-    Filter.matching_message(msg.merge(:type => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:event_type => 'missing')).must_equal []
     Filter.matching_message(msg.merge(:severity => 'missing')).must_equal [filter]
   end
 
@@ -72,7 +73,7 @@ class FilterTest < ActiveSupport::TestCase
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
-    Filter.matching_message(msg.merge(:type => 'missing')).must_equal [filter]
+    Filter.matching_message(msg.merge(:event_type => 'missing')).must_equal [filter]
     Filter.matching_message(msg.merge(:severity => 'missing')).must_equal [filter]
   end
 
@@ -85,7 +86,7 @@ class FilterTest < ActiveSupport::TestCase
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal [filter]
-    Filter.matching_message(msg.merge(:type => 'missing')).must_equal [filter]
+    Filter.matching_message(msg.merge(:event_type => 'missing')).must_equal [filter]
     Filter.matching_message(msg.merge(:severity => 'missing')).must_equal []
   end
 
