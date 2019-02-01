@@ -35,7 +35,8 @@ namespace :notifications do
     options[:severity] ||= 'Info'
     options[:message] ||= 'Hello world!'
 
-    kafka = Kafka.new(['localhost:29092'], client_id: 'test-push')
+    host = ENV['KAFKA_BROKER_HOST'] || 'localhost'
+    kafka = Kafka.new(["#{host}:29092"], client_id: 'test-push')
     kafka.deliver_message(options.to_json, topic: Notifications::INCOMING_TOPIC)
   end
   # rubocop:enable Metrics/BlockLength

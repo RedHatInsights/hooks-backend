@@ -5,7 +5,7 @@ common: &common
 development:
   <<: *common
   brokers:
-    - localhost:29092
+    - <%= ENV['KAFKA_BROKER_HOST'] || 'localhost' %>:29092
 
 test:
   <<: *common

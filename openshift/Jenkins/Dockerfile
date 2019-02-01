@@ -16,13 +16,11 @@ ${RUBY_SCL} \
 ${RUBY_SCL}-ruby-devel \
 ${RUBY_SCL}-rubygem-rake \
 ${RUBY_SCL}-rubygem-bundler \
-openscap \
 gcc-c++ \
 make \
 libxml2-devel \
 patch \
-postgresql-devel \
-qt5-qtwebkit-devel" && \
+postgresql-devel" && \
     yum install -y --setopt=tsflags=nodocs ${INSTALL_PKGS} && \
     yum clean all -y && \
     rpm -V ${INSTALL_PKGS}
