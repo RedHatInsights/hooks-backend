@@ -7,6 +7,9 @@ class JobCreatorConsumer < Racecar::Consumer
   subscribes_to Notifications::INCOMING_TOPIC
 
   def process(kafka_message)
+    message_value = kafka_message.value
+    Rails.logger.debug("Received message: #{message_value}")
+
     message = Message.from_json(kafka_message.value)
 
     dispatcher = Dispatcher.new(message)

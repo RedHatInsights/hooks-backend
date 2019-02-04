@@ -39,6 +39,7 @@ namespace :notifications do
     host = ENV['KAFKA_BROKER_HOST'] || 'localhost'
     kafka = Kafka.new(["#{host}:29092"], client_id: 'test-push')
     kafka.deliver_message(options.to_json, topic: Notifications::INCOMING_TOPIC)
+    Rails.logger.info("Sent message with json: #{options.to_json}")
   end
   # rubocop:enable Metrics/BlockLength
 end
