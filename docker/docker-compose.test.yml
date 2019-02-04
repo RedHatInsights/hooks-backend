@@ -9,3 +9,14 @@ services:
     command: "rake notifications:send"
     environment:
       KAFKA_BROKER_HOST: kafka
+
+  notifications-topic-clear:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.rails
+    volumes:
+      - ..:/app
+    command: racecar NullConsumer
+    environment:
+      KAFKA_BROKER_HOST: kafka
+      RACECAR_GROUP_ID: job-creator-consumer
