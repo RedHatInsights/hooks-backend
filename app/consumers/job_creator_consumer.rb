@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'lib/notifications'
-require 'lib/dispatcher'
+require 'notifications'
+require 'dispatcher'
 
 class JobCreatorConsumer < Racecar::Consumer
   subscribes_to Notifications::INCOMING_TOPIC
