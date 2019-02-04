@@ -24,8 +24,8 @@ namespace :notifications do
       opts.on('-s', '--severity {severity}', 'Message severity', String) do |severity|
         options[:severity] = severity
       end
-      opts.on('-a', '--app {application}', 'Application to simulate', String) do |application|
-        options[:application] = application
+      opts.on('-u', '--account_id {account_id}', 'Account_id that sends the message', String) do |account_id|
+        options[:account_id] = account_id
       end
     end.parse!
 
@@ -34,6 +34,7 @@ namespace :notifications do
     options[:timestamp] ||= Time.current
     options[:severity] ||= 'Info'
     options[:message] ||= 'Hello world!'
+    options[:account_id] ||= Account.first_or_create.id
 
     host = ENV['KAFKA_BROKER_HOST'] || 'localhost'
     kafka = Kafka.new(["#{host}:29092"], client_id: 'test-push')
