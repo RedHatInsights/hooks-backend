@@ -71,19 +71,6 @@ services:
       - kafka
       - mcom-redis
       - postgres
-  notification-send:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.rails
-    volumes:
-      - ..:/app
-    command: "rake notifications:send"
-    environment:
-      KAFKA_BROKER_HOST: kafka
-    depends_on:
-      - kafka
-      - postgres
-
   # consumer:
   #   build: ./consumer
   #   image: consumer:latest

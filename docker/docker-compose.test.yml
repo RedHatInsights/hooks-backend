@@ -1,0 +1,11 @@
+version: "3"
+services:
+  notification-send:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.rails
+    volumes:
+      - ..:/app
+    command: "rake notifications:send"
+    environment:
+      KAFKA_BROKER_HOST: kafka
