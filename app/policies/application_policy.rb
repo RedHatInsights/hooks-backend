@@ -34,6 +34,14 @@ class ApplicationPolicy
     false
   end
 
+  def match_account?
+    valid_user? && user.account_id == record.try(:account_id)
+  end
+
+  def valid_user?
+    user.present?
+  end
+
   class Scope
     attr_reader :user, :scope
 
@@ -44,6 +52,10 @@ class ApplicationPolicy
 
     def resolve
       scope.all
+    end
+
+    def only_matching_account
+      scope.where(:account_id => user.account_id)
     end
   end
 end
