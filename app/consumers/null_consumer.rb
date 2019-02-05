@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'notifications'
 
 class NullConsumer < Racecar::Consumer

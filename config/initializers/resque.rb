@@ -11,3 +11,4 @@ Resque.redis = resque_config[rails_env]
 # Logging
 Resque.logger = ::Logger.new(STDOUT)
 Resque.logger.level = Logger::INFO
+
