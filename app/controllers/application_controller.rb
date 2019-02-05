@@ -9,4 +9,8 @@ class ApplicationController < ActionController::API
     render json: { errors: 'You are not authorized to access this action.' },
            status: :forbidden
   end
+
+  def paginate(scope)
+    scope.paginate(:per_page => params[:per_page], :page => params[:page])
+  end
 end

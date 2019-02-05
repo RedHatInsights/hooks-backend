@@ -37,6 +37,10 @@ module Authentication
     request.headers['X-RH-IDENTITY']
   end
 
+  def current_user
+    User.current
+  end
+
   def identity_header_content
     @identity_header_content ||= JSON.parse(Base64.decode64(identity_header))['identity']
   end

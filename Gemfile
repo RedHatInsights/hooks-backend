@@ -35,10 +35,12 @@ gem 'rswag-ui'
 gem 'fast_jsonapi'
 
 gem 'pundit'
+gem 'will_paginate'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'capybara-webkit'
   gem 'codecov', :require => false
   gem 'factory_bot'
   gem 'minitest', '~> 5.1'
