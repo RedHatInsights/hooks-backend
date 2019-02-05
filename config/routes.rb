@@ -2,6 +2,12 @@
 
 Rails.application.routes.draw do
   post 'logger', to: 'logger_endpoint#create'
-  mount Rswag::Api::Engine => '/api-docs'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  scope '/r/insights/platform/notifications/' do
+    mount Rswag::Api::Engine => '/api-docs'
+    # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+    resources :apps, :only => [:index, :show]
+  end
+
 end
