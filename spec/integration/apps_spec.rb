@@ -29,6 +29,7 @@ def encoded_header
 end
 # rubocop:enable Metrics/MethodLength
 
+# rubocop:disable Metrics/BlockLength
 describe 'apps API' do
   path '/r/insights/platform/notifications/apps' do
     after { App.destroy_all }
@@ -57,59 +58,59 @@ describe 'apps API' do
                          type: :object,
                          properties: {
                            name: { type: :string }
-                       },
-                       relationships: {
-                         type: :object,
-                         properties: {
-                           event_types: {
-                             type: :array,
-                             items: {
-                               properties: {
-                                 type: :string,
-                                 id: :integer
+                         },
+                         relationships: {
+                           type: :object,
+                           properties: {
+                             event_types: {
+                               type: :array,
+                               items: {
+                                 properties: {
+                                   type: :string,
+                                   id: :integer
+                                 }
                                }
                              }
                            }
                          }
                        }
                      }
-                   }
-                 },
-                 included: {
-                   type: :array,
-                   items: {
-                     properties: {
-                       id: { type: :integer },
-                       type: { type: :string },
-                       attributes: {
-                         name: { type: :string }
+                   },
+                   included: {
+                     type: :array,
+                     items: {
+                       properties: {
+                         id: { type: :integer },
+                         type: { type: :string },
+                         attributes: {
+                           name: { type: :string }
+                         }
                        }
                      }
                    }
                  }
                }
-             }
         examples 'application/json' => {
           data: [
             {
               type: 'app',
               id: '3',
               attributes: {
-                name: 'notifications',
+                name: 'notifications'
               },
               relationships: {
                 event_types: {
                   data: [
-                      { id: "11", type: 'event_type' },
-                      { id: "12", type: 'event_type' }
+                    { id: '11', type: 'event_type' },
+                    { id: '12', type: 'event_type' }
                   ]
                 }
               }
             }
           ],
           included: [
-            { id: '11', type: 'event_type', attributes: { name: 'something'}},
-            { id: '12', type: 'event_type', attributes: { name: 'something-else'}},
+            { id: '11', type: 'event_type', attributes: { name: 'something' } },
+            { id: '12', type: 'event_type', attributes: { name: 'something-else' } }
           ]
         }
 
@@ -117,7 +118,7 @@ describe 'apps API' do
           FactoryBot.create(:app, :with_event_type)
           submit_request(example.metadata)
         end
-      
+
         it 'returns a valid 200 response' do |example|
           assert_response_matches_metadata(example.metadata)
         end
@@ -125,3 +126,4 @@ describe 'apps API' do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
