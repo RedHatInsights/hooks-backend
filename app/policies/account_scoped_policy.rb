@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccountScopedPolicy < ApplicationPolicy
   def index?
     match_account?
