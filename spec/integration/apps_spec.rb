@@ -41,13 +41,9 @@ describe 'apps API' do
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
 
       response '200', 'lists all apps requested' do
-        let(:blog) { { title: 'foo', content: 'bar' } }
-
         let(:'X-RH-IDENTITY') { encoded_header }
         schema type: :object,
                properties: {
-                 # meta: { '$ref' => '#/definitions/metadata' },
-                 # links: { '$ref' => '#/definitions/links' },
                  data: {
                    type: :array,
                    items: {
