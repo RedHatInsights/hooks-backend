@@ -10,7 +10,7 @@ class JobCreatorConsumer < Racecar::Consumer
     message_value = kafka_message.value
     Rails.logger.debug("Received message: #{message_value}")
 
-    message = Message.from_json(kafka_message.value)
+    message = Message.from_json(message_value)
 
     dispatcher = Dispatcher.new(message)
     dispatcher.dispatch!
