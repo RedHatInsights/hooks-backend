@@ -34,7 +34,7 @@ namespace :notifications do
     options[:timestamp] ||= Time.current
     options[:severity] ||= 'Info'
     options[:message] ||= 'Hello world!'
-    options[:account_id] ||= Account.Account.find_or_create_by(id: '00000000-0000-0000-0000-000000000000').id
+    options[:account_id] ||= Account.find_or_create_by(id: '00000000-0000-0000-0000-000000000000').id
 
     host = ENV['KAFKA_BROKER_HOST'] || 'localhost'
     kafka = Kafka.new(["#{host}:29092"], client_id: 'test-push')

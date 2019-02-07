@@ -5,8 +5,6 @@ class ApplicationController < ActionController::API
   include Pundit
   include Authentication
 
-  protect_from_forgery
-
   rescue_from Pundit::NotAuthorizedError do
     render json: { errors: 'You are not authorized to access this action.' },
            status: :forbidden

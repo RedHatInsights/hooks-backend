@@ -1,7 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  Excludes:
+  Exclude:
     - db/schema.rb
     - db/migrate/*
     - bin/bundle
@@ -17,7 +17,7 @@ Lint/ShadowingOuterLocalVariable:
 Style/Documentation:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Exclude:
     - 'config/initializers/rswag-api.rb'
 
