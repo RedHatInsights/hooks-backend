@@ -29,10 +29,53 @@ def encoded_header
 end
 # rubocop:enable Metrics/MethodLength
 
+app_spec = {
+  type: { type: :string },
+  id: { type: :string },
+  attributes: {
+    type: :object,
+    properties: {
+      name: { type: :string }
+    }
+  },
+  relationships: {
+    type: :object,
+    properties: {
+      event_types: {
+        type: :object,
+        properties: {
+          data: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                type: { type: :string },
+                id: { type: :string }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+event_type_spec = {
+  id: { type: :string },
+  type: { type: :string },
+  attributes: {
+    name: { type: :string }
+  }
+}
+
+included_event_type_spec = {
+  type: :array,
+  items: { properties: event_type_spec }
+}
+
 # rubocop:disable Metrics/BlockLength
 describe 'apps API' do
   path '/r/insights/platform/notifications/apps' do
-    after { App.destroy_all }
     get 'List all apps' do
       tags 'app'
       description 'Lists all apps requested'
@@ -47,44 +90,10 @@ describe 'apps API' do
                  data: {
                    type: :array,
                    items: {
-                     properties: {
-                       type: { type: :string },
-                       id: { type: :string },
-                       attributes: {
-                         type: :object,
-                         properties: {
-                           name: { type: :string }
-                         },
-                         relationships: {
-                           type: :object,
-                           properties: {
-                             event_types: {
-                               type: :array,
-                               items: {
-                                 properties: {
-                                   type: :string,
-                                   id: :integer
-                                 }
-                               }
-                             }
-                           }
-                         }
-                       }
-                     }
-                   },
-                   included: {
-                     type: :array,
-                     items: {
-                       properties: {
-                         id: { type: :integer },
-                         type: { type: :string },
-                         attributes: {
-                           name: { type: :string }
-                         }
-                       }
-                     }
+                     properties: app_spec
                    }
-                 }
+                 },
+                 included: included_event_type_spec
                }
         examples 'application/json' => {
           data: [
@@ -112,6 +121,57 @@ describe 'apps API' do
 
         before do |example|
           FactoryBot.create(:app, :with_event_type)
+          submit_request(example.metadata)
+        end
+
+        it 'returns a valid 200 response' do |example|
+          assert_response_matches_metadata(example.metadata)
+        end
+      end
+    end
+  end
+
+  path '/r/insights/platform/notifications/apps/{id}' do
+    get 'Show an app' do
+      tags 'app'
+      description 'Shows the requested app'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :id, :in => :path, :type => :integer
+
+      response '200', 'shows the requested app' do
+        let(:'X-RH-IDENTITY') { encoded_header }
+        schema type: :object,
+               properties: {
+                 data: app_spec,
+                 included: included_event_type_spec
+               }
+        examples 'application/json' => {
+          data: {
+            type: 'app',
+            id: '3',
+            attributes: {
+              name: 'notifications'
+            },
+            relationships: {
+              event_types: {
+                data: [
+                  { id: '11', type: 'event_type' },
+                  { id: '12', type: 'event_type' }
+                ]
+              }
+            }
+          },
+          included: [
+            { id: '11', type: 'event_type', attributes: { name: 'something' } },
+            { id: '12', type: 'event_type', attributes: { name: 'something-else' } }
+          ]
+        }
+
+        let(:id) { FactoryBot.create(:app, :with_event_type).id }
+
+        before do |example|
           submit_request(example.metadata)
         end
 

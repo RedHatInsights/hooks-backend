@@ -9,5 +9,4 @@ Rails.application.routes.draw do
 
     resources :apps, :only => %i[index show]
   end
-
 end

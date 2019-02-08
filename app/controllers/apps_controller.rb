@@ -7,7 +7,7 @@ class AppsController < ApplicationController
   end
 
   def show
-    record = authorize App.find(params[:id]).includes(:event_types)
+    record = authorize App.includes(:event_types).find(params[:id])
     render :json => AppSerializer.new(record, :include => %i[event_types event_types.name])
   end
 end
