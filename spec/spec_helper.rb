@@ -18,3 +18,49 @@ RSpec.configure do |config|
     File.delete(Rails.root.join('tmp', 'thumbnail.png')) if File.file?(Rails.root.join('tmp', 'thumbnail.png'))
   end
 end
+
+def account_number
+  '1234'
+end
+
+def account
+  Account.find_or_create_by(:account_number => account_number)
+end
+
+# Justification: It's mostly hash test data
+# rubocop:disable Metrics/MethodLength
+def security_header
+  {
+    'identity':
+    {
+      'account_number': account_number,
+      'type': 'User',
+      'user': {
+        'email': 'a@b.com',
+        'username': 'a@b.com',
+        'first_name': 'a',
+        'last_name': 'b',
+        'is_active': true,
+        'locale': 'en_US'
+      },
+      'internal': {
+        'org_id': '29329'
+      }
+    }
+  }
+end
+# rubocop:enable Metrics/MethodLength
+
+def encoded_header
+  Base64.encode64(security_header.to_json)
+end
+
+def simple_spec(hash)
+  hash.reduce({}) do |acc, (key, value)|
+    if key.is_a? Array
+      key.reduce(acc) { |key| acc.merge(key => { :type => value }) }
+    else
+      acc.merge(key => { :type => value })
+    end
+  end
+end
