@@ -9,4 +9,6 @@ class AccountTest < ActiveSupport::TestCase
   should have_many :users
   should have_many :endpoints
   should have_many :filters
+  should validate_uniqueness_of(:account_number).case_insensitive
+  should validate_presence_of(:account_number)
 end
