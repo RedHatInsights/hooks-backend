@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EndpointsController < ApplicationController
   before_action :find_endpoint, :only => %i[destroy show update]
 

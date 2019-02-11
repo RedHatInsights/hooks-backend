@@ -4,10 +4,10 @@ require 'rails_helper'
 require 'swagger_helper'
 
 endpoint_spec = {
-  attributes: simple_spec([:name, :url] => :string,
+  attributes: simple_spec(%i[name url] => :string,
                           :active => :boolean,
                           :filter_count => :integer)
-}.merge simple_spec([:type, :id] => :string)
+}.merge simple_spec(%i[type id] => :string)
 
 # endpoint_spec = {
 #   type: { type: :string },
@@ -80,8 +80,8 @@ describe 'endpoints API' do
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
-        properties: simple_spec([:name, :type, :url] => :string, :active => :boolean),
-        required: [ 'name', 'url', 'type' ]
+        properties: simple_spec(%i[name type url] => :string, :active => :boolean),
+        required: %w[name url type]
       }
 
       response '201', 'endpoint created' do
@@ -101,7 +101,7 @@ describe 'endpoints API' do
 
         run_test! do |response|
           expect(response.code).to eq('422')
-          result = JSON.load(response.body)
+          result = JSON.parse(response.body)
           expect(result['errors']['name']).to include("can't be blank")
         end
       end
@@ -162,7 +162,7 @@ describe 'endpoints API' do
       parameter name: :id, :in => :path, :type => :integer
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
-        properties: simple_spec([:name, :type, :url] => :string, :active => :boolean)
+        properties: simple_spec(%i[name type url] => :string, :active => :boolean)
       }
 
       let(:'X-RH-IDENTITY') { encoded_header }
@@ -177,9 +177,9 @@ describe 'endpoints API' do
         let(:'X-RH-IDENTITY') { encoded_header }
         let(:endpoint) { { url: 'foo', name: 'bar' } }
         schema type: :object,
-          properties: {
-          data: endpoint_spec
-        }
+               properties: {
+                 data: endpoint_spec
+               }
 
         before { |example| submit_request example.metadata }
 
