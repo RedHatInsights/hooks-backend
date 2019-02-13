@@ -90,6 +90,35 @@ describe 'filters API' do
     end
   end
 
+  path '/r/insights/platform/notifications/filters/{id}' do
+    delete 'Delete a filter' do
+      tags 'filter'
+      description 'Lists all filters associated to endpoint'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :id, in: :path, :type => :integer
+
+      response '204', 'destroys the filter' do
+        let(:'X-RH-IDENTITY') { encoded_header }
+
+        let(:id) do
+          filter = Builder::Filter.build!(account) { |f| }
+          filter.id
+        end
+
+        before do |example|
+          submit_request example.metadata
+        end
+
+        it 'returns a valid 204 response' do |example|
+          assert_response_matches_metadata(example.metadata)
+          expect(Filter.where(:id => id).all.count).to eq(0)
+        end
+      end
+    end
+  end
+
   path '/r/insights/platform/notifications/endpoints/{endpoint_id}/filters' do
     get 'List all filters associated to endpoint' do
       tags 'filter'
