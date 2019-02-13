@@ -160,7 +160,6 @@ describe 'endpoints API' do
       end
 
       response '200', 'endpoint updated' do
-        let(:'X-RH-IDENTITY') { encoded_header }
         let(:endpoint) { { url: 'foo', name: 'bar' } }
         schema type: :object,
                properties: {
@@ -175,6 +174,32 @@ describe 'endpoints API' do
           endpoint = Endpoint.find(id)
           expect(endpoint.url).to eq('foo')
           expect(endpoint.name).to eq('bar')
+        end
+      end
+    end
+
+    delete 'Destroy an endpoint' do
+      tags 'endpoint'
+      description 'Destroys the requested endpoint'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :id, :in => :path, :type => :integer
+
+      let(:'X-RH-IDENTITY') { encoded_header }
+      let(:id) do
+        endpoint = FactoryBot.build(:endpoint)
+        endpoint.account = account
+        endpoint.save!
+        endpoint.id
+      end
+
+      response '204', 'endpoint destroyed' do
+        before { |example| submit_request example.metadata }
+
+        it 'returns a valid 204 response' do |example|
+          assert_response_matches_metadata(example.metadata)
+          expect(Endpoint.where(:id => id).all.count).to eq(0)
         end
       end
     end

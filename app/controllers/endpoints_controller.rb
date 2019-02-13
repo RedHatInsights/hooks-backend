@@ -30,7 +30,6 @@ class EndpointsController < ApplicationController
   end
 
   def update
-    authorize @endpoint
     if @endpoint.update_attributes(endpoint_params)
       render :json => EndpointSerializer.new(@endpoint)
     else
