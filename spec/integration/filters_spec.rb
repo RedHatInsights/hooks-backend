@@ -88,6 +88,48 @@ describe 'filters API' do
         end
       end
     end
+
+    post 'Create a filter' do
+      tags 'filter'
+      description 'Creates a filter'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :filter, in: :body, schema: {
+        type: :object,
+        properties: {
+          app_ids: {
+            type: :array,
+            items: :integer
+          },
+          event_type_ids: {
+            type: :array,
+            items: :integer
+          },
+          severity_filters: {
+            type: :array,
+            items: :string
+          }
+        }
+      }
+
+      response '201', 'creates a filter' do
+        let(:'X-RH-IDENTITY') { encoded_header }
+        let(:filter) do
+          app = FactoryBot.create(:app, :with_event_type)
+          filter = { :app_ids => [app.id],
+                     :event_type_ids => app.event_types.map(&:id),
+                     :severity_filters => %w[high critical] }
+          { :filter => filter }
+        end
+        schema type: :object,
+               properties: {
+                 data: filter_spec
+               }
+
+        run_test!
+      end
+    end
   end
 
   path '/r/insights/platform/notifications/filters/{id}' do
@@ -120,13 +162,21 @@ describe 'filters API' do
   end
 
   path '/r/insights/platform/notifications/endpoints/{endpoint_id}/filters' do
+    parameter name: :endpoint_id, in: :path, :type => :integer
+    let(:endpoint_id) do
+      endpoint = FactoryBot.build(:endpoint)
+      endpoint.account = account
+      endpoint.save!
+      endpoint.filters << Builder::Filter.build!(account) { |f| }
+      endpoint.id
+    end
+
     get 'List all filters associated to endpoint' do
       tags 'filter'
       description 'Lists all filters associated to endpoint'
       consumes 'application/json'
       produces 'application/json'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
-      parameter name: :endpoint_id, in: :path, :type => :integer
 
       response '200', 'lists all filters requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
@@ -155,14 +205,6 @@ describe 'filters API' do
           ]
         }
 
-        let(:endpoint_id) do
-          endpoint = FactoryBot.build(:endpoint)
-          endpoint.account = account
-          endpoint.save!
-          endpoint.filters << Builder::Filter.build!(account) { |f| }
-          endpoint.id
-        end
-
         before do |example|
           app = FactoryBot.create(:app, :with_event_type)
           Builder::Filter.build!(account) do |f|
@@ -180,6 +222,48 @@ describe 'filters API' do
             expect(Filter.find(filter['id']).account_id).to eq(account.id)
           end
         end
+      end
+    end
+    post 'Create a filter' do
+      tags 'filter'
+      description 'Creates a filter'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :filter, in: :body, schema: {
+        type: :object,
+        properties: {
+          app_ids: {
+            type: :array,
+            items: :integer
+          },
+          event_type_ids: {
+            type: :array,
+            items: :integer
+          },
+          severity_filters: {
+            type: :array,
+            items: :string
+          }
+        }
+      }
+
+      response '201', 'creates a filter' do
+        let(:'X-RH-IDENTITY') { encoded_header }
+
+        let(:filter) do
+          app = FactoryBot.create(:app, :with_event_type)
+          filter = { :app_ids => [app.id],
+                     :event_type_ids => app.event_types.map(&:id),
+                     :severity_filters => %w[high critical] }
+          { :filter => filter }
+        end
+        schema type: :object,
+               properties: {
+                 data: filter_spec
+               }
+
+        run_test!
       end
     end
   end
