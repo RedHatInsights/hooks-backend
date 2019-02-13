@@ -58,7 +58,7 @@ end
 def simple_spec(hash)
   hash.reduce({}) do |acc, (key, value)|
     if key.is_a? Array
-      key.reduce(acc) { |key| acc.merge(key => { :type => value }) }
+      key.reduce(acc) { |acc, key| acc.merge(key => { :type => value }) }
     else
       acc.merge(key => { :type => value })
     end

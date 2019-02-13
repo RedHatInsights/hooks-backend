@@ -9,20 +9,6 @@ endpoint_spec = {
                           :filter_count => :integer)
 }.merge simple_spec(%i[type id] => :string)
 
-# endpoint_spec = {
-#   type: { type: :string },
-#   id: { type: :string },
-#   attributes: {
-#     type: :object,
-#     properties: {
-#       name: { type: :string },
-#       url: { type: :string },
-#       active: { type: :boolean },
-#       filter_count: { type: :integer }
-#     }
-#   }
-# }
-
 # rubocop:disable Metrics/BlockLength
 describe 'endpoints API' do
   path '/r/insights/platform/notifications/endpoints' do
