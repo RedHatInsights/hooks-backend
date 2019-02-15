@@ -22,19 +22,11 @@ class EndpointsController < ApplicationController
     endpoint.account = current_user.account
     endpoint.type ||= Endpoint.name
     authorize endpoint
-    if endpoint.save
-      render :json => EndpointSerializer.new(endpoint), :status => :created
-    else
-      render :json => { :errors => endpoint.errors }, :status => 422
-    end
+    process_create endpoint, EndpointSerializer
   end
 
   def update
-    if @endpoint.update_attributes(endpoint_params)
-      render :json => EndpointSerializer.new(@endpoint)
-    else
-      render :json => { :errors => @endpoint.errors }, :status => 422
-    end
+    process_update(@endpoint, endpoint_params, EndpointSerializer)
   end
 
   private

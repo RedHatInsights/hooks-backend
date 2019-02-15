@@ -5,16 +5,12 @@ class FiltersController < ApplicationController
 
   # rubocop:disable Metrics/AbcSize
   def create
-    filter = Filter.new(:account => current_user.account)
+    filter = Filter.new(account: current_user.account)
+    endpoint = authorize(Endpoint.find(params[:endpoint_id])) if params[:endpoint_id]
+    filter.endpoint_filters.build(endpoint: endpoint) if endpoint
+    filter = modify_filter(filter, filter_params[:app_ids], filter_params[:event_type_ids], filter_params[:severity_filters]) # have to make sure this action does everything in-memory
     authorize filter
-    filter.endpoints << authorize(Endpoint.find(params[:endpoint_id])) if params[:endpoint_id]
-    base = params[:filter]
-    filter = modify_filter(filter, base[:app_ids], base[:event_type_ids], base[:severity_filters])
-    if filter.save
-      render :json => FilterSerializer.new(filter), :status => :created
-    else
-      render :json => { :errors => filter.errors }, :status => 422
-    end
+    process_create filter, FilterSerializer
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -29,8 +25,10 @@ class FiltersController < ApplicationController
   end
 
   def update
-    base = params[:filter]
-    modify_filter(@filter, base[:app_ids], base[:event_type_ids], base[:severity_filters])
+    render_update(@filter, FilterSerializer) do |record|
+      modify_filter(record, filter_params[:app_ids], filter_params[:event_type_ids], filter_params[:severity_filters])
+      true
+    end
   end
 
   private
@@ -43,7 +41,7 @@ class FiltersController < ApplicationController
   end
 
   def find_resources(klass, ids)
-    return [] if ids.empty?
+    return klass.none if ids.empty?
 
     klass.where(:id => ids)
   end
@@ -54,7 +52,7 @@ class FiltersController < ApplicationController
     existing = filter.severity_filters.map(&:severity)
     filter.severity_filters.where(:severity => (existing - severities)).destroy_all
     (severities - existing).each do |to_add|
-      filter.severity_filters << SeverityFilter.new(:severity => to_add)
+      filter.severity_filters.build(:severity => to_add)
     end
     filter
   end
@@ -65,9 +63,13 @@ class FiltersController < ApplicationController
 
   def index_scope
     if params.key?(:endpoint_id)
-      Filter.joins(:endpoints).merge(Endpoint.where(:id => params[:endpoint_id]))
+      Filter.joins(:endpoint_filters).merge(EndpointFilter.where(:endpoint_id => params[:endpoint_id]))
     else
       Filter
     end
+  end
+
+  def filter_params
+    params.require(:filter)
   end
 end

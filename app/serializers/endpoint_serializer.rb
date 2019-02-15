@@ -5,6 +5,6 @@ class EndpointSerializer
 
   attributes :name, :url, :active
   attribute :filter_count do |object|
-    object.filters.count
+    object.filters.size
   end
 end
