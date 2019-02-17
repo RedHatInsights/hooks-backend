@@ -3,16 +3,21 @@
 class FiltersController < ApplicationController
   before_action :find_filter, :only => %i[destroy update]
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
     filter = Filter.new(account: current_user.account)
     endpoint = authorize(Endpoint.find(params[:endpoint_id])) if params[:endpoint_id]
     filter.endpoint_filters.build(endpoint: endpoint) if endpoint
-    filter = modify_filter(filter, filter_params[:app_ids], filter_params[:event_type_ids], filter_params[:severity_filters]) # have to make sure this action does everything in-memory
+    filter = modify_filter(
+      filter,
+      filter_params[:app_ids],
+      filter_params[:event_type_ids],
+      filter_params[:severity_filters]
+    )
     authorize filter
     process_create filter, FilterSerializer
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def index
     records = policy_scope(index_scope)
@@ -26,7 +31,12 @@ class FiltersController < ApplicationController
 
   def update
     render_update(@filter, FilterSerializer) do |record|
-      modify_filter(record, filter_params[:app_ids], filter_params[:event_type_ids], filter_params[:severity_filters])
+      modify_filter(
+        record,
+        filter_params[:app_ids],
+        filter_params[:event_type_ids],
+        filter_params[:severity_filters]
+      )
       true
     end
   end
