@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+APP_CONTAINER="rails"
+
+pushd `dirname "$0"`/../docker
+docker-compose run "$APP_CONTAINER" "$@"
+popd

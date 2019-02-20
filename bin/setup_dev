@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-pushd `dirname "$0"`/../docker
-docker-compose up
-docker-compose stop
+APP_ROOT=`dirname "$0"`/..
+BIN_DIR="$APP_ROOT"/bin
+
+pushd "$APP_ROOT"/docker
+docker-compose build
+$BIN_DIR/run_docker bundle install
+$BIN_DIR/run_docker bundle exec rake db:create
+$BIN_DIR/run_docker bundle exec rake db:migrate
+$BIN_DIR/run_docker bundle exec rake rswag:specs:swaggerize
 popd

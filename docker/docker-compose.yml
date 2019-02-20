@@ -39,7 +39,7 @@ services:
       dockerfile: docker/Dockerfile.rails
     volumes:
       - ..:/app
-    command: rails server --binding 0.0.0.0
+    command: bin/rails server --binding 0.0.0.0
     ports:
       - 3000:3000
     depends_on:
@@ -50,7 +50,7 @@ services:
       dockerfile: docker/Dockerfile.rails
     volumes:
       - ..:/app
-    command: rake environment resque:work
+    command: bin/rake environment resque:work
     environment:
       QUEUE: '*'
       REDIS_URL: "redis://mcom-redis:6379"
@@ -63,7 +63,7 @@ services:
       dockerfile: docker/Dockerfile.rails
     volumes:
       - ..:/app
-    command: racecar JobCreatorConsumer
+    command: bundle exec racecar JobCreatorConsumer
     environment:
       KAFKA_BROKER_HOST: kafka
       REDIS_URL: "redis://mcom-redis:6379"
