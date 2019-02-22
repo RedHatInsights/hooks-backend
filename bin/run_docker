@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIRECTORY=$(cd `dirname $0` && pwd)
+APP_ROOT="$SCRIPT_DIRECTORY"/..
 APP_CONTAINER="rails"
 
-pushd `dirname "$0"`/../docker
+pushd "$APP_ROOT"/docker
 docker-compose run "$APP_CONTAINER" "$@"
 popd

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-APP_ROOT=`dirname "$0"`/..
+SCRIPT_DIRECTORY=$(cd `dirname $0` && pwd)
+APP_ROOT="$SCRIPT_DIRECTORY"/..
 BIN_DIR="$APP_ROOT"/bin
 
 pushd "$APP_ROOT"/docker

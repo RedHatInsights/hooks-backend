@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-pushd `dirname "$0"`/../docker
+SCRIPT_DIRECTORY=$(cd `dirname $0` && pwd)
+APP_ROOT="$SCRIPT_DIRECTORY"/..
+
+pushd "$APP_ROOT"/docker
 docker-compose up
 docker-compose stop
 popd
