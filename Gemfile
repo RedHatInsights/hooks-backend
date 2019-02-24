@@ -52,6 +52,7 @@ group :development, :test do
   gem 'rubocop'
   gem 'shoulda-context'
   gem 'shoulda-matchers'
+  gem 'webmock'
 end
 
 group :development do

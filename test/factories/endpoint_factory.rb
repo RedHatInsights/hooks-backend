@@ -9,5 +9,9 @@ FactoryBot.define do
     trait :with_account do
       association :account, :factory => :account
     end
+
+    factory :http_endpoint, class: Endpoints::HttpEndpoint do
+      type { Endpoints::HttpEndpoint.name }
+    end
   end
 end
