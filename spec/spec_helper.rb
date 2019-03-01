@@ -64,3 +64,25 @@ def simple_spec(hash)
     end
   end
 end
+
+# rubocop:disable Metrics/MethodLength
+def incoming_filter_spec
+  {
+    type: :object,
+    properties: {
+      app_ids: {
+        type: :array,
+        items: :integer
+      },
+      event_type_ids: {
+        type: :array,
+        items: :integer
+      },
+      severity_filters: {
+        type: :array,
+        items: :string
+      }
+    }
+  }
+end
+# rubocop:enable Metrics/MethodLength

@@ -95,23 +95,7 @@ describe 'filters API' do
       consumes 'application/json'
       produces 'application/json'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
-      parameter name: :filter, in: :body, schema: {
-        type: :object,
-        properties: {
-          app_ids: {
-            type: :array,
-            items: :integer
-          },
-          event_type_ids: {
-            type: :array,
-            items: :integer
-          },
-          severity_filters: {
-            type: :array,
-            items: :string
-          }
-        }
-      }
+      parameter name: :filter, in: :body, schema: incoming_filter_spec
 
       response '201', 'creates a filter' do
         let(:'X-RH-IDENTITY') { encoded_header }

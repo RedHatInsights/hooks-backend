@@ -4,6 +4,7 @@ class ApplicationController < ActionController::API
   include ActionController::Helpers
   include Pundit
   include Authentication
+  include Params
 
   rescue_from Pundit::NotAuthorizedError do
     render json: { errors: 'You are not authorized to access this action.' },
@@ -23,7 +24,7 @@ class ApplicationController < ActionController::API
     if record.save
       render :json => serializer_class.new(record), :status => :created
     else
-      render :json => { :errors => record.errors }, :status => :unprocessable_entity
+      render_unprocessable_entity record.errors
     end
   end
 
@@ -35,7 +36,11 @@ class ApplicationController < ActionController::API
     if yield record
       render :json => serializer_class.new(record)
     else
-      render :json => { :errors => record.errors }, :status => :unprocessable_entity
+      render_unprocessable_entity record.errors
     end
+  end
+
+  def render_unprocessable_entity(errors)
+    render :json => { :errors => errors }, :status => :unprocessable_entity
   end
 end

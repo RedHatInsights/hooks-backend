@@ -18,9 +18,13 @@ class EndpointsController < ApplicationController
   end
 
   def create
-    endpoint = Endpoint.new(endpoint_params)
-    endpoint.account = current_user.account
-    endpoint.type ||= Endpoint.name
+    begin
+      endpoint = build_endpoint
+    rescue ActiveRecord::RecordNotFound => ex
+      render_unprocessable_entity ex
+      return
+    end
+
     authorize endpoint
     process_create endpoint, EndpointSerializer
   end
@@ -31,11 +35,29 @@ class EndpointsController < ApplicationController
 
   private
 
-  def endpoint_params
-    params.require(:endpoint).permit(:name, :url, :active)
-  end
-
   def find_endpoint
     @endpoint = authorize Endpoint.find(params[:id])
+  end
+
+  def nested_filters
+    params.require(:endpoint).permit(filters: [filter_properties]).fetch(:filters, [])
+  end
+
+  def build_filter_attributes(filter_params)
+    attributes = filter_params.merge(filter_params.merge(account: current_user.account))
+    severities = attributes.delete(:severity_filters)
+    attributes[:severity_filters_attributes] = severities.map { |severity| { severity: severity } }
+    attributes
+  end
+
+  def build_endpoint
+    endpoint = Endpoint.new(endpoint_params)
+    endpoint.account = current_user.account
+    endpoint.type ||= Endpoint.name
+
+    nested_filters.each do |filter_params|
+      authorize(endpoint.filters.build(build_filter_attributes(filter_params)))
+    end
+    endpoint
   end
 end

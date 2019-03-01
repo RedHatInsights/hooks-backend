@@ -66,17 +66,34 @@ describe 'endpoints API' do
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
-        properties: simple_spec(%i[name type url] => :string, :active => :boolean),
+        properties: simple_spec(%i[name type url] => :string, :active => :boolean).merge(
+          filters: {
+            type: :array,
+            items: incoming_filter_spec
+          }
+        ),
         required: %w[name url type]
       }
 
       response '201', 'endpoint created' do
         let(:'X-RH-IDENTITY') { encoded_header }
-        let(:endpoint) { { url: 'foo', name: 'bar' } }
-        schema type: :object,
-               properties: {
-                 data: endpoint_spec
-               }
+        let(:apps) { FactoryBot.create_list(:app, 2, :with_event_type) }
+        let(:event_types) { apps.map(&:event_types).flatten }
+        let(:endpoint) do
+          {
+            endpoint: {
+              url: 'foo',
+              name: 'bar',
+              filters: [
+                {
+                  app_ids: apps.map(&:id),
+                  event_type_ids: event_types.map(&:id),
+                  severity_filters: %w[low medium]
+                }
+              ]
+            }
+          }
+        end
 
         run_test!
       end
@@ -90,6 +107,27 @@ describe 'endpoints API' do
           result = JSON.parse(response.body)
           expect(result['errors']['name']).to include("can't be blank")
         end
+      end
+
+      response '422', 'endpoint created' do
+        let(:'X-RH-IDENTITY') { encoded_header }
+        let(:endpoint) do
+          {
+            endpoint: {
+              url: 'foo',
+              name: 'bar',
+              filters: [
+                {
+                  app_ids: [1, 2],
+                  event_type_ids: [3, 4],
+                  severity_filters: %w[low medium]
+                }
+              ]
+            }
+          }
+        end
+
+        run_test!
       end
     end
   end

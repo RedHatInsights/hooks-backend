@@ -78,8 +78,4 @@ class FiltersController < ApplicationController
       Filter
     end
   end
-
-  def filter_params
-    params.require(:filter)
-  end
 end

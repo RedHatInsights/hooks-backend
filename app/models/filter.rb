@@ -8,6 +8,7 @@ class Filter < ApplicationRecord
   has_many :endpoints, :through => :endpoint_filters, :inverse_of => :filters
 
   has_many :severity_filters, :dependent => :destroy
+  accepts_nested_attributes_for :severity_filters
 
   has_many :app_filters, :dependent => :destroy
   has_many :apps, :through => :app_filters, :dependent => :destroy, :inverse_of => :filters
