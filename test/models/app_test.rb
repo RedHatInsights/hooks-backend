@@ -37,6 +37,6 @@ class AppBuilderTest < ActiveSupport::TestCase
     app.name.must_equal name
     app.event_types.map(&:valid?).must_equal [true].cycle(3).to_a
     app.event_types.map(&:new_record?).must_equal [false].cycle(3).to_a
-    app.event_types.map(&:name).sort.must_equal event_types.sort
+    app.event_types.map(&:external_id).sort.must_equal event_types.sort
   end
 end

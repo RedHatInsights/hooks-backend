@@ -14,13 +14,13 @@ class Message
     new(hash)
   end
 
-  attr_reader :application, :event_type, :severity, :timestamp, :message, :account_id
+  attr_reader :application, :event_type, :level, :timestamp, :message, :account_id
 
   # rubocop:disable Metrics/ParameterLists
-  def initialize(application:, event_type:, severity:, timestamp:, message:, account_id:)
+  def initialize(application:, event_type:, level:, timestamp:, message:, account_id:)
     @application = application
     @event_type = event_type
-    @severity = severity
+    @level = level
     @timestamp = timestamp
     @message = message
     @account_id = account_id
@@ -30,7 +30,7 @@ class Message
   def to_h
     { :application => application,
       :event_type => event_type,
-      :severity => severity,
+      :level => level,
       :timestamp => timestamp,
       :message => message,
       :account_id => account_id }

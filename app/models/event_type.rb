@@ -5,7 +5,9 @@ class EventType < ApplicationRecord
 
   has_many :event_type_filters, :dependent => :destroy
   has_many :filters, :through => :event_type_filters, :inverse_of => :event_types
+  has_many :levels, :dependent => :destroy
 
-  validates :name, :presence => true,
-                   :uniqueness => { :scope => :app_id }
+  validates :title, :presence => true
+  validates :external_id, :presence => true,
+                          :uniqueness => { :scope => :app_id }
 end

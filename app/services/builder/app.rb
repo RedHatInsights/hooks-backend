@@ -8,7 +8,9 @@ module Builder
 
     def event_type(name)
       @event_types ||= []
-      @event_types << name
+      type = EventType.new(name)
+      @event_types << type
+      type
     end
 
     # rubocop:disable Style/TrivialAccessors
@@ -18,11 +20,11 @@ module Builder
     # rubocop:enable Style/TrivialAccessors
 
     def build!
-      app = ::App.new(:name => @name)
-      app.save!
-      event_types.each do |type|
-        app.event_types.create(:name => type)
+      app = ::App.new(:name => @name, :title => @name)
+      event_types.each do |builder|
+        builder.build!(app)
       end
+      app.save!
       app
     end
 
@@ -30,6 +32,28 @@ module Builder
       builder = App.new
       yield builder
       builder.build!
+    end
+  end
+
+  class EventType
+    def initialize(name, levels = [])
+      @name = name
+      @levels = levels
+    end
+
+    def level(level)
+      @levels << level
+    end
+
+    def levels(levels)
+      levels.each { |l| level l }
+    end
+
+    def build!(app)
+      type = app.event_types.build(:title => @name, :external_id => @name)
+      @levels.each do |level|
+        type.levels.build(:title => level, :external_id => level)
+      end
     end
   end
 end

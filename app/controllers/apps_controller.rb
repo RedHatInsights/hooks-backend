@@ -3,11 +3,11 @@
 class AppsController < ApplicationController
   def index
     records = paginate(policy_scope(App).includes(:event_types))
-    render :json => AppSerializer.new(records, :include => %i[event_types event_types.name])
+    render :json => AppSerializer.new(records, :include => %i[event_types event_types.external_id])
   end
 
   def show
     record = authorize App.includes(:event_types).find(params[:id])
-    render :json => AppSerializer.new(record, :include => %i[event_types event_types.name])
+    render :json => AppSerializer.new(record, :include => %i[event_types event_types.external_id])
   end
 end

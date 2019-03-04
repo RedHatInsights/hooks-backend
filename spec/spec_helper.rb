@@ -78,7 +78,7 @@ def incoming_filter_spec
         type: :array,
         items: :integer
       },
-      severity_filters: {
+      level_ids: {
         type: :array,
         items: :string
       }

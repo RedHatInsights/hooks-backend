@@ -8,7 +8,12 @@ Rails.application.routes.draw do
     mount Rswag::Ui::Engine => 'api-docs'
     # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-    resources :apps, :only => %i[index show]
+    resources :apps, :only => %i[index show] do
+      collection do
+        post 'register', to: 'app_registration#create'
+      end
+    end
+
     resources :endpoints, :except => %(edit new) do
       resources :filters, :except => %(edit new)
     end

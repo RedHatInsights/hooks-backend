@@ -2,6 +2,7 @@
 
 class App < ApplicationRecord
   validates :name, :uniqueness => true, :presence => true
+  validates :title, :presence => true
 
   has_many :event_types, :dependent => :destroy
 

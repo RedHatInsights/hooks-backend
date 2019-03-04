@@ -45,8 +45,6 @@ class EndpointsController < ApplicationController
 
   def build_filter_attributes(filter_params)
     attributes = filter_params.merge(filter_params.merge(account: current_user.account))
-    severities = attributes.delete(:severity_filters)
-    attributes[:severity_filters_attributes] = severities.map { |severity| { severity: severity } }
     attributes
   end
 

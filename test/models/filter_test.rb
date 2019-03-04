@@ -4,7 +4,8 @@ class FilterTest < ActiveSupport::TestCase
   should have_many :endpoint_filters
   should have_many(:endpoints).through(:endpoint_filters)
 
-  should have_many :severity_filters
+  should have_many :level_filters
+  should have_many(:levels).through(:level_filters)
 
   should have_many :app_filters
   should have_many(:apps).through(:app_filters)
@@ -17,77 +18,65 @@ class FilterTest < ActiveSupport::TestCase
   before do
     Builder::App.build! do |a|
       a.name 'not_useful'
-      event_types.each { |type| a.event_type type }
+      event_types.each { |type| a.event_type(type).levels(levels) }
     end
   end
 
   let(:account) { FactoryBot.create(:account) }
   let(:msg) do
-    Message.new :application => app.name, :event_type => app.event_types.first.name,
-                :severity => 'critical', :account_id => account.id, :timestamp => Time.zone.now,
+    Message.new :application => app.name, :event_type => app.event_types.first.external_id,
+                :level => 'critical', :account_id => account.id, :timestamp => Time.zone.now,
                 :message => 'hello'
   end
   let(:event_types) { %w[something something-else yet-something-else] }
+  let(:levels) { %w[low medium high critical] }
   let(:app_name) { 'filter-test-app-1' }
   let(:app) do
     Builder::App.build! do |a|
       a.name app_name
-      event_types.each { |type| a.event_type type }
+      event_types.each { |type| a.event_type(type).levels(levels) }
     end
   end
 
-  it 'allows matching by application name, event type and severity' do
+  it 'allows matching by application name, event type and level' do
     Builder::Filter.build!(account) do |b|
-      b.application(app.name, app.event_types.first.name)
-      b.severity 'low'
+      b.application(app.name) do |a|
+        a.event_type(app.event_types.first.external_id).level('low')
+      end
     end
 
     filter = Builder::Filter.build!(account) do |b|
-      b.application app.name, app.event_types.first.name
-      b.severities 'critical', 'high'
+      b.application app.name do |a|
+        a.event_type(app.event_types.first.external_id).levels(%w[critical high])
+      end
     end
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
     Filter.matching_message(msg.merge(:event_type => 'missing')).must_equal []
-    Filter.matching_message(msg.merge(:severity => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:level => 'missing')).must_equal []
   end
 
-  it 'allows matching by application name, event type and severity wildcard' do
+  it 'allows matching by application name, event type and level wildcard' do
     filter = Builder::Filter.build!(account) do |b|
-      b.application app.name, app.event_types.first.name
-      b.severity.any!
+      b.application app.name, app.event_types.first.external_id
     end
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
     Filter.matching_message(msg.merge(:event_type => 'missing')).must_equal []
-    Filter.matching_message(msg.merge(:severity => 'missing')).must_equal [filter]
+    Filter.matching_message(msg.merge(:level => 'missing')).must_equal [filter]
   end
 
-  it 'allows matching by application name, event type wildcard and severity wildcard' do
+  it 'allows matching by application name, event type wildcard and level wildcard' do
     filter = Builder::Filter.build!(account) do |b|
       b.application(app.name).event_type.any!
-      b.severity.any!
     end
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
     Filter.matching_message(msg.merge(:event_type => 'missing')).must_equal [filter]
-    Filter.matching_message(msg.merge(:severity => 'missing')).must_equal [filter]
-  end
-
-  it 'allows matching by application name wildcard, event type wildcard and severity' do
-    filter = Builder::Filter.build!(account) do |b|
-      b.application.any!
-       .event_type.any!
-      b.severities 'critical', 'high'
-    end
-
-    Filter.matching_message(msg).must_equal [filter]
-    Filter.matching_message(msg.merge(:application => 'missing')).must_equal [filter]
-    Filter.matching_message(msg.merge(:event_type => 'missing')).must_equal [filter]
-    Filter.matching_message(msg.merge(:severity => 'missing')).must_equal []
+    Filter.matching_message(msg.merge(:level => 'missing')).must_equal [filter]
   end
 
   it 'does not allow matching by disabled filters' do
@@ -107,6 +96,6 @@ class FilterTest < ActiveSupport::TestCase
   end
 end
 
-class SeverityFilterTest < ActiveSupport::TestCase
+class LevelFilterTest < ActiveSupport::TestCase
   should belong_to(:filter)
 end

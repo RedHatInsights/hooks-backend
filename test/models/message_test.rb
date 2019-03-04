@@ -7,7 +7,7 @@ class MessageTest < ActiveSupport::TestCase
     properties = {
       application: 'application',
       event_type: 'event_type',
-      severity: 'severity',
+      level: 'level',
       timestamp: 'timestamp',
       message: 'message',
       account_id: 'uuid'
@@ -17,7 +17,7 @@ class MessageTest < ActiveSupport::TestCase
 
     assert_equal 'application', message.application
     assert_equal 'event_type', message.event_type
-    assert_equal 'severity', message.severity
+    assert_equal 'level', message.level
     assert_equal 'timestamp', message.timestamp
     assert_equal 'message', message.message
     assert_equal 'uuid', message.account_id
@@ -27,7 +27,7 @@ class MessageTest < ActiveSupport::TestCase
     properties = {
       application: 'application',
       event_type: 'event_type',
-      severity: 'severity',
+      level: 'level',
       timestamp: 'timestamp',
       message: 'message',
       account_id: 'uuid'
@@ -37,7 +37,7 @@ class MessageTest < ActiveSupport::TestCase
 
     assert_equal 'application', message.application
     assert_equal 'event_type', message.event_type
-    assert_equal 'severity', message.severity
+    assert_equal 'level', message.level
     assert_equal 'timestamp', message.timestamp
     assert_equal 'message', message.message
     assert_equal 'uuid', message.account_id
@@ -47,7 +47,7 @@ class MessageTest < ActiveSupport::TestCase
     properties = {
       application: 'application',
       event_type: 'event_type',
-      severity: 'severity',
+      level: 'level',
       timestamp: 'timestamp',
       message: 'message',
       account_id: 'uuid'
@@ -61,7 +61,7 @@ class MessageTest < ActiveSupport::TestCase
     properties = {
       application: 'application',
       event_type: 'event_type',
-      severity: 'severity',
+      level: 'level',
       timestamp: 'timestamp',
       message: 'message',
       account_id: 'uuid'

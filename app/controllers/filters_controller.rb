@@ -12,7 +12,7 @@ class FiltersController < ApplicationController
       filter,
       filter_params[:app_ids],
       filter_params[:event_type_ids],
-      filter_params[:severity_filters]
+      filter_params[:level_filters]
     )
     authorize filter
     process_create filter, FilterSerializer
@@ -35,7 +35,7 @@ class FiltersController < ApplicationController
         record,
         filter_params[:app_ids],
         filter_params[:event_type_ids],
-        filter_params[:severity_filters]
+        filter_params[:level_filters]
       )
       true
     end
@@ -43,10 +43,10 @@ class FiltersController < ApplicationController
 
   private
 
-  def modify_filter(filter, app_ids, event_type_ids, severities)
+  def modify_filter(filter, app_ids, event_type_ids, levels)
     filter.apps = find_resources(App, app_ids) if app_ids
     filter.event_types = find_resources(EventType, event_type_ids) if event_type_ids
-    filter = set_severity_filters(filter, severities) if severities
+    filter = set_level_filters(filter, levels) if levels
     filter
   end
 
@@ -56,13 +56,13 @@ class FiltersController < ApplicationController
     klass.where(:id => ids)
   end
 
-  def set_severity_filters(filter, severities)
-    return filter if severities.nil?
+  def set_level_filters(filter, levels)
+    return filter if levels.nil?
 
-    existing = filter.severity_filters.map(&:severity)
-    filter.severity_filters.where(:severity => (existing - severities)).destroy_all
-    (severities - existing).each do |to_add|
-      filter.severity_filters.build(:severity => to_add)
+    existing = filter.level_filters.map(&:level)
+    filter.level_filters.where(:level => (existing - levels)).destroy_all
+    (levels - existing).each do |to_add|
+      filter.level_filters.build(:level => to_add)
     end
     filter
   end

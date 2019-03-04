@@ -4,5 +4,6 @@ class EventTypeSerializer
   include FastJsonapi::ObjectSerializer
 
   set_type :event_type
-  attributes :name
+  attributes :title
+  attribute :name, &:external_id
 end

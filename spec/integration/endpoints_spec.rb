@@ -79,6 +79,7 @@ describe 'endpoints API' do
         let(:'X-RH-IDENTITY') { encoded_header }
         let(:apps) { FactoryBot.create_list(:app, 2, :with_event_type) }
         let(:event_types) { apps.map(&:event_types).flatten }
+        let(:levels) { event_types.map(&:levels).flatten }
         let(:endpoint) do
           {
             endpoint: {
@@ -88,14 +89,23 @@ describe 'endpoints API' do
                 {
                   app_ids: apps.map(&:id),
                   event_type_ids: event_types.map(&:id),
-                  severity_filters: %w[low medium]
+                  level_ids: levels.map(&:id)
                 }
               ]
             }
           }
         end
 
-        run_test!
+        run_test! do |response|
+          id = JSON.parse(response.body)['data']['id']
+          endpoint = Endpoint.find(id)
+          filter = endpoint.filters.first
+          created_event_types = filter.apps.map(&:event_types).flatten
+          created_levels = created_event_types.map(&:levels).flatten
+          expect(filter.apps).to match(apps)
+          expect(created_event_types).to match(event_types)
+          expect(created_levels).to match(levels)
+        end
       end
 
       response '422', 'invalid request' do
@@ -120,7 +130,7 @@ describe 'endpoints API' do
                 {
                   app_ids: [1, 2],
                   event_type_ids: [3, 4],
-                  severity_filters: %w[low medium]
+                  level_ids: [5, 6]
                 }
               ]
             }

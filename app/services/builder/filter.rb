@@ -4,7 +4,7 @@ module Builder
   class Filter
     def initialize
       @apps = []
-      @severities = []
+      @levels = []
       @enabled = true
     end
 
@@ -19,25 +19,12 @@ module Builder
       @enabled = false
     end
 
-    def severity(name = nil)
-      builder = Severity.new(name)
-      @severities << builder
-      yield builder if block_given?
-      builder
-    end
-
-    def severities(*args)
-      args.each { |arg| severity(arg) }
-    end
-
     def build!(account)
       filter = ::Filter.new(:enabled => @enabled)
       filter.account = account
       filter.save!
 
-      [@apps, @severities].each do |group|
-        group.each { |builder| builder.build!(filter) }
-      end
+      @apps.each { |builder| builder.build!(filter) }
       filter
     end
 
@@ -101,16 +88,28 @@ module Builder
       def build!(filter, app)
         return if @name == ANY
 
-        filter.event_types << app.event_types.where(:name => @name).first
-        @children.each { |builder| builder.build!(filter) }
+        event_type = app.event_types.where(:external_id => @name).first
+        filter.event_types << event_type
+        @children.each { |builder| builder.build!(filter, event_type) }
+      end
+
+      def level(name = nil)
+        builder = Level.new(name)
+        @children << builder
+        yield builder if block_given?
+        builder
+      end
+
+      def levels(names)
+        names.each { |name| level name }
       end
     end
 
-    class Severity < Common
-      alias severity name
+    class Level < Common
+      alias level name
 
-      def build!(filter)
-        filter.severity_filters.create(:severity => @name) if @name != ANY
+      def build!(filter, event_type)
+        filter.levels << event_type.levels.where(:external_id => @name).first if @name != ANY
       end
     end
   end
