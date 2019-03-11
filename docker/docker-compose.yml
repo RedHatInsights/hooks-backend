@@ -26,9 +26,8 @@ services:
       - 6379
   postgres:
     image: postgres:11-alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    env_file:
+      - postgres.env
     expose:
       - 5432
     ports:
@@ -40,6 +39,8 @@ services:
     volumes:
       - ..:/app
     command: bin/rails server --binding 0.0.0.0
+    env_file:
+      - postgres.env
     ports:
       - 3000:3000
     depends_on:
@@ -54,6 +55,8 @@ services:
     environment:
       QUEUE: '*'
       REDIS_URL: "redis://mcom-redis:6379"
+    env_file:
+      - postgres.env
     depends_on:
       - postgres
       - mcom-redis
@@ -67,6 +70,8 @@ services:
     environment:
       KAFKA_BROKER_HOST: kafka
       REDIS_URL: "redis://mcom-redis:6379"
+    env_file:
+      - postgres.env
     depends_on:
       - kafka
       - mcom-redis

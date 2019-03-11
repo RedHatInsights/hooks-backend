@@ -22,7 +22,6 @@
 .ruby-gemset
 Gemfile.lock
 
-/config/database.yml
 /db/schema.rb
 .tags*
 /coverage/*

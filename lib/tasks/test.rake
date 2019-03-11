@@ -10,5 +10,11 @@ namespace :test do
   end
 end
 
-require 'rubocop/rake_task'
-RuboCop::RakeTask.new(:rubocop)
+# rubocop:disable Lint/HandleExceptions
+begin
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new(:rubocop)
+rescue LoadError
+  # Don't register a task if rubocop is not available
+end
+# rubocop:enable Lint/HandleExceptions
