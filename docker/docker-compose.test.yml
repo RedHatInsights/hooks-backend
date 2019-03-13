@@ -9,6 +9,8 @@ services:
     command: "rake notifications:send"
     environment:
       KAFKA_BROKER_HOST: kafka
+    env_file:
+      - postgres.env
 
   notifications-topic-clear:
     build:
@@ -20,3 +22,5 @@ services:
     environment:
       KAFKA_BROKER_HOST: kafka
       RACECAR_GROUP_ID: job-creator-consumer
+    env_file:
+      - postgres.env

@@ -19,17 +19,17 @@ class SendNotificationJob < ApplicationJob
     Rails.logger.warn("Disabled #{endpoint} after too many retries for #{error.inspect}")
   end
 
-  def perform(endpoint, timestamp, category, message)
-    Rails.logger.debug("Received a job to send: #{endpoint}, #{timestamp}, #{category}, #{message}")
+  def perform(endpoint, timestamp, level, message)
+    Rails.logger.debug("Received a job to send: #{endpoint}, #{timestamp}, #{level}, #{message}")
 
     unless endpoint.active
       Rails.logger.debug("Endpoint #{endpoint} is not active, discarding message")
       return
     end
 
-    endpoint.send_message(timestamp: timestamp, category: category, message: message)
+    endpoint.send_message(timestamp: timestamp, level: level, message: message)
 
-    Rails.logger.debug("Job successfully sent: #{endpoint}, #{timestamp}, #{category}, #{message}")
+    Rails.logger.debug("Job successfully sent: #{endpoint}, #{timestamp}, #{level}, #{message}")
   end
 
   def endpoint

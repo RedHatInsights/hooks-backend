@@ -9,7 +9,7 @@ class Endpoint < ApplicationRecord
   validates :name, :presence => true
   validates :url, :presence => true
 
-  def send_message(_timestamp:, _category:, _message:)
+  def send_message(_timestamp:, _level:, _message:)
     raise 'Inherited class must be used to send mesages'
   end
 end

@@ -9,13 +9,13 @@ class HttpEndpointTest < ActiveSupport::TestCase
     FactoryBot.create(:http_endpoint, :with_account, url: url)
   end
   let(:timestamp) { Time.current.to_s }
-  let(:category) { 'test_category' }
+  let(:level) { 'test_level' }
   let(:message_text) { 'testing 1,2,3' }
   let(:expect_request) do
     stub_request(:post, url).with(
       body: {
         timestamp: timestamp,
-        category: category,
+        level: level,
         message: message_text
       }
     )
@@ -24,14 +24,14 @@ class HttpEndpointTest < ActiveSupport::TestCase
   it 'POSTs successfully' do
     expect_request
 
-    endpoint.send_message(timestamp: timestamp, category: category, message: message_text)
+    endpoint.send_message(timestamp: timestamp, level: level, message: message_text)
   end
 
   it 'recovers from timeout' do
     expect_request.to_timeout
 
     assert_raises Notifications::RecoverableError do
-      endpoint.send_message(timestamp: timestamp, category: category, message: message_text)
+      endpoint.send_message(timestamp: timestamp, level: level, message: message_text)
     end
   end
 
@@ -39,7 +39,7 @@ class HttpEndpointTest < ActiveSupport::TestCase
     expect_request.to_return(status: 501)
 
     assert_raises Notifications::RecoverableError do
-      endpoint.send_message(timestamp: timestamp, category: category, message: message_text)
+      endpoint.send_message(timestamp: timestamp, level: level, message: message_text)
     end
   end
 
@@ -47,7 +47,7 @@ class HttpEndpointTest < ActiveSupport::TestCase
     expect_request.to_return(status: 404)
 
     assert_raises Notifications::FatalError do
-      endpoint.send_message(timestamp: timestamp, category: category, message: message_text)
+      endpoint.send_message(timestamp: timestamp, level: level, message: message_text)
     end
   end
 end

@@ -21,8 +21,8 @@ namespace :notifications do
       opts.on('-e', '--event {event}', 'Event type to simulate', String) do |event|
         options[:event_type] = event
       end
-      opts.on('-s', '--severity {severity}', 'Message severity', String) do |severity|
-        options[:severity] = severity
+      opts.on('-l', '--level {level}', 'Message level', String) do |level|
+        options[:level] = level
       end
       opts.on('-u', '--account_id {account_id}', 'Account_id that sends the message', String) do |account_id|
         options[:account_id] = account_id
@@ -32,7 +32,7 @@ namespace :notifications do
     options[:application] ||= 'TestApp'
     options[:event_type] ||= 'TestEvent'
     options[:timestamp] ||= Time.current
-    options[:severity] ||= 'Info'
+    options[:level] ||= 'Info'
     options[:message] ||= 'Hello world!'
     options[:account_id] ||= Account.find_or_create_by(id: '00000000-0000-0000-0000-000000000000').id
 

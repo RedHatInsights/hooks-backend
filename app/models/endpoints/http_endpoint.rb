@@ -5,8 +5,8 @@ require 'uri'
 
 module Endpoints
   class HttpEndpoint < Endpoint
-    def send_message(timestamp:, category:, message:)
-      payload = to_payload(timestamp: timestamp, category: category, message: message)
+    def send_message(timestamp:, level:, message:)
+      payload = to_payload(timestamp: timestamp, level: level, message: message)
       response = Net::HTTP.post(
         address,
         payload,
@@ -23,10 +23,10 @@ module Endpoints
       URI(url)
     end
 
-    def to_payload(timestamp:, category:, message:)
+    def to_payload(timestamp:, level:, message:)
       {
         timestamp: timestamp,
-        category: category,
+        level: level,
         message: message
       }.to_json
     end
