@@ -12,9 +12,7 @@ ActiveRecord::Base.transaction do
       random_level_count = Random.rand(level_count)
       random_event_type_count.times do |type_id|
         event_type = app.event_type "seed-type-#{type_id}"
-        event_type.levels [0...random_level_count].map do |level_id|
-          "level-#{level_id}"
-        end
+        event_type.levels((0...random_level_count).map { |level_id| "level-#{level_id}" })
       end
     end
   end
