@@ -11,7 +11,7 @@ class Dispatcher
 
     endpoints.each do |endpoint|
       job_class.perform_later(endpoint, timestamp, level, message)
-      Rails.logger.info("Enqueued #{jobclass} with endpoint: #{endpoint.id}")
+      Rails.logger.info("Enqueued #{job_class} with endpoint: #{endpoint.id}")
     end
   end
 

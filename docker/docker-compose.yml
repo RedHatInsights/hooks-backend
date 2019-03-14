@@ -74,7 +74,9 @@ services:
     environment:
       KAFKA_BROKER_HOST: kafka
       KAFKA_PORT: 29092
-      REDIS_URL: "redis://mcom-redis:6379"
+      REDIS_SERVICE_NAME: mcom-redis
+      REDIS_PASSWORD: redispass
+      MCOM_REDIS_SERVICE_HOST: mcom-redis
     env_file:
       - postgres.env
     depends_on:
