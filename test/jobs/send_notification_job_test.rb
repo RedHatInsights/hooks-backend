@@ -5,7 +5,7 @@ require 'test_helper'
 class SendNotificationJobTest < ActiveJob::TestCase
   let(:endpoint) { FactoryBot.create(:endpoint, :with_account) }
   let(:timestamp) { Time.current.to_s }
-  let(:category) { 'test_category' }
+  let(:level) { 'test_level' }
   let(:message_text) { 'testing 1,2,3' }
 
   it 'Performs the job once on success' do
@@ -13,7 +13,7 @@ class SendNotificationJobTest < ActiveJob::TestCase
     Endpoint.any_instance.expects(:send_message).returns(nil)
 
     assert_performed_jobs(1) do
-      SendNotificationJob.perform_later(endpoint, timestamp, category, message_text)
+      SendNotificationJob.perform_later(endpoint, timestamp, level, message_text)
     end
   end
 
@@ -22,7 +22,7 @@ class SendNotificationJobTest < ActiveJob::TestCase
     Endpoint.any_instance.expects(:send_message).raises(Notifications::RecoverableError, 'test').times(3)
 
     assert_performed_jobs(3) do
-      SendNotificationJob.perform_later(endpoint, timestamp, category, message_text)
+      SendNotificationJob.perform_later(endpoint, timestamp, level, message_text)
     end
 
     endpoint.reload
@@ -35,7 +35,7 @@ class SendNotificationJobTest < ActiveJob::TestCase
     Endpoint.any_instance.expects(:send_message).raises(Notifications::FatalError, 'test')
 
     assert_performed_jobs(1) do
-      SendNotificationJob.perform_later(endpoint, timestamp, category, message_text)
+      SendNotificationJob.perform_later(endpoint, timestamp, level, message_text)
     end
 
     endpoint.reload

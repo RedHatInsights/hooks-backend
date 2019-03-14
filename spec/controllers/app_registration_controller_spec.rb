@@ -7,9 +7,9 @@ require 'spec_helper'
 RSpec.describe AppRegistrationController do
   describe 'app registration' do
     let(:levels) do
-      [{ :id => 'application.event_type.2.severity.1',
+      [{ :id => 'application.event_type.2.level.1',
          :title => 'Low' },
-       { :id => 'application.event_type.2.severity.2',
+       { :id => 'application.event_type.2.level.2',
          :title => 'Medium' }]
     end
 
@@ -77,7 +77,7 @@ RSpec.describe AppRegistrationController do
       app = Builder::App.build! do |app|
         app.name 'application'
         app.event_type('application.event_type.2')
-           .levels %w[interesting application.event_type.2.severity.1]
+           .levels %w[interesting application.event_type.2.level.1]
       end
       id = app.event_types.first.id
 

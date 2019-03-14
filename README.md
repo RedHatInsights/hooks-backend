@@ -12,12 +12,12 @@ different _endpoints_.
 ### Components
 
 *Message*: A JSON payload with predefined fields: `Application`, `Event type`,
-`Severity`, `Message` and `Timestamp`.
+`Level`, `Message` and `Timestamp`.
 
 *Dispatcher*: Component that is responsible for receiving incoming _messages_ and
 deciding (based on _filters_) which _endpoint_ should receive the message.
 
-*Filter*: A combination of `Application`, `Event type` and `Severity` sets that
+*Filter*: A combination of `Application`, `Event type` and `Level` sets that
 will be compared against the _message_ received. Once there is a match,
 _endpoints_ associated with this filter record would be triggered.
 

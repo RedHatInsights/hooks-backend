@@ -10,7 +10,7 @@ class Dispatcher
     Rails.logger.info("Dispatching: #{@message.to_h}")
 
     endpoints.each do |endpoint|
-      job_class.perform_later(endpoint, timestamp, category, message)
+      job_class.perform_later(endpoint, timestamp, level, message)
       Rails.logger.info("Enqueued #{jobclass} with endpoint: #{endpoint.id}")
     end
   end
@@ -32,8 +32,8 @@ class Dispatcher
     @message.timestamp
   end
 
-  def category
-    @message.severity
+  def level
+    @message.level
   end
 
   def message
