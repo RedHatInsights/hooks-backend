@@ -19,13 +19,15 @@ services:
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:32181
   mcom-redis:
-    image: redis
+    image: "registry.access.redhat.com/rhscl/redis-32-rhel7"
     ports:
       - 6379:6379
     expose:
       - 6379
+    environment:
+      REDIS_PASSWORD: redispass
   postgres:
-    image: postgres:11-alpine
+    image: "registry.access.redhat.com/rhscl/postgresql-10-rhel7"
     env_file:
       - postgres.env
     expose:
@@ -54,7 +56,9 @@ services:
     command: bin/rake environment resque:work
     environment:
       QUEUE: '*'
-      REDIS_URL: "redis://mcom-redis:6379"
+      REDIS_SERVICE_NAME: mcom-redis
+      REDIS_PASSWORD: redispass
+      MCOM_REDIS_SERVICE_HOST: mcom-redis
     env_file:
       - postgres.env
     depends_on:
@@ -69,6 +73,7 @@ services:
     command: bundle exec racecar JobCreatorConsumer
     environment:
       KAFKA_BROKER_HOST: kafka
+      KAFKA_PORT: 29092
       REDIS_URL: "redis://mcom-redis:6379"
     env_file:
       - postgres.env

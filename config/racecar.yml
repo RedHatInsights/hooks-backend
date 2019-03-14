@@ -1,20 +1,18 @@
 # These config values will be shared by all environments but can be overridden.
+<% kafka_host = ENV['KAFKA_BROKER_HOST'] || 'localhost' %>
+<% kafka_port = ENV['KAFKA_PORT'] || 29092 %>
+<% kafka_url = ENV['KAFKAMQ'] ? ENV['KAFKAMQ'] : "#{kafka_host}:#{kafka_port}" %>
+
 common: &common
   client_id: "tech_test"
+  brokers:
+    - <%= kafka_url %>
 
 development:
   <<: *common
-  brokers:
-    - <%= ENV['KAFKA_BROKER_HOST'] || 'localhost' %>:29092
 
 test:
   <<: *common
-  brokers:
-    - localhost:9092
 
 production:
   <<: *common
-  brokers:
-    - kafka1.myapp.com:9092
-    - kafka2.myapp.com:9092
-    - kafka3.myapp.com:9092

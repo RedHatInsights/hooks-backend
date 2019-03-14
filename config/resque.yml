@@ -1,3 +1,11 @@
-development: <%= ENV['REDIS_URL'] || 'localhost:6379' %>
-test: <%= ENV['REDIS_URL'] || 'localhost:6379' %>
-production: <%= ENV['REDIS_URL'] %>
+<% redis_service = ENV.fetch('REDIS_SERVICE_NAME','').upcase.sub('-', '_') %>
+<% redis_port = ENV['REDIS_PORT'] || 6379 %>
+<% redis_host = ENV["#{redis_service}_SERVICE_HOST"] || 'localhost' %>
+<% redis_auth = ENV['REDIS_PASSWORD'] ? "user:#{ENV['REDIS_PASSWORD']}@" : '' %>
+
+<% redis_url = "redis://#{redis_auth}#{redis_host}:#{redis_port}" %>
+
+development: <%= ENV['REDIS_URL'] || redis_url %>
+test: <%= ENV['REDIS_URL'] || redis_url %>
+production: <%= ENV['REDIS_URL'] || redis_url %>
+
