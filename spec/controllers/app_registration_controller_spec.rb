@@ -54,7 +54,6 @@ RSpec.describe AppRegistrationController do
     end
 
     it 'creates an application with event types and levels' do
-      expect(App.all).to be_empty
       register_app!
       data = JSON.parse(response.body)['data']
       app = App.find(data['id'])

@@ -30,22 +30,22 @@ class EndpointsController < ApplicationController
   end
 
   def update
-    process_update(@endpoint, endpoint_params, EndpointSerializer)
+    full_params = endpoint_params.merge(transform_filter_params)
+    process_update(@endpoint, full_params, EndpointSerializer)
   end
 
   private
 
   def find_endpoint
-    @endpoint = authorize Endpoint.find(params[:id])
+    @endpoint = authorize(Endpoint.includes(:filters).find(params[:id]))
   end
 
   def nested_filters
-    params.require(:endpoint).permit(filters: [filter_properties]).fetch(:filters, [])
+    params.require(:endpoint).permit(filters: [filter_properties.push(:_destroy)]).fetch(:filters, [])
   end
 
   def build_filter_attributes(filter_params)
-    attributes = filter_params.merge(filter_params.merge(account: current_user.account))
-    attributes
+    filter_params.merge(account: current_user.account)
   end
 
   def build_endpoint
@@ -57,5 +57,11 @@ class EndpointsController < ApplicationController
       authorize(endpoint.filters.build(build_filter_attributes(filter_params)))
     end
     endpoint
+  end
+
+  def transform_filter_params
+    {
+      filters_attributes: nested_filters.map { |filter_attributes| build_filter_attributes(filter_attributes) }
+    }
   end
 end

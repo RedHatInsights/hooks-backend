@@ -21,6 +21,6 @@ module Params
   end
 
   def filter_properties
-    [:endpoint_id, :app_ids => [], :event_type_ids => [], :level_ids => []]
+    [:id, :endpoint_id, :app_ids => [], :event_type_ids => [], :level_ids => []]
   end
 end
