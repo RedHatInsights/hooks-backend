@@ -6,4 +6,5 @@ class EventTypeSerializer
   set_type :event_type
   attributes :title
   attribute :name, &:external_id
+  has_many :levels
 end

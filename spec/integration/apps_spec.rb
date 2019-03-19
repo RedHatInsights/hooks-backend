@@ -65,6 +65,26 @@ event_type_spec = {
   type: { type: :string },
   attributes: {
     name: { type: :string }
+  },
+  relationships: {
+    type: :object,
+    properties: {
+      levels: {
+        type: :object,
+        properties: {
+          data: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                title: { type: :string },
+                id: { type: :string }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -114,8 +134,16 @@ describe 'apps API' do
             }
           ],
           included: [
-            { id: '11', type: 'event_type', attributes: { name: 'something' } },
-            { id: '12', type: 'event_type', attributes: { name: 'something-else' } }
+            { id: '11', type: 'event_type', attributes: { name: 'something' },
+              relationships: {
+                levels: {
+                  data: [
+                    { id: '1', type: 'level' }
+                  ]
+                }
+              } },
+            { id: '12', type: 'event_type', attributes: { name: 'something-else' } },
+            { id: '1', type: 'level', attributes: { title: 'level-title' } }
           ]
         }
 
@@ -164,8 +192,16 @@ describe 'apps API' do
             }
           },
           included: [
-            { id: '11', type: 'event_type', attributes: { name: 'something' } },
-            { id: '12', type: 'event_type', attributes: { name: 'something-else' } }
+            { id: '11', type: 'event_type', attributes: { name: 'something' },
+              relationships: {
+                levels: {
+                  data: [
+                    { id: '1', type: 'level' }
+                  ]
+                }
+              } },
+            { id: '12', type: 'event_type', attributes: { name: 'something-else' } },
+            { id: '1', type: 'level', attributes: { title: 'level-title' } }
           ]
         }
 

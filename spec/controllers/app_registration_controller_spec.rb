@@ -5,6 +5,10 @@ require 'spec_helper'
 
 # rubocop:disable Metrics/BlockLength
 RSpec.describe AppRegistrationController do
+  before do
+    App.destroy_all
+  end
+
   describe 'app registration' do
     let(:levels) do
       [{ :id => 'application.event_type.2.level.1',
