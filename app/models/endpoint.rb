@@ -14,4 +14,8 @@ class Endpoint < ApplicationRecord
   def send_message(_timestamp:, _level:, _message:)
     raise 'Inherited class must be used to send mesages'
   end
+
+  def self.policy_class
+    ::EndpointPolicy
+  end
 end

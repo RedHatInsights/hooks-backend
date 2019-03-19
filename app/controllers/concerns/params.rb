@@ -17,7 +17,7 @@ module Params
   end
 
   def endpoint_properties
-    %i[name url active filter_id]
+    %i[name url active filter_id type]
   end
 
   def filter_properties

@@ -16,6 +16,10 @@ class ApplicationController < ActionController::API
            status: :internal_server_error
   end
 
+  rescue_from ActiveRecord::SubclassNotFound do |exception|
+    render_unprocessable_entity exception
+  end
+
   def paginate(scope)
     scope.paginate(:per_page => params[:per_page], :page => params[:page])
   end
