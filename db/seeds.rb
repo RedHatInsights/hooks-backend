@@ -21,7 +21,7 @@ ActiveRecord::Base.transaction do
   test_acc.save!
   test_endpoint = Endpoints::HttpEndpoint.new(
     name: 'test_endpoint',
-    url: 'http://rails:3000/logger',
+    url: 'http://endpoint:4567/logger',
     account: test_acc
   )
   test_filter = Filter.new(account_id: test_acc.id, endpoints: [test_endpoint]) # filter all

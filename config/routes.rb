@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  post 'logger', to: 'logger_endpoint#create'
-
   scope '/r/insights/platform/notifications/' do
     mount Rswag::Api::Engine => '/api-docs'
     mount Rswag::Ui::Engine => 'api-docs'

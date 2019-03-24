@@ -47,6 +47,15 @@ services:
       - 3000:3000
     depends_on:
       - postgres
+  endpoint:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.rails
+    volumes:
+      - ..:/app
+    command: bundle exec ruby bin/example_endpoint.rb -o 0.0.0.0
+    ports:
+      - 4567:4567
   resque:
     build:
       context: ..
