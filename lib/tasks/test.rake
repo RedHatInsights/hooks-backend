@@ -1,12 +1,33 @@
 # frozen_string_literal: true
 
 require 'rake/testtask'
+require 'fileutils'
+require 'tempfile'
 
 desc 'Run tests and rubocop'
 namespace :test do
   task :validate do
     Rake::Task['test'].invoke
     Rake::Task['spec'].invoke
+  end
+end
+
+desc 'Run checks'
+namespace :check do
+  task :matching_docs do
+    tmpfile = Tempfile.new
+    tmpfile.close
+    rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
+    swagger_doc = File.join(rails_root, 'swagger/v1/swagger.json')
+    FileUtils.copy swagger_doc, tmpfile.path
+    ENV['SKIP_COVERAGE'] = 'true'
+    Rake::Task['rswag:specs:swaggerize'].invoke
+    unless FileUtils.compare_file(swagger_doc, tmpfile.path)
+      STDERR.puts 'The swagger docs were not updated'
+      exit 1
+    end
+  ensure
+    tmpfile.unlink
   end
 end
 

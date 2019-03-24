@@ -25,4 +25,3 @@ Gemfile.lock
 /db/schema.rb
 .tags*
 /coverage/*
-/swagger/*

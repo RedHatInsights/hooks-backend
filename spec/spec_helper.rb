@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-SimpleCov.command_name 'spec'
+unless ENV['SKIP_COVERAGE']
+  require 'simplecov'
+  SimpleCov.command_name 'spec'
+end
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

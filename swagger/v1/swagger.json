@@ -1,0 +1,1404 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/r/insights/platform/notifications/apps/register": {
+      "post": {
+        "summary": "Register an app",
+        "tags": [
+          "filter"
+        ],
+        "description": "Lists all filters requested",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "application",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "application": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "event_types": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "levels": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "registers the application"
+          }
+        }
+      }
+    },
+    "/r/insights/platform/notifications/apps": {
+      "get": {
+        "summary": "List all apps",
+        "tags": [
+          "app"
+        ],
+        "description": "Lists all apps requested",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lists all apps requested",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "attributes": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "relationships": {
+                        "type": "object",
+                        "properties": {
+                          "event_types": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "included": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "attributes": {
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "relationships": {
+                        "type": "object",
+                        "properties": {
+                          "levels": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "data": [
+                  {
+                    "type": "app",
+                    "id": "3",
+                    "attributes": {
+                      "name": "notifications"
+                    },
+                    "relationships": {
+                      "event_types": {
+                        "data": [
+                          {
+                            "id": "11",
+                            "type": "event_type"
+                          },
+                          {
+                            "id": "12",
+                            "type": "event_type"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "included": [
+                  {
+                    "id": "11",
+                    "type": "event_type",
+                    "attributes": {
+                      "name": "something"
+                    },
+                    "relationships": {
+                      "levels": {
+                        "data": [
+                          {
+                            "id": "1",
+                            "type": "level"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "id": "12",
+                    "type": "event_type",
+                    "attributes": {
+                      "name": "something-else"
+                    }
+                  },
+                  {
+                    "id": "1",
+                    "type": "level",
+                    "attributes": {
+                      "title": "level-title"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/r/insights/platform/notifications/apps/{id}": {
+      "get": {
+        "summary": "Show an app",
+        "tags": [
+          "app"
+        ],
+        "description": "Shows the requested app",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "shows the requested app",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "properties": {
+                      "event_types": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "included": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "attributes": {
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "relationships": {
+                        "type": "object",
+                        "properties": {
+                          "levels": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "data": {
+                  "type": "app",
+                  "id": "3",
+                  "attributes": {
+                    "name": "notifications"
+                  },
+                  "relationships": {
+                    "event_types": {
+                      "data": [
+                        {
+                          "id": "11",
+                          "type": "event_type"
+                        },
+                        {
+                          "id": "12",
+                          "type": "event_type"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "included": [
+                  {
+                    "id": "11",
+                    "type": "event_type",
+                    "attributes": {
+                      "name": "something"
+                    },
+                    "relationships": {
+                      "levels": {
+                        "data": [
+                          {
+                            "id": "1",
+                            "type": "level"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "id": "12",
+                    "type": "event_type",
+                    "attributes": {
+                      "name": "something-else"
+                    }
+                  },
+                  {
+                    "id": "1",
+                    "type": "level",
+                    "attributes": {
+                      "title": "level-title"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/r/insights/platform/notifications/endpoints": {
+      "get": {
+        "summary": "List all endpoints",
+        "tags": [
+          "endpoint"
+        ],
+        "description": "Lists all endpoints requested",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lists all endpoints requested",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "attributes": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "active": {
+                          "type": "boolean"
+                        },
+                        "filter_count": {
+                          "type": "integer"
+                        }
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "data": [
+                  {
+                    "type": "endpoint",
+                    "id": "1",
+                    "attributes": {
+                      "name": "my endpoint",
+                      "url": "http://dev.null",
+                      "active": true,
+                      "filter_count": 15
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create and endpoint",
+        "tags": [
+          "endpoint"
+        ],
+        "description": "Shows the requested endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endpoint",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "active": {
+                  "type": "boolean"
+                },
+                "filters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "app_ids": {
+                        "type": "array",
+                        "items": "integer"
+                      },
+                      "event_type_ids": {
+                        "type": "array",
+                        "items": "integer"
+                      },
+                      "level_ids": {
+                        "type": "array",
+                        "items": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "url",
+                "type"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "endpoint created"
+          },
+          "422": {
+            "description": "endpoint created"
+          }
+        }
+      }
+    },
+    "/r/insights/platform/notifications/endpoints/{id}": {
+      "get": {
+        "summary": "Show an endpoint",
+        "tags": [
+          "endpoint"
+        ],
+        "description": "Shows the requested endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "shows the requested endpoint",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "attributes": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "boolean"
+                    },
+                    "filter_count": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "data": {
+                  "type": "endpoint",
+                  "id": "1",
+                  "attributes": {
+                    "name": "my endpoint",
+                    "url": "http://dev.null",
+                    "active": true,
+                    "filter_count": 15
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an endpoint",
+        "tags": [
+          "endpoint"
+        ],
+        "description": "Updates the requested endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "endpoint",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "active": {
+                  "type": "boolean"
+                },
+                "filters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "app_ids": {
+                        "type": "array",
+                        "items": "integer"
+                      },
+                      "event_type_ids": {
+                        "type": "array",
+                        "items": "integer"
+                      },
+                      "level_ids": {
+                        "type": "array",
+                        "items": "string"
+                      },
+                      "_destroy": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "endpoint updated",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "attributes": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "boolean"
+                    },
+                    "filter_count": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Destroy an endpoint",
+        "tags": [
+          "endpoint"
+        ],
+        "description": "Destroys the requested endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "endpoint destroyed"
+          }
+        }
+      }
+    },
+    "/r/insights/platform/notifications/filters": {
+      "get": {
+        "summary": "List all filters",
+        "tags": [
+          "filter"
+        ],
+        "description": "Lists all filters requested",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lists all filters requested",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "attributes": {
+                        "enabled": {
+                          "type": "boolean"
+                        }
+                      },
+                      "relationships": {
+                        "type": "object",
+                        "properties": {
+                          "apps": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "event_types": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "levels": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "data": [
+                  {
+                    "type": "filter",
+                    "id": "1",
+                    "attributes": {
+                      "enabled": true
+                    },
+                    "relationships": {
+                      "apps": {
+                        "data": [
+                          {
+                            "id": "1",
+                            "type": "app"
+                          }
+                        ]
+                      },
+                      "event_types": {
+                        "data": [
+                          {
+                            "id": "1",
+                            "type": "event_type"
+                          },
+                          {
+                            "id": 2,
+                            "type": "event_type"
+                          }
+                        ]
+                      },
+                      "levels": {
+                        "data": [
+                          {
+                            "id": "1",
+                            "type": "level"
+                          },
+                          {
+                            "id": 2,
+                            "type": "level"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a filter",
+        "tags": [
+          "filter"
+        ],
+        "description": "Creates a filter",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "app_ids": {
+                  "type": "array",
+                  "items": "integer"
+                },
+                "event_type_ids": {
+                  "type": "array",
+                  "items": "integer"
+                },
+                "level_ids": {
+                  "type": "array",
+                  "items": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "creates a filter",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "attributes": {
+                    "enabled": {
+                      "type": "boolean"
+                    }
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "properties": {
+                      "apps": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "event_types": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "levels": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/r/insights/platform/notifications/filters/{id}": {
+      "delete": {
+        "summary": "Delete a filter",
+        "tags": [
+          "filter"
+        ],
+        "description": "Lists all filters associated to endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "destroys the filter"
+          }
+        }
+      }
+    },
+    "/r/insights/platform/notifications/endpoints/{endpoint_id}/filters": {
+      "parameters": [
+        {
+          "name": "endpoint_id",
+          "in": "path",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "List all filters associated to endpoint",
+        "tags": [
+          "filter"
+        ],
+        "description": "Lists all filters associated to endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lists all filters requested",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "attributes": {
+                        "enabled": {
+                          "type": "boolean"
+                        }
+                      },
+                      "relationships": {
+                        "type": "object",
+                        "properties": {
+                          "apps": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "event_types": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "levels": {
+                            "type": "object",
+                            "properties": {
+                              "data": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "data": [
+                  {
+                    "type": "filter",
+                    "id": "1",
+                    "attributes": {
+                      "name": "my filter",
+                      "url": "http://dev.null",
+                      "active": true,
+                      "filter_count": 15
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a filter",
+        "tags": [
+          "filter"
+        ],
+        "description": "Creates a filter",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "app_ids": {
+                  "type": "array",
+                  "items": "integer"
+                },
+                "event_type_ids": {
+                  "type": "array",
+                  "items": "integer"
+                },
+                "levels": {
+                  "type": "array",
+                  "items": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "creates a filter",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "attributes": {
+                    "enabled": {
+                      "type": "boolean"
+                    }
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "properties": {
+                      "apps": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "event_types": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "levels": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
