@@ -21,7 +21,7 @@ incoming_endpoint_spec = simple_spec(
 
 # rubocop:disable Metrics/BlockLength
 describe 'endpoints API' do
-  path '/r/insights/platform/notifications/endpoints' do
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/endpoints" do
     get 'List all endpoints' do
       tags 'endpoint'
       description 'Lists all endpoints requested'
@@ -147,7 +147,7 @@ describe 'endpoints API' do
     end
   end
 
-  path '/r/insights/platform/notifications/endpoints/{id}' do
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/endpoints/{id}" do
     get 'Show an endpoint' do
       tags 'endpoint'
       description 'Shows the requested endpoint'

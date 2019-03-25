@@ -5,7 +5,7 @@ require 'swagger_helper'
 
 # rubocop:disable Metrics/BlockLength
 describe 'filters API' do
-  path '/r/insights/platform/notifications/apps/register' do
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/apps/register" do
     post 'Register an app' do
       tags 'filter'
       description 'Lists all filters requested'

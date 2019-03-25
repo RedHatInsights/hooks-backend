@@ -5,7 +5,7 @@
     "version": "v1"
   },
   "paths": {
-    "/r/insights/platform/notifications/apps/register": {
+    "/api/webhooks/apps/register": {
       "post": {
         "summary": "Register an app",
         "tags": [
@@ -81,7 +81,7 @@
         }
       }
     },
-    "/r/insights/platform/notifications/apps": {
+    "/api/webhooks/apps": {
       "get": {
         "summary": "List all apps",
         "tags": [
@@ -262,7 +262,7 @@
         }
       }
     },
-    "/r/insights/platform/notifications/apps/{id}": {
+    "/api/webhooks/apps/{id}": {
       "get": {
         "summary": "Show an app",
         "tags": [
@@ -442,7 +442,7 @@
         }
       }
     },
-    "/r/insights/platform/notifications/endpoints": {
+    "/api/webhooks/endpoints": {
       "get": {
         "summary": "List all endpoints",
         "tags": [
@@ -595,7 +595,7 @@
         }
       }
     },
-    "/r/insights/platform/notifications/endpoints/{id}": {
+    "/api/webhooks/endpoints/{id}": {
       "get": {
         "summary": "Show an endpoint",
         "tags": [
@@ -808,7 +808,7 @@
         }
       }
     },
-    "/r/insights/platform/notifications/filters": {
+    "/api/webhooks/filters": {
       "get": {
         "summary": "List all filters",
         "tags": [
@@ -1098,7 +1098,7 @@
         }
       }
     },
-    "/r/insights/platform/notifications/filters/{id}": {
+    "/api/webhooks/filters/{id}": {
       "delete": {
         "summary": "Delete a filter",
         "tags": [
@@ -1133,7 +1133,7 @@
         }
       }
     },
-    "/r/insights/platform/notifications/endpoints/{endpoint_id}/filters": {
+    "/api/webhooks/endpoints/{endpoint_id}/filters": {
       "parameters": [
         {
           "name": "endpoint_id",

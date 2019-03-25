@@ -11,6 +11,8 @@ addons:
 env:
   global:
     - TESTOPTS=--verbose
+    - PATH_PREFIX=/api
+    - APP_NAME=webhooks
 
 install:
   - bundle install

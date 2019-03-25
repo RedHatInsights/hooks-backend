@@ -30,7 +30,7 @@ filter_spec = {
 
 # rubocop:disable Metrics/BlockLength
 describe 'filters API' do
-  path '/r/insights/platform/notifications/filters' do
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/filters" do
     get 'List all filters' do
       tags 'filter'
       description 'Lists all filters requested'
@@ -116,7 +116,7 @@ describe 'filters API' do
     end
   end
 
-  path '/r/insights/platform/notifications/filters/{id}' do
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/filters/{id}" do
     delete 'Delete a filter' do
       tags 'filter'
       description 'Lists all filters associated to endpoint'
@@ -145,7 +145,7 @@ describe 'filters API' do
     end
   end
 
-  path '/r/insights/platform/notifications/endpoints/{endpoint_id}/filters' do
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/endpoints/{endpoint_id}/filters" do
     parameter name: :endpoint_id, in: :path, :type => :integer
     let(:endpoint_id) do
       endpoint = FactoryBot.build(:endpoint)

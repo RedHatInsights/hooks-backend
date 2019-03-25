@@ -43,6 +43,7 @@ services:
     command: bin/rails server --binding 0.0.0.0
     env_file:
       - postgres.env
+      - app.env
     ports:
       - 3000:3000
     depends_on:
