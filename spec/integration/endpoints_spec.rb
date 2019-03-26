@@ -38,6 +38,10 @@ describe 'endpoints API' do
                    items: {
                      properties: endpoint_spec
                    }
+                 },
+                 meta: {
+                   type: :object,
+                   properties: simple_spec(%i[page per_page total] => :integer)
                  }
                }
         examples 'application/json' => {
@@ -52,7 +56,12 @@ describe 'endpoints API' do
                 filter_count: 15
               }
             }
-          ]
+          ],
+          meta: {
+            page: 1,
+            per_page: 10,
+            total: 2
+          }
         }
 
         before do |example|

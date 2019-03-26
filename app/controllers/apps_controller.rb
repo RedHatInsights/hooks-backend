@@ -2,8 +2,8 @@
 
 class AppsController < ApplicationController
   def index
-    records = paginate(policy_scope(App).includes(:event_types))
-    render :json => AppSerializer.new(records, :include => default_includes)
+    process_index App.includes(:event_types), AppSerializer,
+                  :include => default_includes
   end
 
   def show

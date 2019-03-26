@@ -113,7 +113,11 @@ describe 'apps API' do
                      properties: app_spec
                    }
                  },
-                 included: included_event_type_spec
+                 included: included_event_type_spec,
+                 meta: {
+                   type: :object,
+                   properties: simple_spec(%i[page per_page total] => :integer)
+                 }
                }
         examples 'application/json' => {
           data: [
@@ -144,7 +148,12 @@ describe 'apps API' do
               } },
             { id: '12', type: 'event_type', attributes: { name: 'something-else' } },
             { id: '1', type: 'level', attributes: { title: 'level-title' } }
-          ]
+          ],
+          meta: {
+            page: 1,
+            per_page: 10,
+            total: 1
+          }
         }
 
         before do |example|

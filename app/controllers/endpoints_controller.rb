@@ -4,8 +4,7 @@ class EndpointsController < ApplicationController
   before_action :find_endpoint, :only => %i[destroy show update]
 
   def index
-    records = paginate(policy_scope(Endpoint))
-    render :json => EndpointSerializer.new(records)
+    process_index Endpoint, EndpointSerializer
   end
 
   def show

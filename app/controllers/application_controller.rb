@@ -21,7 +21,7 @@ class ApplicationController < ActionController::API
   end
 
   def paginate(scope)
-    scope.paginate(:per_page => params[:per_page], :page => params[:page])
+    scope.paginate(:per_page => params[:per_page] || 10, :page => params[:page] || 1)
   end
 
   def process_create(record, serializer_class)
@@ -42,6 +42,12 @@ class ApplicationController < ActionController::API
     else
       render_unprocessable_entity record.errors
     end
+  end
+
+  def process_index(base, serializer_class, opts = {})
+    scope = paginate(policy_scope(base))
+    meta = { :total => scope.count, :per_page => scope.per_page, :page => scope.current_page }
+    render :json => serializer_class.new(scope, { :meta => meta }.deep_merge(opts))
   end
 
   def render_unprocessable_entity(errors)

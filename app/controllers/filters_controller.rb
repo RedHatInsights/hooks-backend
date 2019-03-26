@@ -20,8 +20,7 @@ class FiltersController < ApplicationController
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def index
-    records = policy_scope(index_scope)
-    render :json => FilterSerializer.new(paginate(records))
+    process_index index_scope, FilterSerializer
   end
 
   def destroy

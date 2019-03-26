@@ -195,6 +195,20 @@
                       }
                     }
                   }
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "integer"
+                    },
+                    "per_page": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  }
                 }
               }
             },
@@ -255,7 +269,12 @@
                       "title": "level-title"
                     }
                   }
-                ]
+                ],
+                "meta": {
+                  "page": 1,
+                  "per_page": 10,
+                  "total": 1
+                }
               }
             }
           }
@@ -496,6 +515,20 @@
                       }
                     }
                   }
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "integer"
+                    },
+                    "per_page": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  }
                 }
               }
             },
@@ -512,7 +545,12 @@
                       "filter_count": 15
                     }
                   }
-                ]
+                ],
+                "meta": {
+                  "page": 1,
+                  "per_page": 10,
+                  "total": 2
+                }
               }
             }
           }
@@ -916,6 +954,20 @@
                       }
                     }
                   }
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "integer"
+                    },
+                    "per_page": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  }
                 }
               }
             },
@@ -963,7 +1015,12 @@
                       }
                     }
                   }
-                ]
+                ],
+                "meta": {
+                  "page": 1,
+                  "per_page": 10,
+                  "total": 3
+                }
               }
             }
           }

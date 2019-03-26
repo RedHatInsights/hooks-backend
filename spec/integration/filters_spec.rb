@@ -48,6 +48,10 @@ describe 'filters API' do
                      type: :object,
                      properties: filter_spec
                    }
+                 },
+                 meta: {
+                   type: :object,
+                   properties: simple_spec(%i[page per_page total] => :integer)
                  }
                }
         examples 'application/json' => {
@@ -70,7 +74,12 @@ describe 'filters API' do
                 }
               }
             }
-          ]
+          ],
+          meta: {
+            page: 1,
+            per_page: 10,
+            total: 3
+          }
         }
 
         before do |example|
