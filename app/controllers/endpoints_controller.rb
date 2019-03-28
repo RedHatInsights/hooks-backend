@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EndpointsController < ApplicationController
-  before_action :find_endpoint, :only => %i[destroy show update]
+  before_action :find_endpoint, :only => %i[destroy show update test]
 
   def index
     process_index Endpoint, EndpointSerializer
@@ -31,6 +31,11 @@ class EndpointsController < ApplicationController
   def update
     full_params = endpoint_params.merge(transform_filter_params)
     process_update(@endpoint, full_params, EndpointSerializer)
+  end
+
+  def test
+    SendNotificationJob.perform_now(@endpoint, Time.zone.now, 'Test', 'Test message from webhooks')
+    head :no_content
   end
 
   private

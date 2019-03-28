@@ -132,27 +132,6 @@ describe 'endpoints API' do
           expect(result['errors']['name']).to include("can't be blank")
         end
       end
-
-      response '422', 'endpoint created' do
-        let(:'X-RH-IDENTITY') { encoded_header }
-        let(:endpoint) do
-          {
-            endpoint: {
-              url: 'foo',
-              name: 'bar',
-              filters: [
-                {
-                  app_ids: [1, 2],
-                  event_type_ids: [3, 4],
-                  level_ids: [5, 6]
-                }
-              ]
-            }
-          }
-        end
-
-        run_test!
-      end
     end
   end
 
@@ -344,6 +323,40 @@ describe 'endpoints API' do
           assert_response_matches_metadata(example.metadata)
           expect(Endpoint.where(:id => id).all.count).to eq(0)
         end
+      end
+    end
+  end
+
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/endpoints/{id}/test" do
+    post 'Send a test message through endpoint' do
+      tags 'endpoint'
+      description 'Send a test message to the endpoint'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :id, :in => :path, :type => :integer
+
+      let(:'X-RH-IDENTITY') { encoded_header }
+      let(:endpoint) do
+        endpoint = FactoryBot.build(:endpoint)
+        endpoint.account = account
+        endpoint.save!
+        endpoint
+      end
+      let(:id) do
+        endpoint.id
+      end
+
+      response '204', 'Sent successfully' do
+        before do |_example|
+          expect_any_instance_of(Endpoint).to receive(:send_message).with(
+            timestamp: anything,
+            level: 'Test',
+            message: 'Test message from webhooks'
+          )
+        end
+
+        run_test!
       end
     end
   end

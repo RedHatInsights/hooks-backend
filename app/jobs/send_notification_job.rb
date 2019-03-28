@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'notifications'
+
 # Sends a simple one-step notification.
 class SendNotificationJob < ApplicationJob
   def self.disable_endpoint(endpoint)

@@ -628,7 +628,7 @@
             "description": "endpoint created"
           },
           "422": {
-            "description": "endpoint created"
+            "description": "invalid request"
           }
         }
       }
@@ -842,6 +842,41 @@
         "responses": {
           "204": {
             "description": "endpoint destroyed"
+          }
+        }
+      }
+    },
+    "/api/webhooks/endpoints/{id}/test": {
+      "post": {
+        "summary": "Send a test message through endpoint",
+        "tags": [
+          "endpoint"
+        ],
+        "description": "Send a test message to the endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-RH-IDENTITY",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Sent successfully"
           }
         }
       }

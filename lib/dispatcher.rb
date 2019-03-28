@@ -25,7 +25,7 @@ class Dispatcher
   end
 
   def job_class
-    SendServiceNowNotificationJob
+    SendNotificationJob
   end
 
   def timestamp
