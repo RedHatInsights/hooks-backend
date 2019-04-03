@@ -74,6 +74,22 @@ services:
     depends_on:
       - postgres
       - mcom-redis
+  resque-scheduler:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.rails
+    volumes:
+      - ..:/app
+    command: bin/rake environment resque:scheduler
+    environment:
+      REDIS_SERVICE_NAME: mcom-redis
+      REDIS_PASSWORD: redispass
+      MCOM_REDIS_SERVICE_HOST: mcom-redis
+    env_file:
+      - postgres.env
+    depends_on:
+      - postgres
+      - mcom-redis
   racecar:
     build:
       context: ..

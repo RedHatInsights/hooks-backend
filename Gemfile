@@ -72,3 +72,4 @@ gem 'resque'
 
 # Kafka connector
 gem 'racecar'
+gem 'resque-scheduler', :git => 'https://github.com/resque/resque-scheduler.git', :ref => 'bbf4930'
