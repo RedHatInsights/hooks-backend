@@ -3,8 +3,11 @@
 class EndpointsController < ApplicationController
   before_action :find_endpoint, :only => %i[destroy show update test]
 
+  ALLOWED_SORT_KEYS = %w[name url active].freeze
+
   def index
-    process_index Endpoint, EndpointSerializer
+    process_index Endpoint, EndpointSerializer,
+                  default_sort: 'name', allowed_sort_keys: ALLOWED_SORT_KEYS
   end
 
   def show

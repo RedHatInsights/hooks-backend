@@ -481,6 +481,30 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "scehma": {
+              "type": "integer"
+            },
+            "required": false
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "scehma": {
+              "type": "integer"
+            },
+            "required": false
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "scehma": {
+              "type": "string"
+            },
+            "required": false
           }
         ],
         "responses": {
@@ -901,6 +925,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "scehma": {
+              "type": "integer"
+            },
+            "required": false
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "scehma": {
+              "type": "integer"
+            },
+            "required": false
           }
         ],
         "responses": {

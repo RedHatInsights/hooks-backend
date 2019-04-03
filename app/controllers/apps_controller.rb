@@ -3,7 +3,7 @@
 class AppsController < ApplicationController
   def index
     process_index App.includes(:event_types), AppSerializer,
-                  :include => default_includes
+                  :opts => { :include => default_includes }
   end
 
   def show

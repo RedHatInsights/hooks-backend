@@ -28,6 +28,9 @@ describe 'endpoints API' do
       consumes 'application/json'
       produces 'application/json'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :page, in: :query, scehma: { type: :integer }, required: false
+      parameter name: :per_page, in: :query, scehma: { type: :integer }, required: false
+      parameter name: :order, in: :query, scehma: { type: :string }, required: false
 
       response '200', 'lists all endpoints requested' do
         let(:'X-RH-IDENTITY') { encoded_header }

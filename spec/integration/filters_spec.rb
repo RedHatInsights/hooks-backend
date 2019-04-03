@@ -37,6 +37,8 @@ describe 'filters API' do
       consumes 'application/json'
       produces 'application/json'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :page, in: :query, scehma: { type: :integer }, required: false
+      parameter name: :per_page, in: :query, scehma: { type: :integer }, required: false
 
       response '200', 'lists all filters requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
