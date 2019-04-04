@@ -28,10 +28,10 @@ describe 'endpoints API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'ListEndpoints'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
-      parameter name: :page, in: :query, scehma: { type: :integer }, required: false
-      parameter name: :per_page, in: :query, scehma: { type: :integer }, required: false
-      parameter name: :order, in: :query, scehma: { type: :string }, required: false
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter name: :page, in: :query, type: :integer, required: false
+      parameter name: :per_page, in: :query, type: :integer, required: false
+      parameter name: :order, in: :query, type: :string, required: false
 
       response '200', 'lists all endpoints requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
@@ -87,7 +87,7 @@ describe 'endpoints API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'CreateEndoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
         properties: incoming_endpoint_spec,
@@ -147,7 +147,7 @@ describe 'endpoints API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'ShowEndpoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :id, :in => :path, :type => :integer
 
       response '200', 'shows the requested endpoint' do
@@ -192,7 +192,7 @@ describe 'endpoints API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'UpdateEndpoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :id, :in => :path, :type => :integer
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
@@ -313,7 +313,7 @@ describe 'endpoints API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'DestroyEndpoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :id, :in => :path, :type => :integer
 
       let(:'X-RH-IDENTITY') { encoded_header }
@@ -342,7 +342,7 @@ describe 'endpoints API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'TestEndpoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :id, :in => :path, :type => :integer
 
       let(:'X-RH-IDENTITY') { encoded_header }

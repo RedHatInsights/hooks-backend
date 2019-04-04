@@ -37,9 +37,9 @@ describe 'filters API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'ListFilters'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
-      parameter name: :page, in: :query, scehma: { type: :integer }, required: false
-      parameter name: :per_page, in: :query, scehma: { type: :integer }, required: false
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter name: :page, in: :query, type: :integer, required: false
+      parameter name: :per_page, in: :query, type: :integer, required: false
 
       response '200', 'lists all filters requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
@@ -107,7 +107,7 @@ describe 'filters API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'CreateFilter'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :filter, in: :body, schema: incoming_filter_spec
 
       response '201', 'creates a filter' do
@@ -136,7 +136,7 @@ describe 'filters API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'DestroyFilter'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :id, in: :path, :type => :integer
 
       response '204', 'destroys the filter' do
@@ -175,7 +175,7 @@ describe 'filters API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'ListEndpointFilters'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
 
       response '200', 'lists all filters requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
@@ -229,7 +229,7 @@ describe 'filters API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'CreateEndpointFilter'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :filter, in: :body, schema: {
         type: :object,
         properties: {

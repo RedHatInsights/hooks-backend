@@ -100,9 +100,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -301,9 +299,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "id",
@@ -482,32 +478,24 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "page",
             "in": "query",
-            "scehma": {
-              "type": "integer"
-            },
+            "type": "integer",
             "required": false
           },
           {
             "name": "per_page",
             "in": "query",
-            "scehma": {
-              "type": "integer"
-            },
+            "type": "integer",
             "required": false
           },
           {
             "name": "order",
             "in": "query",
-            "scehma": {
-              "type": "string"
-            },
+            "type": "string",
             "required": false
           }
         ],
@@ -601,9 +589,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "endpoint",
@@ -680,9 +666,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "id",
@@ -755,9 +739,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "id",
@@ -860,9 +842,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "id",
@@ -896,9 +876,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "id",
@@ -932,24 +910,18 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "page",
             "in": "query",
-            "scehma": {
-              "type": "integer"
-            },
+            "type": "integer",
             "required": false
           },
           {
             "name": "per_page",
             "in": "query",
-            "scehma": {
-              "type": "integer"
-            },
+            "type": "integer",
             "required": false
           }
         ],
@@ -1128,9 +1100,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "filter",
@@ -1259,9 +1229,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "id",
@@ -1303,9 +1271,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -1433,9 +1399,7 @@
           {
             "name": "X-RH-IDENTITY",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "filter",

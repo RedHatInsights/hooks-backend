@@ -102,7 +102,7 @@ describe 'apps API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'ListApps'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
 
       response '200', 'lists all apps requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
@@ -176,7 +176,7 @@ describe 'apps API' do
       consumes 'application/json'
       produces 'application/json'
       operationId 'ShowApp'
-      parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :id, :in => :path, :type => :integer
 
       response '200', 'shows the requested app' do
