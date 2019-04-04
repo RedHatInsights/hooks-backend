@@ -27,6 +27,7 @@ describe 'endpoints API' do
       description 'Lists all endpoints requested'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'ListEndpoints'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :page, in: :query, scehma: { type: :integer }, required: false
       parameter name: :per_page, in: :query, scehma: { type: :integer }, required: false
@@ -85,6 +86,7 @@ describe 'endpoints API' do
       description 'Shows the requested endpoint'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'CreateEndoint'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
@@ -144,6 +146,7 @@ describe 'endpoints API' do
       description 'Shows the requested endpoint'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'ShowEndpoint'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :id, :in => :path, :type => :integer
 
@@ -188,6 +191,7 @@ describe 'endpoints API' do
       description 'Updates the requested endpoint'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'UpdateEndpoint'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :id, :in => :path, :type => :integer
       parameter name: :endpoint, in: :body, schema: {
@@ -308,6 +312,7 @@ describe 'endpoints API' do
       description 'Destroys the requested endpoint'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'DestroyEndpoint'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :id, :in => :path, :type => :integer
 
@@ -336,6 +341,7 @@ describe 'endpoints API' do
       description 'Send a test message to the endpoint'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'TestEndpoint'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :id, :in => :path, :type => :integer
 

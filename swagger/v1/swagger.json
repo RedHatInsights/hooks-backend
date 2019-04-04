@@ -11,13 +11,14 @@
         "tags": [
           "filter"
         ],
-        "description": "Lists all filters requested",
+        "description": "Register an application",
         "consumes": [
           "application/json"
         ],
         "produces": [
           "application/json"
         ],
+        "operationId": "RegisterApp",
         "parameters": [
           {
             "name": "application",
@@ -94,6 +95,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "ListApps",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -294,6 +296,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "ShowApp",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -474,6 +477,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "ListEndpoints",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -592,6 +596,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "CreateEndoint",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -670,6 +675,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "ShowEndpoint",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -744,6 +750,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "UpdateEndpoint",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -848,6 +855,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "DestroyEndpoint",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -883,6 +891,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "TestEndpoint",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -918,6 +927,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "ListFilters",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -1113,6 +1123,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "CreateFilter",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -1243,6 +1254,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "DestroyFilter",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -1286,6 +1298,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "ListEndpointFilters",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",
@@ -1415,6 +1428,7 @@
         "produces": [
           "application/json"
         ],
+        "operationId": "CreateEndpointFilter",
         "parameters": [
           {
             "name": "X-RH-IDENTITY",

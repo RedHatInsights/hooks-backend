@@ -36,6 +36,7 @@ describe 'filters API' do
       description 'Lists all filters requested'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'ListFilters'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :page, in: :query, scehma: { type: :integer }, required: false
       parameter name: :per_page, in: :query, scehma: { type: :integer }, required: false
@@ -105,6 +106,7 @@ describe 'filters API' do
       description 'Creates a filter'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'CreateFilter'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :filter, in: :body, schema: incoming_filter_spec
 
@@ -133,6 +135,7 @@ describe 'filters API' do
       description 'Lists all filters associated to endpoint'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'DestroyFilter'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :id, in: :path, :type => :integer
 
@@ -171,6 +174,7 @@ describe 'filters API' do
       description 'Lists all filters associated to endpoint'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'ListEndpointFilters'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
 
       response '200', 'lists all filters requested' do
@@ -224,6 +228,7 @@ describe 'filters API' do
       description 'Creates a filter'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'CreateEndpointFilter'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :filter, in: :body, schema: {
         type: :object,

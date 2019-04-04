@@ -8,9 +8,10 @@ describe 'filters API' do
   path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/apps/register" do
     post 'Register an app' do
       tags 'filter'
-      description 'Lists all filters requested'
+      description 'Register an application'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'RegisterApp'
       parameter name: :application, in: :body, schema: {
         type: :object,
         properties: {

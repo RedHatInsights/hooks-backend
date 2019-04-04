@@ -101,6 +101,7 @@ describe 'apps API' do
       description 'Lists all apps requested'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'ListApps'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
 
       response '200', 'lists all apps requested' do
@@ -174,6 +175,7 @@ describe 'apps API' do
       description 'Shows the requested app'
       consumes 'application/json'
       produces 'application/json'
+      operationId 'ShowApp'
       parameter name: :'X-RH-IDENTITY', in: :header, schema: { type: :string }
       parameter name: :id, :in => :path, :type => :integer
 
