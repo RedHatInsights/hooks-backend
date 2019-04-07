@@ -22,8 +22,8 @@ class EndpointsController < ApplicationController
   def create
     begin
       endpoint = build_endpoint
-    rescue ActiveRecord::RecordNotFound => ex
-      render_unprocessable_entity ex
+    rescue ActiveRecord::RecordNotFound => e
+      render_unprocessable_entity e
       return
     end
 

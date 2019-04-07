@@ -23,7 +23,9 @@ namespace :check do
     ENV['SKIP_COVERAGE'] = 'true'
     Rake::Task['rswag:specs:swaggerize'].invoke
     unless FileUtils.compare_file(swagger_doc, tmpfile.path)
+      # rubocop:disable Style/StderrPuts
       STDERR.puts 'The swagger docs were not updated'
+      # rubocop:enable Style/StderrPuts
       exit 1
     end
   ensure

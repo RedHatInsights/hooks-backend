@@ -13,8 +13,8 @@ module Endpoints
         'Content-Type' => 'application/json'
       )
       validate_response(response)
-    rescue Timeout::Error => ex
-      raise Notifications::RecoverableError, ex
+    rescue Timeout::Error => e
+      raise Notifications::RecoverableError, e
     end
 
     protected

@@ -124,6 +124,9 @@
                         "properties": {
                           "name": {
                             "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
                           }
                         }
                       },
@@ -166,6 +169,9 @@
                       },
                       "attributes": {
                         "name": {
+                          "type": "string"
+                        },
+                        "title": {
                           "type": "string"
                         }
                       },
@@ -326,6 +332,9 @@
                     "properties": {
                       "name": {
                         "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
                       }
                     }
                   },
@@ -367,6 +376,9 @@
                       "attributes": {
                         "name": {
                           "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
                         }
                       },
                       "relationships": {
@@ -404,7 +416,8 @@
                   "type": "app",
                   "id": "3",
                   "attributes": {
-                    "name": "notifications"
+                    "name": "notifications",
+                    "title": "Notifications"
                   },
                   "relationships": {
                     "event_types": {
@@ -426,7 +439,8 @@
                     "id": "11",
                     "type": "event_type",
                     "attributes": {
-                      "name": "something"
+                      "name": "something",
+                      "title": "Something"
                     },
                     "relationships": {
                       "levels": {
@@ -443,7 +457,8 @@
                     "id": "12",
                     "type": "event_type",
                     "attributes": {
-                      "name": "something-else"
+                      "name": "something-else",
+                      "title": "Something else"
                     }
                   },
                   {

@@ -35,7 +35,8 @@ app_spec = {
   attributes: {
     type: :object,
     properties: {
-      name: { type: :string }
+      name: { type: :string },
+      title: { type: :string }
     }
   },
   relationships: {
@@ -64,7 +65,8 @@ event_type_spec = {
   id: { type: :string },
   type: { type: :string },
   attributes: {
-    name: { type: :string }
+    name: { type: :string },
+    title: { type: :string }
   },
   relationships: {
     type: :object,
@@ -191,7 +193,8 @@ describe 'apps API' do
             type: 'app',
             id: '3',
             attributes: {
-              name: 'notifications'
+              name: 'notifications',
+              title: 'Notifications'
             },
             relationships: {
               event_types: {
@@ -203,7 +206,7 @@ describe 'apps API' do
             }
           },
           included: [
-            { id: '11', type: 'event_type', attributes: { name: 'something' },
+            { id: '11', type: 'event_type', attributes: { name: 'something', title: 'Something' },
               relationships: {
                 levels: {
                   data: [
@@ -211,7 +214,8 @@ describe 'apps API' do
                   ]
                 }
               } },
-            { id: '12', type: 'event_type', attributes: { name: 'something-else' } },
+            { id: '12', type: 'event_type',
+              attributes: { name: 'something-else', title: 'Something else' } },
             { id: '1', type: 'level', attributes: { title: 'level-title' } }
           ]
         }
