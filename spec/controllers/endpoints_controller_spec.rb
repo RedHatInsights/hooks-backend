@@ -18,6 +18,25 @@ RSpec.describe EndpointsController, type: :controller do
       data = JSON.parse response.body
       expect(data['errors']).to match(/failed to locate the subclass: 'Foobar'/)
     end
+
+    it 'does not allow creation of multiple endpoints with the same name' do
+      payload = {
+        endpoint: {
+          type: '::Endpoints::HttpEndpoint',
+          url: 'http://something.somewhere.com',
+          name: 'Endpoint'
+        }
+      }
+      request.headers['X-RH-IDENTITY'] = encoded_header
+
+      post :create, params: payload
+      expect(response).to have_http_status(:created)
+
+      post :create, params: payload
+      expect(response).to have_http_status(:unprocessable_entity)
+      data = JSON.parse response.body
+      expect(data['errors']).to eq('name' => ['has already been taken'])
+    end
   end
 
   describe 'GET #index' do

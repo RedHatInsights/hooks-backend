@@ -7,7 +7,8 @@ class Endpoint < ApplicationRecord
 
   accepts_nested_attributes_for :filter, allow_destroy: true
 
-  validates :name, :presence => true
+  validates :name, :presence => true,
+                   :uniqueness => { :scope => :account_id }
   validates :url, :presence => true
 
   def send_message(*)
