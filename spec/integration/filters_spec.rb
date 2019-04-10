@@ -40,6 +40,8 @@ describe 'filters API' do
       parameter name: :'X-RH-IDENTITY', in: :header, type: :string
       parameter name: :page, in: :query, type: :integer, required: false
       parameter name: :per_page, in: :query, type: :integer, required: false
+      parameter name: :limit, in: :query, type: :integer, required: false
+      parameter name: :offset, in: :query, type: :integer, required: false
 
       response '200', 'lists all filters requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
@@ -81,7 +83,9 @@ describe 'filters API' do
           meta: {
             page: 1,
             per_page: 10,
-            total: 3
+            total: 3,
+            limit: nil,
+            offset: nil
           }
         }
 

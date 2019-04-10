@@ -7,6 +7,7 @@ class ApplicationController < ActionController::API
   include Params
 
   class UnknownOrder < RuntimeError; end
+  class BadRequest < RuntimeError; end
 
   rescue_from Pundit::NotAuthorizedError do
     render json: { errors: 'You are not authorized to access this action.' },
@@ -18,12 +19,41 @@ class ApplicationController < ActionController::API
            status: :internal_server_error
   end
 
+  rescue_from BadRequest do |exception|
+    render json: { errors: "Server cannot accept given parameters, reason: #{exception.inspect}" },
+           status: :bad_request
+  end
+
   rescue_from ActiveRecord::SubclassNotFound, UnknownOrder do |exception|
     render_unprocessable_entity exception
   end
 
   def paginate(scope)
-    scope.paginate(:per_page => params[:per_page] || 10, :page => params[:page] || 1)
+    raise BadRequest, 'Both page and offset pagination is not allowed' if page_pagination? && offset_pagination?
+
+    limit_query(scope.paginate(:per_page => params[:per_page] || 10, :page => params[:page] || 1))
+  end
+
+  def page_pagination?
+    params[:per_page] || params[:page]
+  end
+
+  def offset_pagination?
+    params[:limit] || params[:offset]
+  end
+
+  def limit_query(scope)
+    limited_scope = scope
+    if params[:limit]
+      limit = params[:limit].to_i
+      limited_scope = limited_scope.limit(limit)
+    end
+
+    if params[:offset]
+      offset = params[:offset].to_i
+      limited_scope = limited_scope.offset(offset)
+    end
+    limited_scope
   end
 
   def order(scope, default_order, allowed_keys)
@@ -60,8 +90,19 @@ class ApplicationController < ActionController::API
     scope = policy_scope(base)
     scope = order(scope, default_sort, allowed_sort_keys) if default_sort
     scope = paginate(scope)
-    meta = { :total => scope.count, :per_page => scope.per_page, :page => scope.current_page }
+    meta = index_meta(scope)
     render :json => serializer_class.new(scope, { :meta => meta }.deep_merge(opts))
+  end
+
+  def index_meta(scope)
+    meta = {
+      :total => scope.count,
+      :per_page => scope.per_page,
+      :page => scope.current_page
+    }
+    meta[:limit] = scope.limit_value if scope.respond_to?(:limit_value)
+    meta[:offset] = scope.offset_value if scope.respond_to?(:offset_value)
+    meta
   end
 
   def render_unprocessable_entity(errors)
