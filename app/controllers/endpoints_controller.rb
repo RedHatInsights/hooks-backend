@@ -44,11 +44,11 @@ class EndpointsController < ApplicationController
   private
 
   def find_endpoint
-    @endpoint = authorize(Endpoint.includes(:filters).find(params[:id]))
+    @endpoint = authorize(Endpoint.includes(:filter).find(params[:id]))
   end
 
-  def nested_filters
-    params.require(:endpoint).permit(filters: [filter_properties.push(:_destroy)]).fetch(:filters, [])
+  def nested_filter
+    filter_params(params.require(:endpoint), [:_destroy])
   end
 
   def build_filter_attributes(filter_params)
@@ -60,15 +60,16 @@ class EndpointsController < ApplicationController
     endpoint.account = current_user.account
     endpoint.type ||= Endpoint.name
 
-    nested_filters.each do |filter_params|
-      authorize(endpoint.filters.build(build_filter_attributes(filter_params)))
-    end
+    authorize(endpoint.build_filter(build_filter_attributes(nested_filter))) if nested_filter
+
     endpoint
   end
 
   def transform_filter_params
+    return {} unless nested_filter
+
     {
-      filters_attributes: nested_filters.map { |filter_attributes| build_filter_attributes(filter_attributes) }
+      filter_attributes: build_filter_attributes(nested_filter)
     }
   end
 end

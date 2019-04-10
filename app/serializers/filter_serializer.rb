@@ -8,5 +8,5 @@ class FilterSerializer
   has_many :apps
   has_many :event_types
   has_many :levels
-  has_many :endpoints
+  belongs_to :endpoint
 end

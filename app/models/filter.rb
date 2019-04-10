@@ -4,8 +4,7 @@ class Filter < ApplicationRecord
   belongs_to :account
   validates_associated :account
 
-  has_many :endpoint_filters, :dependent => :destroy
-  has_many :endpoints, :through => :endpoint_filters, :inverse_of => :filters
+  belongs_to :endpoint
 
   has_many :level_filters, :dependent => :destroy
   has_many :levels, :through => :level_filters, :inverse_of => :filters

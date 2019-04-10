@@ -24,6 +24,6 @@ ActiveRecord::Base.transaction do
     url: 'http://endpoint:4567/logger',
     account: test_acc
   )
-  test_filter = Filter.new(account_id: test_acc.id, endpoints: [test_endpoint]) # filter all
+  test_filter = Filter.new(account_id: test_acc.id, endpoint: test_endpoint) # filter all
   test_filter.save!
 end

@@ -87,11 +87,15 @@ describe 'filters API' do
 
         before do |example|
           app = FactoryBot.create(:app, :with_event_type)
-          Builder::Filter.build!(account) do |f|
-            f.application(app.name)
-             .event_type(app.event_types.first.external_id)
-             .levels(app.event_types.first.levels.pluck(:external_id))
-          end
+          endpoint = FactoryBot.create(:endpoint, account: account)
+          FactoryBot.create(
+            :filter,
+            endpoint: endpoint,
+            account: account,
+            apps: [app],
+            event_types: [app.event_types.first],
+            levels: app.event_types.first.levels
+          )
           submit_request example.metadata
         end
 
@@ -114,9 +118,13 @@ describe 'filters API' do
         let(:'X-RH-IDENTITY') { encoded_header }
         let(:filter) do
           app = FactoryBot.create(:app, :with_event_type)
-          filter = { :app_ids => [app.id],
-                     :event_type_ids => app.event_types.pluck(:id),
-                     :levels => app.event_types.first.levels.pluck(:id) }
+          endpoint = FactoryBot.create(:endpoint, account: account)
+          filter = {
+            :app_ids => [app.id],
+            :event_type_ids => app.event_types.pluck(:id),
+            :levels => app.event_types.first.levels.pluck(:id),
+            :endpoint_id => endpoint.id
+          }
           { :filter => filter }
         end
         schema type: :object,
@@ -143,7 +151,8 @@ describe 'filters API' do
         let(:'X-RH-IDENTITY') { encoded_header }
 
         let(:id) do
-          filter = Builder::Filter.build!(account) { |f| }
+          endpoint = FactoryBot.create(:endpoint, account: account)
+          filter = FactoryBot.create(:filter, endpoint: endpoint, account: account)
           filter.id
         end
 
@@ -159,13 +168,13 @@ describe 'filters API' do
     end
   end
 
-  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/endpoints/{endpoint_id}/filters" do
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/endpoints/{endpoint_id}/filter" do
     parameter name: :endpoint_id, in: :path, :type => :integer
     let(:endpoint_id) do
       endpoint = FactoryBot.build(:endpoint)
       endpoint.account = account
+      endpoint.build_filter(account: account)
       endpoint.save!
-      endpoint.filters << Builder::Filter.build!(account) { |f| }
       endpoint.id
     end
 
@@ -182,44 +191,40 @@ describe 'filters API' do
         schema type: :object,
                properties: {
                  data: {
-                   type: :array,
-                   items: {
-                     type: :object,
-                     properties: filter_spec
-                   }
+                   type: :object,
+                   properties: filter_spec
                  }
                }
         examples 'application/json' => {
-          data: [
-            {
-              type: 'filter',
-              id: '1',
-              attributes: {
-                name: 'my filter',
-                url: 'http://dev.null',
-                active: true,
-                filter_count: 15
-              }
+          data: {
+            type: 'filter',
+            id: '1',
+            attributes: {
+              name: 'my filter',
+              url: 'http://dev.null',
+              active: true
             }
-          ]
+          }
         }
 
         before do |example|
           app = FactoryBot.create(:app, :with_event_type)
-          Builder::Filter.build!(account) do |f|
-            f.application(app.name)
-             .event_type(app.event_types.first.external_id)
-             .levels(app.event_types.first.levels.pluck(:external_id))
-          end
+          endpoint = FactoryBot.create(:endpoint, account: account)
+          FactoryBot.create(
+            :filter,
+            endpoint: endpoint,
+            account: account,
+            apps: [app],
+            event_types: [app.event_types.first],
+            levels: app.event_types.first.levels
+          )
           submit_request example.metadata
         end
 
         it 'returns a valid 200 response' do |example|
           assert_response_matches_metadata(example.metadata)
-          data = JSON.parse(response.body)['data']
-          data.each do |filter|
-            expect(Filter.find(filter['id']).account_id).to eq(account.id)
-          end
+          filter = JSON.parse(response.body)['data']
+          expect(Filter.find(filter['id']).account_id).to eq(account.id)
         end
       end
     end
@@ -253,9 +258,11 @@ describe 'filters API' do
 
         let(:filter) do
           app = FactoryBot.create(:app, :with_event_type)
+          endpoint = FactoryBot.create(:endpoint, account: account)
           filter = { :app_ids => [app.id],
                      :event_type_ids => app.event_types.pluck(:id),
-                     :levels => app.event_types.first.levels.pluck(:id) }
+                     :levels => app.event_types.first.levels.pluck(:id),
+                     :endpoint_id => endpoint.id }
           { :filter => filter }
         end
         schema type: :object,

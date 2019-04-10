@@ -4,11 +4,11 @@ require 'test_helper'
 
 class EndpointTest < ActiveSupport::TestCase
   def setup
-    FactoryBot.create(:endpoint, :with_account)
+    endpoint = FactoryBot.create(:endpoint, :with_account)
+    FactoryBot.create(:filter, endpoint: endpoint, account: endpoint.account)
   end
 
-  should have_many :endpoint_filters
-  should have_many(:filters).through(:endpoint_filters)
+  should have_one(:filter)
 
   should validate_presence_of(:name)
   should validate_presence_of(:url)

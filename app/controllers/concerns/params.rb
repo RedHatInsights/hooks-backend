@@ -12,8 +12,8 @@ module Params
     root.require(:endpoint).permit(endpoint_properties)
   end
 
-  def filter_params(root = params)
-    root.require(:filter).permit(filter_properties)
+  def filter_params(root = params, additional_attributes = [])
+    root.permit(filter: [filter_properties + additional_attributes])[:filter]
   end
 
   def endpoint_properties

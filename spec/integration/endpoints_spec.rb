@@ -12,12 +12,7 @@ endpoint_spec = {
 incoming_endpoint_spec = simple_spec(
   %i[name type url] => :string,
   :active => :boolean
-).merge(
-  filters: {
-    type: :array,
-    items: incoming_filter_spec
-  }
-)
+).merge(filter: incoming_filter_spec)
 
 # rubocop:disable Metrics/BlockLength
 describe 'endpoints API' do
@@ -104,13 +99,11 @@ describe 'endpoints API' do
             endpoint: {
               url: 'foo',
               name: 'bar',
-              filters: [
-                {
-                  app_ids: apps.map(&:id),
-                  event_type_ids: event_types.map(&:id),
-                  level_ids: levels.map(&:id)
-                }
-              ]
+              filter: {
+                app_ids: apps.map(&:id),
+                event_type_ids: event_types.map(&:id),
+                level_ids: levels.map(&:id)
+              }
             }
           }
         end
@@ -118,7 +111,7 @@ describe 'endpoints API' do
         run_test! do |response|
           id = JSON.parse(response.body)['data']['id']
           endpoint = Endpoint.find(id)
-          filter = endpoint.filters.first
+          filter = endpoint.filter
           created_event_types = filter.apps.map(&:event_types).flatten
           created_levels = created_event_types.map(&:levels).flatten
           expect(filter.apps).to match(apps)
@@ -197,10 +190,8 @@ describe 'endpoints API' do
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
         properties: incoming_endpoint_spec.deep_merge(
-          filters: {
-            items: {
-              properties: simple_spec(_destroy: :boolean)
-            }
+          filter: {
+            properties: simple_spec(_destroy: :boolean)
           }
         )
       }
@@ -241,13 +232,11 @@ describe 'endpoints API' do
             endpoint: {
               url: 'foo',
               name: 'bar',
-              filters: [
-                {
-                  app_ids: [],
-                  event_type_ids: [],
-                  level_ids: []
-                }
-              ]
+              filter: {
+                app_ids: [],
+                event_type_ids: [],
+                level_ids: []
+              }
             }
           }
         end
@@ -262,16 +251,16 @@ describe 'endpoints API' do
         it 'returns a valid 200 response' do |example|
           assert_response_matches_metadata(example.metadata)
 
-          endpoint = Endpoint.includes(:filters).find(id)
+          endpoint = Endpoint.includes(:filter).find(id)
           expect(endpoint.url).to eq('foo')
           expect(endpoint.name).to eq('bar')
-          expect(endpoint.filters.count).to eq(1)
+          expect(endpoint.filter).not_to be_nil
         end
       end
 
       response '200', 'endpoint updated' do
         let(:endpoint_filter) do
-          endpoint_object.filters.create(account: endpoint_object.account)
+          endpoint_object.create_filter(account: endpoint_object.account)
         end
 
         let(:endpoint) do
@@ -279,12 +268,10 @@ describe 'endpoints API' do
             endpoint: {
               url: 'foo',
               name: 'bar',
-              filters: [
-                {
-                  id: endpoint_filter.id,
-                  _destroy: true
-                }
-              ]
+              filter: {
+                id: endpoint_filter.id,
+                _destroy: true
+              }
             }
           }
         end
@@ -299,10 +286,10 @@ describe 'endpoints API' do
         it 'returns a valid 200 response' do |example|
           assert_response_matches_metadata(example.metadata)
 
-          endpoint = Endpoint.includes(:filters).find(id)
+          endpoint = Endpoint.includes(:filter).find(id)
           expect(endpoint.url).to eq('foo')
           expect(endpoint.name).to eq('bar')
-          expect(endpoint.filters.count).to eq(0)
+          expect(endpoint.filter).to be_nil
         end
       end
     end

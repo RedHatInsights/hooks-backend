@@ -3,10 +3,9 @@
 class Endpoint < ApplicationRecord
   belongs_to :account, :inverse_of => :endpoints
 
-  has_many :endpoint_filters, :dependent => :destroy
-  has_many :filters, :through => :endpoint_filters, :dependent => :destroy, :inverse_of => :endpoints
+  has_one :filter, :dependent => :destroy
 
-  accepts_nested_attributes_for :filters, allow_destroy: true
+  accepts_nested_attributes_for :filter, allow_destroy: true
 
   validates :name, :presence => true
   validates :url, :presence => true

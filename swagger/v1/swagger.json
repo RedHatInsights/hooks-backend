@@ -624,23 +624,20 @@
                 "active": {
                   "type": "boolean"
                 },
-                "filters": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "app_ids": {
-                        "type": "array",
-                        "items": "integer"
-                      },
-                      "event_type_ids": {
-                        "type": "array",
-                        "items": "integer"
-                      },
-                      "level_ids": {
-                        "type": "array",
-                        "items": "string"
-                      }
+                "filter": {
+                  "type": "object",
+                  "properties": {
+                    "app_ids": {
+                      "type": "array",
+                      "items": "integer"
+                    },
+                    "event_type_ids": {
+                      "type": "array",
+                      "items": "integer"
+                    },
+                    "level_ids": {
+                      "type": "array",
+                      "items": "string"
                     }
                   }
                 }
@@ -780,26 +777,23 @@
                 "active": {
                   "type": "boolean"
                 },
-                "filters": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "app_ids": {
-                        "type": "array",
-                        "items": "integer"
-                      },
-                      "event_type_ids": {
-                        "type": "array",
-                        "items": "integer"
-                      },
-                      "level_ids": {
-                        "type": "array",
-                        "items": "string"
-                      },
-                      "_destroy": {
-                        "type": "boolean"
-                      }
+                "filter": {
+                  "type": "object",
+                  "properties": {
+                    "app_ids": {
+                      "type": "array",
+                      "items": "integer"
+                    },
+                    "event_type_ids": {
+                      "type": "array",
+                      "items": "integer"
+                    },
+                    "level_ids": {
+                      "type": "array",
+                      "items": "string"
+                    },
+                    "_destroy": {
+                      "type": "boolean"
                     }
                   }
                 }
@@ -1260,7 +1254,7 @@
         }
       }
     },
-    "/api/webhooks/endpoints/{endpoint_id}/filters": {
+    "/api/webhooks/endpoints/{endpoint_id}/filter": {
       "parameters": [
         {
           "name": "endpoint_id",
@@ -1296,83 +1290,80 @@
               "type": "object",
               "properties": {
                 "data": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "attributes": {
-                        "enabled": {
-                          "type": "boolean"
-                        }
-                      },
-                      "relationships": {
-                        "type": "object",
-                        "properties": {
-                          "apps": {
-                            "type": "object",
-                            "properties": {
-                              "data": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "id": {
-                                      "type": "string"
-                                    },
-                                    "type": {
-                                      "type": "string"
-                                    }
+                  "type": "object",
+                  "properties": {
+                    "attributes": {
+                      "enabled": {
+                        "type": "boolean"
+                      }
+                    },
+                    "relationships": {
+                      "type": "object",
+                      "properties": {
+                        "apps": {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
                                   }
                                 }
                               }
                             }
-                          },
-                          "event_types": {
-                            "type": "object",
-                            "properties": {
-                              "data": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "id": {
-                                      "type": "string"
-                                    },
-                                    "type": {
-                                      "type": "string"
-                                    }
+                          }
+                        },
+                        "event_types": {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
                                   }
                                 }
                               }
                             }
-                          },
-                          "levels": {
-                            "type": "object",
-                            "properties": {
-                              "data": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "id": {
-                                      "type": "string"
-                                    },
-                                    "type": {
-                                      "type": "string"
-                                    }
+                          }
+                        },
+                        "levels": {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
                                   }
                                 }
                               }
                             }
                           }
                         }
-                      },
-                      "type": {
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "string"
                       }
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
                     }
                   }
                 }
@@ -1380,18 +1371,15 @@
             },
             "examples": {
               "application/json": {
-                "data": [
-                  {
-                    "type": "filter",
-                    "id": "1",
-                    "attributes": {
-                      "name": "my filter",
-                      "url": "http://dev.null",
-                      "active": true,
-                      "filter_count": 15
-                    }
+                "data": {
+                  "type": "filter",
+                  "id": "1",
+                  "attributes": {
+                    "name": "my filter",
+                    "url": "http://dev.null",
+                    "active": true
                   }
-                ]
+                }
               }
             }
           }

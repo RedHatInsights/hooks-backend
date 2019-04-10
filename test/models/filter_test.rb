@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class FilterTest < ActiveSupport::TestCase
-  should have_many :endpoint_filters
-  should have_many(:endpoints).through(:endpoint_filters)
+  should belong_to(:endpoint)
 
   should have_many :level_filters
   should have_many(:levels).through(:level_filters)
@@ -37,19 +38,28 @@ class FilterTest < ActiveSupport::TestCase
       event_types.each { |type| a.event_type(type).levels(levels) }
     end
   end
+  let(:endpoint) do
+    FactoryBot.create(:endpoint, account: account)
+  end
 
   it 'allows matching by application name, event type and level' do
-    Builder::Filter.build!(account) do |b|
-      b.application(app.name) do |a|
-        a.event_type(app.event_types.first.external_id).level('low')
-      end
-    end
+    FactoryBot.create(
+      :filter,
+      account: account,
+      endpoint: endpoint,
+      apps: [app],
+      event_types: [app.event_types.first],
+      levels: [app.event_types.first.levels.where(:external_id => 'low').first]
+    )
 
-    filter = Builder::Filter.build!(account) do |b|
-      b.application app.name do |a|
-        a.event_type(app.event_types.first.external_id).levels(%w[critical high])
-      end
-    end
+    filter = FactoryBot.create(
+      :filter,
+      account: account,
+      endpoint: endpoint,
+      apps: [app],
+      event_types: [app.event_types.first],
+      levels: app.event_types.first.levels.where(external_id: %w[critical high])
+    )
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
@@ -58,9 +68,13 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   it 'allows matching by application name, event type and level wildcard' do
-    filter = Builder::Filter.build!(account) do |b|
-      b.application app.name, app.event_types.first.external_id
-    end
+    filter = FactoryBot.create(
+      :filter,
+      account: account,
+      endpoint: endpoint,
+      apps: [app],
+      event_types: [app.event_types.first]
+    )
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
@@ -69,9 +83,12 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   it 'allows matching by application name, event type wildcard and level wildcard' do
-    filter = Builder::Filter.build!(account) do |b|
-      b.application(app.name).event_type.any!
-    end
+    filter = FactoryBot.create(
+      :filter,
+      account: account,
+      endpoint: endpoint,
+      apps: [app]
+    )
 
     Filter.matching_message(msg).must_equal [filter]
     Filter.matching_message(msg.merge(:application => 'missing')).must_equal []
@@ -80,12 +97,11 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   it 'does not allow matching by disabled filters' do
-    filter = Builder::Filter.build!(account) do |b|
-      b.application do |a|
-        a.any!
-        a.event_type.any!
-      end
-    end
+    filter = FactoryBot.create(
+      :filter,
+      account: account,
+      endpoint: endpoint
+    )
 
     Filter.matching_message(msg).must_equal [filter]
 

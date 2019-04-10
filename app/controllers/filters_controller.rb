@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class FiltersController < ApplicationController
-  before_action :find_filter, :only => %i[destroy update]
+  before_action :find_filter, :only => %i[destroy update show]
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
     filter = Filter.new(account: current_user.account)
-    endpoint = authorize(Endpoint.find(params[:endpoint_id])) if params[:endpoint_id]
-    filter.endpoint_filters.build(endpoint: endpoint) if endpoint
+    endpoint = authorize(Endpoint.find(filter_params[:endpoint_id])) if filter_params[:endpoint_id]
+    filter.endpoint = endpoint
     filter = modify_filter(
       filter,
       filter_params[:app_ids],
@@ -20,7 +20,11 @@ class FiltersController < ApplicationController
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def index
-    process_index index_scope, FilterSerializer
+    process_index Filter, FilterSerializer
+  end
+
+  def show
+    render :json => FilterSerializer.new(@filter)
   end
 
   def destroy
@@ -67,14 +71,9 @@ class FiltersController < ApplicationController
   end
 
   def find_filter
-    @filter = authorize Filter.find(params[:id])
-  end
-
-  def index_scope
-    if params.key?(:endpoint_id)
-      Filter.joins(:endpoint_filters).merge(EndpointFilter.where(:endpoint_id => params[:endpoint_id]))
-    else
-      Filter
-    end
+    find_params = {}
+    find_params[:endpoint_id] = params[:endpoint_id] if params[:endpoint_id]
+    find_params[:id] = params[:id] if params[:id]
+    @filter = authorize Filter.find_by(find_params)
   end
 end
