@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "swagger2openapi": "^5.2.5"
+  },
+  "scripts": {
+    "swagger2openapi": "swagger2openapi --verbose --debug --indent '  ' swagger/v1/swagger.json -o swagger/v1/openapi.json"
+  }
+}

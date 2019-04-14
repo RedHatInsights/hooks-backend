@@ -25,3 +25,5 @@ Gemfile.lock
 /db/schema.rb
 .tags*
 /coverage/*
+/swagger/v1/openapi.json
+/node_modules/*

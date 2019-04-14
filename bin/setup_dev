@@ -10,4 +10,6 @@ $BIN_DIR/run_docker bundle install
 $BIN_DIR/run_docker bundle exec rake db:create
 $BIN_DIR/run_docker bundle exec rake db:migrate
 $BIN_DIR/run_docker bundle exec rake rswag:specs:swaggerize
+$BIN_DIR/run_docker npm install
+$BIN_DIR/run_docker npm run swagger2openapi
 popd

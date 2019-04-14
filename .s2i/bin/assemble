@@ -1,0 +1,6 @@
+#!/bin/sh
+
+/usr/libexec/s2i/assemble
+
+npm install
+npm run swagger2openapi
