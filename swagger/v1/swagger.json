@@ -563,6 +563,21 @@
                       },
                       "id": {
                         "type": "string"
+                      },
+                      "last_delivery_status": {
+                        "type": "string",
+                        "enum": [
+                          "success",
+                          "failure"
+                        ]
+                      },
+                      "last_delivery_time": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "first_failure_time": {
+                        "type": "string",
+                        "format": "date-time"
                       }
                     }
                   }
@@ -599,7 +614,9 @@
                       "name": "my endpoint",
                       "url": "http://dev.null",
                       "active": true,
-                      "filter_count": 15
+                      "last_delivery_status": "success",
+                      "last_delivery_time": "2019-04-11T09:26:05.465Z",
+                      "first_failure_time": "2019-04-11T09:26:29.666Z"
                     }
                   }
                 ],
@@ -741,6 +758,21 @@
                   },
                   "id": {
                     "type": "string"
+                  },
+                  "last_delivery_status": {
+                    "type": "string",
+                    "enum": [
+                      "success",
+                      "failure"
+                    ]
+                  },
+                  "last_delivery_time": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "first_failure_time": {
+                    "type": "string",
+                    "format": "date-time"
                   }
                 }
               }
@@ -754,7 +786,9 @@
                     "name": "my endpoint",
                     "url": "http://dev.null",
                     "active": true,
-                    "filter_count": 15
+                    "last_delivery_status": "success",
+                    "last_delivery_time": "2019-04-11T09:26:05.465Z",
+                    "first_failure_time": "2019-04-11T09:26:29.666Z"
                   }
                 }
               }
@@ -855,6 +889,21 @@
                   },
                   "id": {
                     "type": "string"
+                  },
+                  "last_delivery_status": {
+                    "type": "string",
+                    "enum": [
+                      "success",
+                      "failure"
+                    ]
+                  },
+                  "last_delivery_time": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "first_failure_time": {
+                    "type": "string",
+                    "format": "date-time"
                   }
                 }
               }

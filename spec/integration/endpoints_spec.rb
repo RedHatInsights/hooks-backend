@@ -7,7 +7,11 @@ endpoint_spec = {
   attributes: simple_spec(%i[name url] => :string,
                           :active => :boolean,
                           :filter_count => :integer)
-}.merge simple_spec(%i[type id] => :string)
+}.merge(simple_spec(%i[type id] => :string)).merge(
+  :last_delivery_status => { type: :string, enum: [Endpoint::STATUS_SUCCESS, Endpoint::STATUS_FAILURE] },
+  :last_delivery_time => { type: :string, format: 'date-time' },
+  :first_failure_time => { type: :string, format: 'date-time' }
+)
 
 incoming_endpoint_spec = simple_spec(
   %i[name type url] => :string,
@@ -54,7 +58,9 @@ describe 'endpoints API' do
                 name: 'my endpoint',
                 url: 'http://dev.null',
                 active: true,
-                filter_count: 15
+                last_delivery_status: 'success',
+                last_delivery_time: '2019-04-11T09:26:05.465Z',
+                first_failure_time: '2019-04-11T09:26:29.666Z'
               }
             }
           ],
@@ -161,7 +167,9 @@ describe 'endpoints API' do
               name: 'my endpoint',
               url: 'http://dev.null',
               active: true,
-              filter_count: 15
+              last_delivery_status: 'success',
+              last_delivery_time: '2019-04-11T09:26:05.465Z',
+              first_failure_time: '2019-04-11T09:26:29.666Z'
             }
           }
         }

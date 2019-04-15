@@ -18,4 +18,7 @@ class Endpoint < ApplicationRecord
   def self.policy_class
     ::EndpointPolicy
   end
+
+  STATUS_SUCCESS = 'success'
+  STATUS_FAILURE = 'failure'
 end
