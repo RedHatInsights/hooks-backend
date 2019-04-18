@@ -12,7 +12,7 @@ env:
   global:
     - TESTOPTS=--verbose
     - PATH_PREFIX=/api
-    - APP_NAME=webhooks
+    - APP_NAME=hooks
 
 install:
   - bundle install

@@ -5,7 +5,7 @@
     "version": "v1"
   },
   "paths": {
-    "/api/webhooks/apps/register": {
+    "/api/hooks/apps/register": {
       "post": {
         "summary": "Register an app",
         "tags": [
@@ -82,7 +82,7 @@
         }
       }
     },
-    "/api/webhooks/apps": {
+    "/api/hooks/apps": {
       "get": {
         "summary": "List all apps",
         "tags": [
@@ -295,7 +295,7 @@
         }
       }
     },
-    "/api/webhooks/apps/{id}": {
+    "/api/hooks/apps/{id}": {
       "get": {
         "summary": "Show an app",
         "tags": [
@@ -483,7 +483,7 @@
         }
       }
     },
-    "/api/webhooks/endpoints": {
+    "/api/hooks/endpoints": {
       "get": {
         "summary": "List all endpoints",
         "tags": [
@@ -705,7 +705,7 @@
         }
       }
     },
-    "/api/webhooks/endpoints/{id}": {
+    "/api/hooks/endpoints/{id}": {
       "get": {
         "summary": "Show an endpoint",
         "tags": [
@@ -944,7 +944,7 @@
         }
       }
     },
-    "/api/webhooks/endpoints/{id}/test": {
+    "/api/hooks/endpoints/{id}/test": {
       "post": {
         "summary": "Send a test message through endpoint",
         "tags": [
@@ -978,7 +978,7 @@
         }
       }
     },
-    "/api/webhooks/filters": {
+    "/api/hooks/filters": {
       "get": {
         "summary": "List all filters",
         "tags": [
@@ -1311,7 +1311,7 @@
         }
       }
     },
-    "/api/webhooks/filters/{id}": {
+    "/api/hooks/filters/{id}": {
       "delete": {
         "summary": "Delete a filter",
         "tags": [
@@ -1345,7 +1345,7 @@
         }
       }
     },
-    "/api/webhooks/endpoints/{endpoint_id}/filter": {
+    "/api/hooks/endpoints/{endpoint_id}/filter": {
       "parameters": [
         {
           "name": "endpoint_id",
