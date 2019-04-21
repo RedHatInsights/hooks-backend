@@ -4,6 +4,7 @@ require 'test_helper'
 
 class FilterTest < ActiveSupport::TestCase
   should belong_to(:endpoint)
+  should validate_presence_of(:endpoint)
 
   should have_many :level_filters
   should have_many(:levels).through(:level_filters)

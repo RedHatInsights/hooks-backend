@@ -5,6 +5,7 @@ class Filter < ApplicationRecord
   validates_associated :account
 
   belongs_to :endpoint
+  validates_presence_of :endpoint
 
   has_many :level_filters, :dependent => :destroy
   has_many :levels, :through => :level_filters, :inverse_of => :filters

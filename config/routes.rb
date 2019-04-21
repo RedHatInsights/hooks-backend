@@ -13,11 +13,10 @@ Rails.application.routes.draw do
     end
 
     resources :endpoints, :except => %(edit new) do
-      resource :filter, :except => %(edit new)
+      resource :filter, :only => %(show)
       member do
         post 'test', to: 'endpoints#test'
       end
     end
-    resources :filters, :except => %(edit new)
   end
 end

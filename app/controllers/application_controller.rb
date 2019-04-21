@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class ApplicationController < ActionController::API
   include ActionController::Helpers
   include Pundit
@@ -17,6 +18,17 @@ class ApplicationController < ActionController::API
   rescue_from StandardError do |exception|
     render json: { errors: "Server encountered an unexpected error: #{exception.inspect}" },
            status: :internal_server_error
+  end
+
+  # If a client is not authorized to see an object, the application SHOULD NOT
+  # allow the unauthorized client to determine the existence or non-existence of
+  # an object
+  rescue_from Pundit::NotAuthorizedError do |exception|
+    render_not_found(exception.record.class, exception.record.id)
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    render_not_found(exception.model, exception.id)
   end
 
   rescue_from BadRequest do |exception|
@@ -109,9 +121,16 @@ class ApplicationController < ActionController::API
     render :json => { :errors => errors }, :status => :unprocessable_entity
   end
 
+  def render_not_found(what, id)
+    message = "Could not find #{what}"
+    message += "with 'id'=#{id}" if id
+    render :json => { :errors => message }, :status => :not_found
+  end
+
   private
 
   def valid_sort_order?(order, direction, allowed_keys)
     (direction.nil? || %w[asc desc].include?(direction.downcase)) && allowed_keys.include?(order)
   end
 end
+# rubocop:enable Metrics/ClassLength

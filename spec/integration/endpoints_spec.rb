@@ -18,6 +18,29 @@ incoming_endpoint_spec = simple_spec(
   :active => :boolean
 ).merge(filter: incoming_filter_spec)
 
+relation_spec = {
+  type: :object,
+  properties: {
+    id: {
+      type: :string,
+      example: '1'
+    },
+    type: {
+      type: :string
+    }
+  }
+}
+
+relationship_spec = {
+  type: :object,
+  properties: {
+    data: {
+      type: :array,
+      items: relation_spec
+    }
+  }
+}
+
 # rubocop:disable Metrics/BlockLength
 describe 'endpoints API' do
   path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/endpoints" do
@@ -363,6 +386,65 @@ describe 'endpoints API' do
             message: 'Test message from webhooks'
           )
         end
+
+        run_test!
+      end
+    end
+  end
+
+  path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/endpoints/{id}/filter" do
+    get 'Show the filter of the endpoint' do
+      tags 'endpoint'
+      description 'Show the filter of the endpoint'
+      consumes 'application/json'
+      produces 'application/json'
+      operationId 'ShowEndpointFilter'
+      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter name: :id, :in => :path, :type => :integer
+
+      let(:'X-RH-IDENTITY') { encoded_header }
+      let(:endpoint) do
+        endpoint = FactoryBot.build(:endpoint)
+        endpoint.account = account
+        endpoint.save!
+        endpoint.create_filter(:account => account)
+        endpoint
+      end
+      let(:id) do
+        endpoint.id
+      end
+
+      response '200', 'Show the filter of the endpoint' do
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :object,
+                   properties: {
+                     id: {
+                       type: :string,
+                       example: '1'
+                     },
+                     type: {
+                       type: :string,
+                       example: 'filter'
+                     },
+                     attributes: {
+                       type: :object,
+                       properties: {
+                         enabled: {
+                           type: :boolean
+                         }
+                       }
+                     },
+                     relationships: {
+                       apps: relationship_spec,
+                       event_types: relationship_spec,
+                       levels: relationship_spec,
+                       endpoint: relation_spec
+                     }
+                   }
+                 }
+               }
 
         run_test!
       end
