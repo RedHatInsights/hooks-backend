@@ -51,8 +51,6 @@ describe 'endpoints API' do
       produces 'application/json'
       operationId 'ListEndpoints'
       parameter name: :'X-RH-IDENTITY', in: :header, type: :string
-      parameter name: :page, in: :query, type: :integer, required: false
-      parameter name: :per_page, in: :query, type: :integer, required: false
       parameter name: :order, in: :query, type: :string, required: false
       parameter name: :limit, in: :query, type: :integer, required: false
       parameter name: :offset, in: :query, type: :integer, required: false
@@ -69,7 +67,11 @@ describe 'endpoints API' do
                  },
                  meta: {
                    type: :object,
-                   properties: simple_spec(%i[page per_page total limit offset] => :integer)
+                   properties: simple_spec(%i[total limit offset] => :integer)
+                 },
+                 links: {
+                   type: :object,
+                   properties: simple_spec(%i[first last next previous] => :string)
                  }
                }
         examples 'application/json' => {
@@ -88,8 +90,6 @@ describe 'endpoints API' do
             }
           ],
           meta: {
-            page: 1,
-            per_page: 10,
             total: 2,
             limit: nil,
             offset: nil

@@ -119,7 +119,11 @@ describe 'apps API' do
                  included: included_event_type_spec,
                  meta: {
                    type: :object,
-                   properties: simple_spec(%i[page per_page total limit offset] => :integer)
+                   properties: simple_spec(%i[total limit offset] => :integer)
+                 },
+                 links: {
+                   type: :object,
+                   properties: simple_spec(%i[first last next previous] => :string)
                  }
                }
         examples 'application/json' => {
@@ -153,11 +157,9 @@ describe 'apps API' do
             { id: '1', type: 'level', attributes: { title: 'level-title' } }
           ],
           meta: {
-            page: 1,
-            per_page: 10,
             total: 1,
-            limit: nil,
-            offset: nil
+            limit: 100,
+            offset: 0
           }
         }
 

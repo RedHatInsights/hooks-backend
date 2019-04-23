@@ -9,6 +9,7 @@ WORKDIR /app
 
 COPY Gemfile* ./
 COPY docker/entrypoint.sh /
+RUN gem install bundler
 RUN bundle install
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]

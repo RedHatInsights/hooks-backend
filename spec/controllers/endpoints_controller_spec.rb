@@ -44,33 +44,12 @@ RSpec.describe EndpointsController, type: :controller do
     let(:active_endpoint) { FactoryBot.create(:http_endpoint, :account => account) }
     let(:inactive_endpoint) { FactoryBot.create(:http_endpoint, :account => account, :active => false) }
 
-    it 'supports changing page size' do
-      get :index, params: { per_page: 5 }
-      expect(response).to have_http_status(:ok)
-      data = JSON.parse response.body
-      expect(data['meta']['per_page']).to eq(5)
-    end
-
     it 'supports limit offset query' do
       get :index, params: { limit: 1, offset: 2 }
       expect(response).to have_http_status(:ok)
       data = JSON.parse response.body
       expect(data['meta']['limit']).to eq(1)
       expect(data['meta']['offset']).to eq(2)
-    end
-
-    it 'fails for both limit and page query' do
-      get :index, params: { limit: 1, page: 2 }
-      expect(response).to have_http_status(:bad_request)
-      data = JSON.parse response.body
-      expect(data['errors']).to match(/Both page and offset pagination is not allowed/)
-    end
-
-    it 'allows requesting specific page' do
-      get :index, params: { page: 1000 }
-      expect(response).to have_http_status(:ok)
-      data = JSON.parse response.body
-      expect(data['meta']['page']).to eq(1000)
     end
 
     it 'allows requesting specific sort order with default direction' do
