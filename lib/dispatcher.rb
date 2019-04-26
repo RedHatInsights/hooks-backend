@@ -18,8 +18,8 @@ class Dispatcher
   private
 
   def endpoints
-    relevant_filters = Filter.matching_message(@message).preload(:endpoints)
-    endpoints = relevant_filters.map(&:endpoints).flatten.uniq
+    relevant_filters = Filter.matching_message(@message).preload(:endpoint)
+    endpoints = relevant_filters.map(&:endpoint).flatten.uniq
     Rails.logger.info("Found #{endpoints.length} endpoints to send messages to.")
     endpoints
   end
