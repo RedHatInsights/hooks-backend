@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 class AppRegistrationController < ActionController::API
+  include ErrorHandling
+
+  before_action :assert_internal
+
   def create
-    # TODO: Handle auth
     ActiveRecord::Base.transaction do
       app = App.find_or_initialize_by(:name => app_params[:name])
       app.update_attributes!(app_params.slice(:title))
@@ -12,6 +15,15 @@ class AppRegistrationController < ActionController::API
   end
 
   private
+
+  def assert_internal
+    return unless request.headers['X-RH-IDENTITY']
+
+    # If the request has the X-RH-IDENTITY it means it came from the outside world
+    #   Requests from inside the platform don't have this header set
+    render json: { errors: 'Requests with X-RH-IDENTITY are not allowed to register apps.' },
+           status: :forbidden
+  end
 
   def destroy_obsolete(scope, requested_ids)
     scope.where.not(:external_id => requested_ids).destroy_all

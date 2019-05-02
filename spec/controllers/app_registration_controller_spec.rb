@@ -52,7 +52,6 @@ RSpec.describe AppRegistrationController do
     end
 
     def register_app!
-      request.headers['X-RH-IDENTITY'] = encoded_header
       post :create, :params => create_params
       expect(response.code).to eq('200')
     end
@@ -99,6 +98,14 @@ RSpec.describe AppRegistrationController do
       register_app!
       expect(app.reload.title).to eq('Application')
       assert_app_matches_params(app, create_params)
+    end
+
+    it '404s if the X-RH-IDENTITY header is set' do
+      request.headers['X-RH-IDENTITY'] = encoded_header
+      post :create, :params => create_params
+      expect(response.code).to eq('403')
+      data = JSON.parse(response.body)
+      expect(data['errors']).to eq('Requests with X-RH-IDENTITY are not allowed to register apps.')
     end
   end
 end

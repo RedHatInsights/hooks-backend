@@ -19,6 +19,14 @@ RSpec.describe ApplicationController do
     end
   end
 
+  describe 'unknown route handling' do
+    it 'responds with 404' do
+      path = "'a/path/that/does/not/exist"
+      assert_recognizes({ controller: 'fallback', action: 'routing_error', path: path },
+                        "/#{path}")
+    end
+  end
+
   describe 'process_index' do
     controller(AppsController) do
       def index
