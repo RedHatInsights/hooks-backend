@@ -3,14 +3,17 @@
 require 'optparse'
 require_relative '../notifications'
 
+COUNT = (ENV['TEST_COUNT'] || 1).to_i
+app = COUNT > 1 ? 'BenchmarkApp' : 'TestApp'
+
 # rubocop:disable Metrics/BlockLength
 namespace :notifications do
   desc 'Push a message to local kafka'
-  task send: :environment do |args|
+  task send: :environment do
     require 'kafka'
 
     options = {}
-    OptionParser.new(args) do |opts|
+    op = OptionParser.new do |opts|
       opts.banner = 'Usage: rake notifications:send [options]'
       opts.on('-m', '--message {message}', 'A message to send', String) do |message|
         options[:message] = message
@@ -27,9 +30,10 @@ namespace :notifications do
       opts.on('-u', '--account_id {account_id}', 'Account_id that sends the message', String) do |account_id|
         options[:account_id] = account_id
       end
-    end.parse!
+    end
+    op.parse(ARGV.drop(2))
 
-    options[:application] ||= 'TestApp'
+    options[:application] ||= app
     options[:event_type] ||= 'TestEvent'
     options[:timestamp] ||= Time.current
     options[:level] ||= 'Info'
@@ -38,8 +42,15 @@ namespace :notifications do
 
     host = ENV['KAFKA_BROKER_HOST'] || 'localhost'
     kafka = Kafka.new(["#{host}:29092"], client_id: 'test-push')
-    kafka.deliver_message(options.to_json, topic: Notifications::INCOMING_TOPIC)
-    Rails.logger.info("Sent message with json: #{options.to_json}")
+    counter = 0
+    while counter < COUNT
+      producer = kafka.producer
+      count = [(COUNT - counter), 1000].min
+      count.times { producer.produce(options.to_json, topic: Notifications::INCOMING_TOPIC) }
+      producer.deliver_messages
+      counter += count
+    end
+    Rails.logger.info("Sent #{COUNT} messages with json: #{options.to_json}")
   end
   # rubocop:enable Metrics/BlockLength
 end

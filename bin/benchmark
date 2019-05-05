@@ -1,0 +1,44 @@
+#!/bin/sh
+
+RESULT_FILE="$(mktemp)"
+
+SCRIPT_DIRECTORY=$(cd `dirname $0` && pwd)
+APP_ROOT="$SCRIPT_DIRECTORY"/..
+
+COMPOSE_FILES="-f docker-compose.yml -f docker-compose.test.yml"
+
+: ${SIZES:=100,500,1000,5000,10000}
+: ${WARMUP:=0}
+
+function benchmark() {
+         local size="$1"
+         local tmp="$(mktemp)"
+         TEST_COUNT="$size" docker-compose $COMPOSE_FILES up endpoint | tee "$tmp" &
+         TEST_COUNT="$size" docker-compose $COMPOSE_FILES up notification-send
+         wait %1
+         duration=$(grep "BENCHMARK" "$tmp" | awk -F : ' { print $2 } ')
+         echo "${size},${duration}" >> "$RESULT_FILE"
+         echo "Processed ${size} messages in ${duration} seconds"
+         echo
+         rm "$tmp"
+}
+
+cd "${APP_ROOT}/docker"
+
+docker-compose $COMPOSE_FILES up -d zookeeper
+sleep 1
+docker-compose $COMPOSE_FILES up -d kafka postgres mcom-redis
+sleep 10 # Need to wait for kafka to come up
+docker-compose $COMPOSE_FILES up -d racecar resque
+
+if [ "$WARMUP" -gt 0 ]; then
+    benchmark $WARMUP
+    cp /dev/null "$RESULT_FILE"
+fi
+
+for size in $(echo "$SIZES" | tr ',' ' '); do
+    benchmark $size
+done
+
+column --separator , --table --table-right 1,2 < "$RESULT_FILE"
+rm "$RESULT_FILE"

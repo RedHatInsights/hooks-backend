@@ -9,6 +9,7 @@ services:
     command: "rake notifications:send"
     environment:
       KAFKA_BROKER_HOST: kafka
+      TEST_COUNT: ${TEST_COUNT:-1}
     env_file:
       - postgres.env
 

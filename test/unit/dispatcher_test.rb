@@ -21,7 +21,7 @@ class DispatcherTest < ActiveSupport::TestCase
   it 'dispatches messages to the right endpoints' do
     filter
     job_class = mock
-    dispatcher.expects(:job_class).returns(job_class).twice
+    dispatcher.stubs(:job_class).returns(job_class)
     job_class.expects(:perform_later).with(endpoint, msg.timestamp, msg.level, msg.message)
     dispatcher.dispatch!
   end

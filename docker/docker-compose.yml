@@ -57,6 +57,8 @@ services:
     command: bundle exec ruby bin/example_endpoint.rb -o 0.0.0.0
     ports:
       - 4567:4567
+    environment:
+      TEST_COUNT: ${TEST_COUNT:-1}
   resque:
     build:
       context: ..
@@ -69,6 +71,7 @@ services:
       REDIS_SERVICE_NAME: mcom-redis
       REDIS_PASSWORD: redispass
       MCOM_REDIS_SERVICE_HOST: mcom-redis
+      JOBS_PER_FORK: 50
     env_file:
       - postgres.env
     depends_on:
