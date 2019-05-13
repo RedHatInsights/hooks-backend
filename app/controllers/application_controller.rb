@@ -8,6 +8,12 @@ class ApplicationController < ActionController::API
   include PaginationParameters
   include ErrorHandling
 
+  before_action :set_headers
+
+  def set_headers
+    response.headers['Content-Type'] = 'application/vnd.api+json'
+  end
+
   def paginate(scope)
     limited_scope = scope.limit(limit_param)
 

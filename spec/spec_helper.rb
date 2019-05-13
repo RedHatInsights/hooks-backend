@@ -74,15 +74,21 @@ def incoming_filter_spec
     properties: {
       app_ids: {
         type: :array,
-        items: :integer
+        items: {
+          type: :integer
+        }
       },
       event_type_ids: {
         type: :array,
-        items: :integer
+        items: {
+          type: :integer
+        }
       },
       level_ids: {
         type: :array,
-        items: :string
+        items: {
+          type: :integer
+        }
       }
     }
   }

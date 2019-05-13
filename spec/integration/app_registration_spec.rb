@@ -9,44 +9,73 @@ describe 'filters API' do
     post 'Register an app' do
       tags 'filter'
       description 'Register an application'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'RegisterApp'
       parameter name: :application, in: :body, schema: {
         type: :object,
         properties: {
           application: {
-            type: :object,
-            properties: simple_spec(%i[name title] => :string)
+            '$ref' => '#/definitions/app'
           },
           event_types: {
             type: :array,
             items: {
               type: :object,
               properties: {
+                id: {
+                  type: :string,
+                  description: 'Identifier of the event type, used to identify the event type in messages',
+                  example: 'something'
+                },
+                title: {
+                  type: :string,
+                  description: 'Human readable description of the event type, ' \
+                               'shown to the user when configuring filters',
+                  example: 'Something interesting happened'
+                },
                 levels: {
                   type: :array,
                   items: {
                     type: :object,
-                    properties: simple_spec(%i[name title] => :string, :id => :integer)
+                    properties: {
+                      id: {
+                        type: :string,
+                        description: 'Identifier of the level, used to identify the level in messages',
+                        example: 'low'
+                      },
+                      title: {
+                        type: :string,
+                        description: 'Human readable description of the level, ' \
+                                     'shown to the user when configuring filters',
+                        example: 'Low severity'
+                      }
+                    }
                   }
                 }
-              }.merge(simple_spec(%i[name title] => :string, :id => :integer))
+              }
             }
           }
         }
       }
 
       response '200', 'registers the application' do
+        schema type: :object,
+               properties: {
+                 data: {
+                   '$ref' => '#/definitions/app'
+                 }
+               }
+
         let(:application) do
           app = { :name => 'app-1', :title => 'Application 1' }
           levels = [
-            { :id => 1, :name => 'level-1', :title => 'Low' },
-            { :id => 2, :name => 'level-2', :title => 'High' }
+            { :id => 'level-1', :title => 'Low' },
+            { :id => 'level-2', :title => 'High' }
           ]
           event_types = [
-            { :id => 1, :name => 'something', :title => 'Something', :levels => [] },
-            { :id => 2, :name => 'something-else', :title => 'Something else', :levels => levels }
+            { :id => 'something', :title => 'Something', :levels => [] },
+            { :id => 'something-else', :title => 'Something else', :levels => levels }
           ]
           { :application => app, :event_types => event_types }
         end

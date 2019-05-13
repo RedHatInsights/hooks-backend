@@ -3,108 +3,16 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-# Justification: It's mostly hash test data
-# rubocop:disable Metrics/MethodLength
-def encoded_header
-  Base64.encode64(
-    {
-      'identity':
-      {
-        'account_number': '1234',
-        'type': 'User',
-        'user': {
-          'email': 'a@b.com',
-          'username': 'a@b.com',
-          'first_name': 'a',
-          'last_name': 'b',
-          'is_active': true,
-          'locale': 'en_US'
-        },
-        'internal': {
-          'org_id': '29329'
-        }
-      }
-    }.to_json
-  )
-end
-# rubocop:enable Metrics/MethodLength
-
-app_spec = {
-  type: { type: :string },
-  id: { type: :string },
-  attributes: {
-    type: :object,
-    properties: {
-      name: { type: :string },
-      title: { type: :string }
-    }
-  },
-  relationships: {
-    type: :object,
-    properties: {
-      event_types: {
-        type: :object,
-        properties: {
-          data: {
-            type: :array,
-            items: {
-              type: :object,
-              properties: {
-                type: { type: :string },
-                id: { type: :string }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-event_type_spec = {
-  id: { type: :string },
-  type: { type: :string },
-  attributes: {
-    name: { type: :string },
-    title: { type: :string }
-  },
-  relationships: {
-    type: :object,
-    properties: {
-      levels: {
-        type: :object,
-        properties: {
-          data: {
-            type: :array,
-            items: {
-              type: :object,
-              properties: {
-                title: { type: :string },
-                id: { type: :string }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-included_event_type_spec = {
-  type: :array,
-  items: { properties: event_type_spec }
-}
-
 # rubocop:disable Metrics/BlockLength
 describe 'apps API' do
   path "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}/apps" do
     get 'List all apps' do
       tags 'app'
       description 'Lists all apps requested'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'ListApps'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter '$ref' => '#/parameters/RHIdentity'
 
       response '200', 'lists all apps requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
@@ -113,20 +21,27 @@ describe 'apps API' do
                  data: {
                    type: :array,
                    items: {
-                     properties: app_spec
+                     '$ref' => '#/definitions/app'
                    }
                  },
-                 included: included_event_type_spec,
+                 included: {
+                   type: :array,
+                   items: {
+                     oneOf: [
+                       { '$ref' => '#/definitions/event_type' },
+                       { '$ref' => '#/definitions/level' }
+                     ]
+                   }
+                 },
                  meta: {
-                   type: :object,
-                   properties: simple_spec(%i[total limit offset] => :integer)
+                   '$ref' => '#/definitions/metadata'
                  },
                  links: {
-                   type: :object,
-                   properties: simple_spec(%i[first last next previous] => :string)
+                   '$ref' => '#/definitions/links'
                  }
                }
-        examples 'application/json' => {
+
+        examples 'application/vnd.api+json' => {
           data: [
             {
               type: 'app',
@@ -179,20 +94,30 @@ describe 'apps API' do
     get 'Show an app' do
       tags 'app'
       description 'Shows the requested app'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'ShowApp'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter '$ref' => '#/parameters/RHIdentity'
       parameter name: :id, :in => :path, :type => :integer
 
       response '200', 'shows the requested app' do
         let(:'X-RH-IDENTITY') { encoded_header }
         schema type: :object,
                properties: {
-                 data: app_spec,
-                 included: included_event_type_spec
+                 data: {
+                   '$ref' => '#/definitions/app'
+                 },
+                 included: {
+                   type: :array,
+                   items: {
+                     oneOf: [
+                       { '$ref' => '#/definitions/event_type' },
+                       { '$ref' => '#/definitions/level' }
+                     ]
+                   }
+                 }
                }
-        examples 'application/json' => {
+        examples 'application/vnd.api+json' => {
           data: {
             type: 'app',
             id: '3',

@@ -28,3 +28,4 @@ script:
   - bundle exec rake test:validate
   - bundle exec rake check:matching_docs
   - npm run swagger2openapi
+  - npm run validate

@@ -3,43 +3,10 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-endpoint_spec = {
-  attributes: simple_spec(%i[name url] => :string,
-                          :active => :boolean,
-                          :filter_count => :integer)
-}.merge(simple_spec(%i[type id] => :string)).merge(
-  :last_delivery_status => { type: :string, enum: [Endpoint::STATUS_SUCCESS, Endpoint::STATUS_FAILURE] },
-  :last_delivery_time => { type: :string, format: 'date-time' },
-  :first_failure_time => { type: :string, format: 'date-time' }
-)
-
 incoming_endpoint_spec = simple_spec(
   %i[name type url] => :string,
   :active => :boolean
 ).merge(filter: incoming_filter_spec)
-
-relation_spec = {
-  type: :object,
-  properties: {
-    id: {
-      type: :string,
-      example: '1'
-    },
-    type: {
-      type: :string
-    }
-  }
-}
-
-relationship_spec = {
-  type: :object,
-  properties: {
-    data: {
-      type: :array,
-      items: relation_spec
-    }
-  }
-}
 
 # rubocop:disable Metrics/BlockLength
 describe 'endpoints API' do
@@ -47,13 +14,13 @@ describe 'endpoints API' do
     get 'List all endpoints' do
       tags 'endpoint'
       description 'Lists all endpoints requested'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'ListEndpoints'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
-      parameter name: :order, in: :query, type: :string, required: false
-      parameter name: :limit, in: :query, type: :integer, required: false
-      parameter name: :offset, in: :query, type: :integer, required: false
+      parameter '$ref' => '#/parameters/RHIdentity'
+      parameter '$ref' => '#/parameters/order'
+      parameter '$ref' => '#/parameters/limit'
+      parameter '$ref' => '#/parameters/offset'
 
       response '200', 'lists all endpoints requested' do
         let(:'X-RH-IDENTITY') { encoded_header }
@@ -62,19 +29,17 @@ describe 'endpoints API' do
                  data: {
                    type: :array,
                    items: {
-                     properties: endpoint_spec
+                     '$ref' => '#/definitions/endpoint'
                    }
                  },
                  meta: {
-                   type: :object,
-                   properties: simple_spec(%i[total limit offset] => :integer)
+                   '$ref' => '#/definitions/metadata'
                  },
                  links: {
-                   type: :object,
-                   properties: simple_spec(%i[first last next previous] => :string)
+                   '$ref' => '#/definitions/links'
                  }
                }
-        examples 'application/json' => {
+        examples 'application/vnd.api+json' => {
           data: [
             {
               type: 'endpoint',
@@ -112,10 +77,10 @@ describe 'endpoints API' do
     post 'Create and endpoint' do
       tags 'endpoint'
       description 'Shows the requested endpoint'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'CreateEndoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter '$ref' => '#/parameters/RHIdentity'
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
         properties: incoming_endpoint_spec,
@@ -170,19 +135,22 @@ describe 'endpoints API' do
     get 'Show an endpoint' do
       tags 'endpoint'
       description 'Shows the requested endpoint'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'ShowEndpoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter '$ref' => '#/parameters/RHIdentity'
       parameter name: :id, :in => :path, :type => :integer
 
       response '200', 'shows the requested endpoint' do
         let(:'X-RH-IDENTITY') { encoded_header }
         schema type: :object,
                properties: {
-                 data: endpoint_spec
+                 data: {
+                   '$ref' => '#/definitions/endpoint'
+                 }
                }
-        examples 'application/json' => {
+
+        examples 'application/vnd.api+json' => {
           data: {
             type: 'endpoint',
             id: '1',
@@ -217,10 +185,10 @@ describe 'endpoints API' do
     put 'Update an endpoint' do
       tags 'endpoint'
       description 'Updates the requested endpoint'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'UpdateEndpoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter '$ref' => '#/parameters/RHIdentity'
       parameter name: :id, :in => :path, :type => :integer
       parameter name: :endpoint, in: :body, schema: {
         type: :object,
@@ -247,7 +215,9 @@ describe 'endpoints API' do
         let(:endpoint) { { url: 'foo', name: 'bar' } }
         schema type: :object,
                properties: {
-                 data: endpoint_spec
+                 data: {
+                   '$ref' => '#/definitions/endpoint'
+                 }
                }
 
         before { |example| submit_request example.metadata }
@@ -278,7 +248,9 @@ describe 'endpoints API' do
 
         schema type: :object,
                properties: {
-                 data: endpoint_spec
+                 data: {
+                   '$ref' => '#/definitions/endpoint'
+                 }
                }
 
         before { |example| submit_request example.metadata }
@@ -313,7 +285,9 @@ describe 'endpoints API' do
 
         schema type: :object,
                properties: {
-                 data: endpoint_spec
+                 data: {
+                   '$ref' => '#/definitions/endpoint'
+                 }
                }
 
         before { |example| submit_request example.metadata }
@@ -332,10 +306,10 @@ describe 'endpoints API' do
     delete 'Destroy an endpoint' do
       tags 'endpoint'
       description 'Destroys the requested endpoint'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'DestroyEndpoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter '$ref' => '#/parameters/RHIdentity'
       parameter name: :id, :in => :path, :type => :integer
 
       let(:'X-RH-IDENTITY') { encoded_header }
@@ -361,10 +335,10 @@ describe 'endpoints API' do
     post 'Send a test message through endpoint' do
       tags 'endpoint'
       description 'Send a test message to the endpoint'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'TestEndpoint'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter '$ref' => '#/parameters/RHIdentity'
       parameter name: :id, :in => :path, :type => :integer
 
       let(:'X-RH-IDENTITY') { encoded_header }
@@ -396,10 +370,10 @@ describe 'endpoints API' do
     get 'Show the filter of the endpoint' do
       tags 'endpoint'
       description 'Show the filter of the endpoint'
-      consumes 'application/json'
-      produces 'application/json'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
       operationId 'ShowEndpointFilter'
-      parameter name: :'X-RH-IDENTITY', in: :header, type: :string
+      parameter '$ref' => '#/parameters/RHIdentity'
       parameter name: :id, :in => :path, :type => :integer
 
       let(:'X-RH-IDENTITY') { encoded_header }
@@ -437,10 +411,13 @@ describe 'endpoints API' do
                        }
                      },
                      relationships: {
-                       apps: relationship_spec,
-                       event_types: relationship_spec,
-                       levels: relationship_spec,
-                       endpoint: relation_spec
+                       type: :object,
+                       properties: {
+                         apps: { '$ref' => '#/definitions/relationships' },
+                         event_types: { '$ref' => '#/definitions/relationships' },
+                         levels: { '$ref' => '#/definitions/relationships' },
+                         endpoint: { '$ref' => '#/definitions/relationship' }
+                       }
                      }
                    }
                  }
