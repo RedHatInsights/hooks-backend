@@ -16,7 +16,7 @@ RSpec.describe EndpointsController, type: :controller do
       post :create, params: payload
       expect(response).to have_http_status(:unprocessable_entity)
       data = JSON.parse response.body
-      expect(data['errors']).to match(/failed to locate the subclass: 'Foobar'/)
+      expect(data['errors']).to match(/Cannot find an endpoint type: Foobar/)
     end
 
     it 'does not allow creation of multiple endpoints with the same name' do

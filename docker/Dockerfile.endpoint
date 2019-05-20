@@ -1,0 +1,13 @@
+FROM docker_rails:latest
+RUN dnf install -y nginx
+
+ENV RAILS_ENV development
+
+WORKDIR /app
+
+COPY Gemfile* ./
+COPY docker/endpoint/entrypoint.sh /
+RUN gem install bundler
+RUN bundle install
+
+ENTRYPOINT ["sh", "/entrypoint.sh"]

@@ -4,6 +4,8 @@ SCRIPT_DIRECTORY=$(cd `dirname $0` && pwd)
 APP_ROOT="$SCRIPT_DIRECTORY"/..
 BIN_DIR="$APP_ROOT"/bin
 
+openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout "$APP_ROOT"/tmp/endpoint.key -out "$APP_ROOT"/tmp/endpoint.crt -subj '/CN=endpoint'
+
 pushd "$APP_ROOT"/docker
 docker-compose build
 $BIN_DIR/run_docker bundle install

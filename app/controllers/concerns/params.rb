@@ -9,7 +9,12 @@ module Params
   extend ActiveSupport::Concern
 
   def endpoint_params(root = params)
-    root.require(:endpoint).permit(endpoint_properties)
+    endpoint = root.require(:endpoint)
+    endpoint_class = (endpoint[:type] || 'Endpoint').constantize
+    data_attributes = endpoint_class.stored_parameters
+    endpoint.permit(endpoint_properties + [data: data_attributes])
+  rescue NameError
+    raise ActiveRecord::SubclassNotFound, "Cannot find an endpoint type: #{endpoint[:type]}"
   end
 
   def filter_params(root = params, additional_attributes = [])

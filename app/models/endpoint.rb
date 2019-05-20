@@ -19,6 +19,10 @@ class Endpoint < ApplicationRecord
     ::EndpointPolicy
   end
 
+  def self.stored_parameters
+    []
+  end
+
   STATUS_SUCCESS = 'success'
   STATUS_FAILURE = 'failure'
 end
