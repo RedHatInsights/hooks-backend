@@ -16,7 +16,7 @@ RSpec.describe EndpointsController, type: :controller do
       post :create, params: payload
       expect(response).to have_http_status(:unprocessable_entity)
       data = JSON.parse response.body
-      expect(data['errors']).to match(/Cannot find an endpoint type: Foobar/)
+      expect(data['errors'].first['detail']).to match(/Cannot find an endpoint type: Foobar/)
     end
 
     it 'does not allow creation of multiple endpoints with the same name' do
@@ -35,7 +35,8 @@ RSpec.describe EndpointsController, type: :controller do
       post :create, params: payload
       expect(response).to have_http_status(:unprocessable_entity)
       data = JSON.parse response.body
-      expect(data['errors']).to eq('name' => ['has already been taken'])
+      name_error = data['errors'].find { |e| e['source']&.fetch('pointer') == '/data/attributes/name' }
+      expect(name_error['detail']).to eq('has already been taken')
     end
   end
 
@@ -76,7 +77,7 @@ RSpec.describe EndpointsController, type: :controller do
       get :index, params: { order: 'bogus' }
       expect(response).to have_http_status(:unprocessable_entity)
       data = JSON.parse response.body
-      expect(data['errors']).to eq("Unknown sort order 'bogus'")
+      expect(data['errors'].first['detail']).to eq("Unknown sort order 'bogus'")
     end
   end
 end

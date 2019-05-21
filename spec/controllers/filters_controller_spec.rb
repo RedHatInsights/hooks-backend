@@ -14,8 +14,8 @@ RSpec.describe FiltersController, type: :controller do
     it 'returns 404 if the endpoint does not exist' do
       get :show, params: { endpoint_id: endpoint.id + 1 }
       expect(response).to have_http_status(:not_found)
-      error = JSON.parse(response.body)['errors']
-      expect(error).to eq(not_found_error)
+      errors = JSON.parse(response.body)['errors']
+      expect(errors.first['detail']).to eq(not_found_error)
     end
 
     it 'succeeds if the endpoint exists' do
@@ -38,7 +38,7 @@ RSpec.describe FiltersController, type: :controller do
       expect(endpoint.filter).to be_nil
       get :show, params: { endpoint_id: endpoint.id }
       expect(response).to have_http_status(:not_found)
-      expect(JSON.parse(response.body)['errors']).to eq(not_found_error)
+      expect(JSON.parse(response.body)['errors'].first['detail']).to eq(not_found_error)
     end
 
     it 'returns 404 if the endpoint exists but belongs to another user' do
@@ -46,8 +46,8 @@ RSpec.describe FiltersController, type: :controller do
 
       get :show, params: { endpoint_id: endpoint.id }
       expect(response).to have_http_status(:not_found)
-      error = JSON.parse(response.body)['errors']
-      expect(error).to eq(not_found_error)
+      errors = JSON.parse(response.body)['errors']
+      expect(errors.first['detail']).to eq(not_found_error)
     end
   end
 end

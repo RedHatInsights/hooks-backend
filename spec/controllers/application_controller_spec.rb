@@ -111,7 +111,8 @@ RSpec.describe ApplicationController do
       request.headers['X-RH-IDENTITY'] = encoded_header
       get :index
       body_json = JSON.parse(response.body)
-      expect(body_json['errors']['name']).to include(/can't be blank/)
+      name_error = body_json['errors'].find { |e| e['source']&.fetch('pointer') == '/data/attributes/name' }
+      expect(name_error['detail']).to match(/can't be blank/)
       expect(response.status).to eq(422)
     end
   end
@@ -124,11 +125,12 @@ RSpec.describe ApplicationController do
       end
     end
 
-    it 'responds with errors json on create' do
+    it 'responds with errors json on update' do
       request.headers['X-RH-IDENTITY'] = encoded_header
       get :index
       body_json = JSON.parse(response.body)
-      expect(body_json['errors']['name']).to include(/can't be blank/)
+      name_error = body_json['errors'].find { |e| e['source']&.fetch('pointer') == '/data/attributes/name' }
+      expect(name_error['detail']).to match(/can't be blank/)
       expect(response.status).to eq(422)
     end
   end

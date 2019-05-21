@@ -125,7 +125,8 @@ describe 'endpoints API' do
         run_test! do |response|
           expect(response.code).to eq('422')
           result = JSON.parse(response.body)
-          expect(result['errors']['name']).to include("can't be blank")
+          name_error = result['errors'].find { |e| e['source']&.fetch('pointer') == '/data/attributes/name' }
+          expect(name_error['detail']).to match("can't be blank")
         end
       end
     end
