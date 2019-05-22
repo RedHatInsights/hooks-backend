@@ -7,6 +7,7 @@ class ApplicationController < ActionController::API
   include Params
   include PaginationParameters
   include ErrorHandling
+  include OpenApi::DSL
 
   before_action :set_headers
 

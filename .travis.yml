@@ -16,7 +16,6 @@ env:
 
 install:
   - bundle install
-  - npm install
 
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
@@ -25,7 +24,5 @@ before_script:
 
 script:
   - bundle exec rake rubocop
+  - bundle exec rake documentation:generate
   - bundle exec rake test:validate
-  - bundle exec rake check:matching_docs
-  - npm run swagger2openapi
-  - npm run validate

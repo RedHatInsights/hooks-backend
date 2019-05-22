@@ -21,7 +21,7 @@ namespace :check do
     swagger_doc = File.join(rails_root, 'swagger/v1/swagger.json')
     FileUtils.copy swagger_doc, tmpfile.path
     ENV['SKIP_COVERAGE'] = 'true'
-    Rake::Task['rswag:specs:swaggerize'].invoke
+    Rake::Task['documentation:generate'].invoke
     unless FileUtils.compare_file(swagger_doc, tmpfile.path)
       # rubocop:disable Style/StderrPuts
       STDERR.puts 'The swagger docs were not updated'

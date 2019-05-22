@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class EndpointsController < ApplicationController
+  include Documentation::Endpoints
+
   before_action :find_endpoint, :only => %i[destroy show update test]
 
   ALLOWED_SORT_KEYS = %w[name url active].freeze

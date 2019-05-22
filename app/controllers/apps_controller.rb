@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AppsController < ApplicationController
+  include Documentation::Apps
+
   def index
     process_index App.includes(:event_types), AppSerializer,
                   :opts => { :include => default_includes }

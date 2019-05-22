@@ -2,5 +2,4 @@
 
 /usr/libexec/s2i/assemble
 
-npm install
-npm run swagger2openapi
+RAILS_ENV=production bundle exec rake documentation:generate

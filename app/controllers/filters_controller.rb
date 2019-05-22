@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class FiltersController < ApplicationController
+  include Documentation::Filters
+
   before_action :find_filter, :only => %i[show]
 
   def show

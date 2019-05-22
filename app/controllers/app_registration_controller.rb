@@ -2,6 +2,7 @@
 
 class AppRegistrationController < ActionController::API
   include ErrorHandling
+  include Documentation::AppsRegistration
 
   before_action :assert_internal
 

@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-unless ENV['SKIP_COVERAGE']
-  require 'simplecov'
-  SimpleCov.command_name 'spec'
-end
-
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
