@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   scope "#{ENV['PATH_PREFIX']}/#{ENV['APP_NAME']}" do
-    mount Rswag::Api::Engine => '/api-docs'
+    mount Rswag::Api::Engine => '/'
     mount Rswag::Ui::Engine => 'api-docs'
     # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
