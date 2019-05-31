@@ -12,7 +12,7 @@ module ErrorHandling
       render :json => exception_hash(
         exception,
         status: :internal_server_error,
-        detail: "Server encountered an unexpected error: #{exception.inspect}"
+        detail: 'Server encountered an unexpected error'
       ), status: :internal_server_error
     end
 
@@ -35,7 +35,7 @@ module ErrorHandling
       render :json => exception_hash(
         exception,
         status: :bad_request,
-        detail: "Server cannot accept given parameters, reason: #{exception.inspect}"
+        detail: 'Server cannot accept given parameters'
       ), status: :bad_request
     end
 

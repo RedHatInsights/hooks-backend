@@ -15,7 +15,7 @@ RSpec.describe ApplicationController do
     it 'responds with json error' do
       request.headers['X-RH-IDENTITY'] = encoded_header
       get :index
-      expect(response.body).to match(/Test exception/)
+      expect(response.body).to match(/Server encountered an unexpected error/)
     end
   end
 
