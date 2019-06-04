@@ -18,10 +18,14 @@ module Documentation
             title: String
           },
           event_types: {
-            id: String,
+            id: {
+              one_of: [Integer, String]
+            },
             title: String,
             levels: {
-              id: String,
+              id: {
+                one_of: [Integer, String]
+              },
               title: String
             }
           }

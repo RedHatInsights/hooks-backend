@@ -107,6 +107,34 @@ RSpec.describe AppRegistrationController do
       data = JSON.parse(response.body)
       expect(data['errors']).to eq('Requests with X-RH-IDENTITY are not allowed to register apps.')
     end
+
+    it 'casts the external IDs into strings' do
+      app = Builder::App.build! do |app|
+        app.name 'application'
+        app.event_type(1).level(1)
+      end
+      params = {
+        :application => {
+          :title => 'Application',
+          :name => 'application'
+        },
+        :event_types => [{
+          :id => 1,
+          :title => 'Foo',
+          :levels => [{
+            :id => 1,
+            :title => 'Baz'
+          }]
+        }]
+      }
+
+      post :create, :params => params, :as => :json
+      expect(response.code).to eq('200')
+      app.reload
+      event_type = app.event_types.first
+      expect(event_type.title).to eq('Foo')
+      expect(event_type.levels.first.title).to eq('Baz')
+    end
   end
 end
 # rubocop:enable Metrics/BlockLength

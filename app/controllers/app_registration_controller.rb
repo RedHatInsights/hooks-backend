@@ -31,14 +31,14 @@ class AppRegistrationController < ActionController::API
   end
 
   def handle_nested(scope, records_params, sub_key = nil)
-    destroy_obsolete(scope, records_params.map { |param| param[:id] })
+    destroy_obsolete(scope, records_params.map { |param| param[:id].to_s })
     records = scope.all
     update_present(records, records_params, sub_key)
     create_missing(scope, records_params, records.map(&:external_id), sub_key)
   end
 
   def create_missing(scope, records_params, present_ids, sub_key = nil)
-    records_params.reject { |param| present_ids.include? param[:id] }.each do |record_params|
+    records_params.reject { |param| present_ids.include? param[:id].to_s }.each do |record_params|
       instance = scope.create(inner_params_for(record_params))
       create_missing(instance.public_send(sub_key), record_params.fetch(sub_key, []), []) if sub_key
     end
@@ -46,7 +46,7 @@ class AppRegistrationController < ActionController::API
 
   def update_present(records, records_params, sub_key)
     records.each do |record|
-      record_params = records_params.find { |rp| rp[:id] == record.external_id }
+      record_params = records_params.find { |rp| rp[:id].to_s == record.external_id }
       record.update_attributes(inner_params_for(record_params))
       handle_nested(record.public_send(sub_key), record_params.fetch(sub_key, [])) if sub_key
     end
