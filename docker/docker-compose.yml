@@ -39,7 +39,9 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.rails
     volumes:
-      - ..:/app
+      - ..:/app:Z
+    security_opt:
+      - label=disable
     command: bin/rails server --binding 0.0.0.0
     env_file:
       - postgres.env
@@ -55,7 +57,9 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.endpoint
     volumes:
-      - ..:/app
+      - ..:/app:Z
+    security_opt:
+      - label=disable
     command: bundle exec ruby bin/example_endpoint.rb -o 0.0.0.0
     ports:
       - 4568:4568
@@ -67,7 +71,9 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.rails
     volumes:
-      - ..:/app
+      - ..:/app:Z
+    security_opt:
+      - label=disable
     command: bin/rake environment resque:work
     environment:
       QUEUE: '*'
@@ -86,7 +92,9 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.rails
     volumes:
-      - ..:/app
+      - ..:/app:Z
+    security_opt:
+      - label=disable
     command: bin/rake environment resque:scheduler
     environment:
       REDIS_SERVICE_NAME: mcom-redis
@@ -103,7 +111,9 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.rails
     volumes:
-      - ..:/app
+      - ..:/app:Z
+    security_opt:
+      - label=disable
     command: bundle exec racecar JobCreatorConsumer
     environment:
       KAFKA_BROKER_HOST: kafka
