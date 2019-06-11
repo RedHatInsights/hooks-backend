@@ -44,6 +44,8 @@ services:
     env_file:
       - postgres.env
       - app.env
+    environment:
+      RAILS_LOG_TO_STDOUT: "true"
     ports:
       - 3000:3000
     depends_on:
@@ -73,6 +75,7 @@ services:
       REDIS_PASSWORD: redispass
       MCOM_REDIS_SERVICE_HOST: mcom-redis
       JOBS_PER_FORK: 50
+      RAILS_LOG_TO_STDOUT: "true"
     env_file:
       - postgres.env
     depends_on:
@@ -89,6 +92,7 @@ services:
       REDIS_SERVICE_NAME: mcom-redis
       REDIS_PASSWORD: redispass
       MCOM_REDIS_SERVICE_HOST: mcom-redis
+      RAILS_LOG_TO_STDOUT: "true"
     env_file:
       - postgres.env
     depends_on:
@@ -107,6 +111,7 @@ services:
       REDIS_SERVICE_NAME: mcom-redis
       REDIS_PASSWORD: redispass
       MCOM_REDIS_SERVICE_HOST: mcom-redis
+      RAILS_LOG_TO_STDOUT: "true"
     env_file:
       - postgres.env
     depends_on:

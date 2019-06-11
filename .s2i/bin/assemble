@@ -3,3 +3,4 @@
 /usr/libexec/s2i/assemble
 
 RAILS_ENV=production bundle exec rake documentation:generate
+rm log/production.log
