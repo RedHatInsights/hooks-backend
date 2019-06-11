@@ -2,7 +2,7 @@
 
 ## Usage
 
-The main entry point to send messages is a predefined Kafka topic: `notifications.outbox`. Messages from that topic would be processed by notifications backend and sent to different services according to user's preferences.
+The main entry point to send messages is a predefined Kafka topic: `hooks.outbox`. Messages from that topic would be processed by notifications backend and sent to different services according to user's preferences.
 
 ## Architecture
 
@@ -26,7 +26,7 @@ to a URL (which is also part of the properties) of a notification service. Good
 examples for such services would be slack, sms senders e.t.c.
 
 ### Basic flow
-The process starts when a message arrives on `notifications.outbox` Kafka topic.
+The process starts when a message arrives on `hooks.outbox` Kafka topic.
 This message is passed to a *dispatcher*.
 
 Dispatcher is responsible to find out
