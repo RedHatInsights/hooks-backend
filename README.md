@@ -11,8 +11,8 @@ different _endpoints_.
 
 ### Components
 
-*Message*: A JSON payload with predefined fields: `Application`, `Event type`,
-`Level`, `Message` and `Timestamp`.
+*Message*: A JSON payload with predefined fields: `application`, `event_type`,
+`level`, `message`, `timestamp` and `account_id`.
 
 *Dispatcher*: Component that is responsible for receiving incoming _messages_ and
 deciding (based on _filters_) which _endpoint_ should receive the message.
