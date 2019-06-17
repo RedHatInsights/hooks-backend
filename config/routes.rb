@@ -12,9 +12,10 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :endpoints, :except => %(edit new) do
+    resources :endpoints, :except => %i[edit new update] do
       resource :filter, :only => %(show)
       member do
+        put '', to: 'endpoints#update'
         post 'test', to: 'endpoints#test'
       end
     end

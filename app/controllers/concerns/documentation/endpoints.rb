@@ -36,7 +36,7 @@ module Documentation
 
       incoming_endpoint_spec = {
         endpoint: {
-          url: 'url',
+          url: { type: String, format: 'uri' },
           name: String,
           'type' => String,
           filter: {

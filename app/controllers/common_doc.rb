@@ -58,19 +58,23 @@ class DocsController < ApplicationController
   components do
     schema :Links, type: {
       first: {
-        type: 'uri',
+        type: String,
+        format: 'uri',
         description: 'Link to the first page of records'
       },
       last: {
-        type: 'uri',
+        type: String,
+        format: 'uri',
         description: 'Link to the last page of records'
       },
       previous: {
-        type: 'uri',
+        type: String,
+        format: 'uri',
         description: 'Link to previous page of records, if such page exists'
       },
       next: {
-        type: 'uri',
+        type: String,
+        format: 'uri',
         description: 'Link to next page of records, if such page exists'
       }
     }
