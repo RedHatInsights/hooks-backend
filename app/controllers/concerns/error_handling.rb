@@ -5,9 +5,6 @@ module ErrorHandling
 
   # rubocop:disable Metrics/BlockLength
   included do
-    class UnknownOrder < RuntimeError; end
-    class BadRequest < RuntimeError; end
-
     rescue_from StandardError do |exception|
       render :json => exception_hash(
         exception,
@@ -39,7 +36,7 @@ module ErrorHandling
       ), status: :bad_request
     end
 
-    rescue_from ActiveRecord::SubclassNotFound, UnknownOrder do |exception|
+    rescue_from ActiveRecord::SubclassNotFound, UnknownOrder, UnknownSearch do |exception|
       render_unprocessable_entity exception
     end
   end

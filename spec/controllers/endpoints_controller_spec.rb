@@ -79,6 +79,49 @@ RSpec.describe EndpointsController, type: :controller do
       data = JSON.parse response.body
       expect(data['errors'].first['detail']).to eq("Unknown sort order 'bogus'")
     end
+
+    it 'fails to search with unknown field' do
+      get :index, params: { q: 'test_field~test_val' }
+      expect(response).to have_http_status(:unprocessable_entity)
+      data = JSON.parse response.body
+      expect(data['errors'].first['detail']).to eq('test_field is not marked searchable')
+    end
+
+    it 'fails to search with bad query' do
+      get :index, params: { q: 'test,bleh' }
+      expect(response).to have_http_status(:unprocessable_entity)
+      data = JSON.parse response.body
+      expect(data['errors'].first['detail']).to eq('test is not valid search codition, should be field~value')
+    end
+
+    it 'searches by url' do
+      good = FactoryBot.create(:http_endpoint, :account => account, url: 'http://good.com')
+      FactoryBot.create(:http_endpoint, :account => account, url: 'http://bad.com')
+      get :index, params: { q: 'url~good' }
+      expect(response).to have_http_status(:ok)
+      data = JSON.parse response.body
+      expect(data['data'].map { |h| h['id'].to_i }).to eq([good.id])
+    end
+
+    it 'searches by name' do
+      good = FactoryBot.create(:http_endpoint, :account => account, name: 'test_good_name')
+      FactoryBot.create(:http_endpoint, :account => account, name: 'test_bad_name')
+      get :index, params: { q: 'name~good' }
+      expect(response).to have_http_status(:ok)
+      data = JSON.parse response.body
+      expect(data['data'].map { |h| h['id'].to_i }).to eq([good.id])
+    end
+
+    it 'searches by both name and url' do
+      good_name = FactoryBot.create(:http_endpoint, :account => account, name: 'test_good_name')
+      FactoryBot.create(:http_endpoint, :account => account, name: 'test_bad_name')
+      good_url = FactoryBot.create(:http_endpoint, :account => account, url: 'http://test_good_url.example.com')
+      FactoryBot.create(:http_endpoint, :account => account, url: 'http://test_bad_url.example.com')
+      get :index, params: { q: 'good' }
+      expect(response).to have_http_status(:ok)
+      data = JSON.parse response.body
+      expect(data['data'].map { |h| h['id'].to_i }).to match_array([good_name.id, good_url.id])
+    end
   end
 end
 # rubocop:enable Metrics/BlockLength

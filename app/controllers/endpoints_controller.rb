@@ -2,13 +2,17 @@
 
 class EndpointsController < ApplicationController
   include Documentation::Endpoints
+  include QueryParameters
+
+  allow_search_on :url, :name
 
   before_action :find_endpoint, :only => %i[destroy show update test]
 
   ALLOWED_SORT_KEYS = %w[name url active].freeze
 
   def index
-    process_index Endpoint, EndpointSerializer,
+    base = Endpoint.where(generate_query_arel(Endpoint))
+    process_index base, EndpointSerializer,
                   default_sort: 'name', allowed_sort_keys: ALLOWED_SORT_KEYS
   end
 

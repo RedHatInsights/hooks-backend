@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+class UnknownOrder < RuntimeError; end
+class UnknownSearch < RuntimeError; end
+class BadRequest < RuntimeError; end
+
 class ApplicationController < ActionController::API
   include ActionController::Helpers
   include Pundit
