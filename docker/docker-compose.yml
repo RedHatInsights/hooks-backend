@@ -48,10 +48,12 @@ services:
       - app.env
     environment:
       RAILS_LOG_TO_STDOUT: "true"
+      APPLICATION_TYPE: hooks-backend
     ports:
       - 3000:3000
     depends_on:
       - postgres
+      - prometheus-exporter
   endpoint:
     build:
       context: ..
@@ -82,11 +84,14 @@ services:
       MCOM_REDIS_SERVICE_HOST: mcom-redis
       JOBS_PER_FORK: 50
       RAILS_LOG_TO_STDOUT: "true"
+      APPLICATION_TYPE: hooks-resque
     env_file:
       - postgres.env
+      - app.env
     depends_on:
       - postgres
       - mcom-redis
+      - prometheus-exporter
   resque-scheduler:
     build:
       context: ..
@@ -101,11 +106,14 @@ services:
       REDIS_PASSWORD: redispass
       MCOM_REDIS_SERVICE_HOST: mcom-redis
       RAILS_LOG_TO_STDOUT: "true"
+      APPLICATION_TYPE: hooks-scheduler
     env_file:
       - postgres.env
+      - app.env
     depends_on:
       - postgres
       - mcom-redis
+      - prometheus-exporter
   racecar:
     build:
       context: ..
@@ -122,13 +130,27 @@ services:
       REDIS_PASSWORD: redispass
       MCOM_REDIS_SERVICE_HOST: mcom-redis
       RAILS_LOG_TO_STDOUT: "true"
+      APPLICATION_TYPE: hooks-consumer
     env_file:
       - postgres.env
+      - app.env
     depends_on:
       - kafka
       - mcom-redis
       - postgres
+      - prometheus-exporter
     restart: on-failure
+  prometheus-exporter:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.rails
+    volumes:
+      - ..:/app
+    command: bundle exec prometheus_exporter -a lib/racecar_collector.rb -a lib/resque_collector.rb
+    ports:
+      - 9394:9394
+    expose:
+      - 9394
   # consumer:
   #   build: ./consumer
   #   image: consumer:latest

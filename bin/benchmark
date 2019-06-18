@@ -27,7 +27,7 @@ cd "${APP_ROOT}/docker"
 
 docker-compose $COMPOSE_FILES up -d zookeeper
 sleep 1
-docker-compose $COMPOSE_FILES up -d kafka postgres mcom-redis
+docker-compose $COMPOSE_FILES up -d kafka postgres mcom-redis prometheus prometheus-exporter
 sleep 10 # Need to wait for kafka to come up
 docker-compose $COMPOSE_FILES up -d racecar resque
 

@@ -29,3 +29,12 @@ services:
       RACECAR_GROUP_ID: job-creator-consumer
     env_file:
       - postgres.env
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - prometheus-exporter
+    ports:
+      - 9090:9090
+

@@ -28,3 +28,8 @@ Resque.before_child_exit do
   #   /usr/share/gems/gems/resque-2.0.0/lib/resque/tasks.rb:20:in `block (2 levels) in <main>'
   #   Tasks: TOP => resque:work
 end
+
+Resque.after_fork do
+  require 'prometheus_exporter/instrumentation'
+  PrometheusExporter::Instrumentation::Process.start
+end
