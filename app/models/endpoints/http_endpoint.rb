@@ -16,7 +16,7 @@ module Endpoints
       end
 
       validate_response(response)
-    rescue Timeout::Error => e
+    rescue Timeout::Error, Errno::ECONNREFUSED => e
       raise Notifications::RecoverableError, e
     end
 
