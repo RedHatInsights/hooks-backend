@@ -22,7 +22,8 @@ class DispatcherTest < ActiveSupport::TestCase
     filter
     job_class = mock
     dispatcher.stubs(:job_class).returns(job_class)
-    job_class.expects(:perform_later).with(endpoint, msg.timestamp, msg.level, msg.message)
+    job_class.expects(:perform_later)
+             .with(endpoint, msg.timestamp, msg.application, msg.event_type, msg.level, msg.message)
     dispatcher.dispatch!
   end
 end

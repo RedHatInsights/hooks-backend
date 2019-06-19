@@ -6,14 +6,16 @@ class Dispatcher
     @message = message
   end
 
+  # rubocop:disable Metrics/AbcSize
   def dispatch!
     Rails.logger.info("Dispatching: #{@message.to_h}")
 
     endpoints.each do |endpoint|
-      job_class.perform_later(endpoint, timestamp, level, message)
+      job_class.perform_later(endpoint, timestamp, application, event_type, level, message)
       Rails.logger.info("Enqueued #{job_class} with endpoint: #{endpoint.id}")
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -38,5 +40,13 @@ class Dispatcher
 
   def message
     @message.message
+  end
+
+  def event_type
+    @message.event_type
+  end
+
+  def application
+    @message.application
   end
 end

@@ -5,8 +5,9 @@ require 'uri'
 
 module Endpoints
   class HttpEndpoint < Endpoint
-    def send_message(timestamp:, level:, message:)
-      payload = to_payload(timestamp: timestamp, level: level, message: message)
+    def send_message(timestamp:, level:, message:, event_type:, application:)
+      payload = to_payload(timestamp: timestamp, message: message,
+                           application: application, event_type: event_type, level: level)
       response = nil
 
       http_request do |connection|
@@ -25,9 +26,11 @@ module Endpoints
       URI(url)
     end
 
-    def to_payload(timestamp:, level:, message:)
+    def to_payload(timestamp:, level:, message:, event_type:, application:)
       {
         timestamp: timestamp,
+        application: application,
+        event_type: event_type,
         level: level,
         message: message
       }.to_json

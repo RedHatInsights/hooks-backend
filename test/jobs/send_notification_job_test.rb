@@ -7,6 +7,8 @@ class SendNotificationJobTest < ActiveJob::TestCase
   let(:endpoint) { FactoryBot.create(:endpoint, :with_account) }
   let(:timestamp) { Time.current.to_s }
   let(:level) { 'test_level' }
+  let(:application) { 'test_application' }
+  let(:event_type) { 'test_event_type' }
   let(:message_text) { 'testing 1,2,3' }
 
   it 'Performs the job once on success' do
@@ -16,7 +18,7 @@ class SendNotificationJobTest < ActiveJob::TestCase
     DateTime.expects(:current).returns(expected_time)
 
     assert_performed_jobs(1) do
-      SendNotificationJob.perform_later(endpoint, timestamp, level, message_text)
+      SendNotificationJob.perform_later(endpoint, timestamp, application, event_type, level, message_text)
     end
 
     endpoint.reload
@@ -33,7 +35,7 @@ class SendNotificationJobTest < ActiveJob::TestCase
             .then.returns(expected_time + 2.seconds)
 
     assert_performed_jobs(3) do
-      SendNotificationJob.perform_later(endpoint, timestamp, level, message_text)
+      SendNotificationJob.perform_later(endpoint, timestamp, application, event_type, level, message_text)
     end
 
     endpoint.reload
@@ -51,7 +53,7 @@ class SendNotificationJobTest < ActiveJob::TestCase
     DateTime.expects(:current).returns(expected_time)
 
     assert_performed_jobs(1) do
-      SendNotificationJob.perform_later(endpoint, timestamp, level, message_text)
+      SendNotificationJob.perform_later(endpoint, timestamp, application, event_type, level, message_text)
     end
 
     endpoint.reload
