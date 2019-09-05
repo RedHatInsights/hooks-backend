@@ -38,6 +38,42 @@ RSpec.describe EndpointsController, type: :controller do
       name_error = data['errors'].find { |e| e['source']&.fetch('pointer') == '/data/attributes/name' }
       expect(name_error['detail']).to eq('has already been taken')
     end
+
+    it 'creates HTTP endpoint if no type is given and URL is http' do
+      payload = { endpoint: { url: 'http://something.somwehere.com', name: 'Default HTTP' } }
+      request.headers['X-RH-IDENTITY'] = encoded_header
+      post :create, params: payload
+
+      data = JSON.parse response.body
+      expect(data['data']['attributes']['type']).to eq(Endpoints::HttpEndpoint.name)
+    end
+
+    it 'creates HTTP endpoint if no type is given and URL is https' do
+      payload = { endpoint: { url: 'https://something.somwehere.com', name: 'Default HTTPS' } }
+      request.headers['X-RH-IDENTITY'] = encoded_header
+      post :create, params: payload
+
+      data = JSON.parse response.body
+      expect(data['data']['attributes']['type']).to eq(Endpoints::HttpsEndpoint.name)
+    end
+  end
+
+  describe 'POST #update' do
+    before { request.headers['X-RH-IDENTITY'] = encoded_header }
+    let(:https_endpoint) { FactoryBot.create(:https_endpoint, :with_certificate, :account => account) }
+
+    it 'changes endpoint type when scheme changes' do
+      original_payload = { endpoint: { url: https_endpoint.url, data: https_endpoint.data } }
+      payload = { endpoint: { url: https_endpoint.url.sub('https', 'http'), data: https_endpoint.data } }
+
+      put :update, params: payload.merge(id: https_endpoint.id)
+      data = JSON.parse response.body
+      expect(data['data']['attributes']['type']).to eq(Endpoints::HttpEndpoint.name)
+
+      put :update, params: original_payload.merge(id: https_endpoint.id)
+      data = JSON.parse response.body
+      expect(data['data']['attributes']['type']).to eq(Endpoints::HttpsEndpoint.name)
+    end
   end
 
   describe 'GET #index' do

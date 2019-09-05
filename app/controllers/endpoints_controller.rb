@@ -38,7 +38,8 @@ class EndpointsController < ApplicationController
   end
 
   def update
-    full_params = endpoint_params.merge(transform_filter_params)
+    updated_params = endpoint_params.merge(type: determine_type(endpoint_params['url']).name)
+    full_params = updated_params.merge(transform_filter_params)
     process_update(@endpoint, full_params, EndpointSerializer)
   end
 
@@ -66,11 +67,22 @@ class EndpointsController < ApplicationController
   def build_endpoint
     endpoint = Endpoint.new(endpoint_params)
     endpoint.account = current_user.account
-    endpoint.type ||= Endpoint.name
+    endpoint.type = determine_type(endpoint.url)
 
     authorize(endpoint.build_filter(build_filter_attributes(nested_filter))) if nested_filter
 
     endpoint
+  end
+
+  def determine_type(url)
+    case URI(url).scheme
+    when 'http'
+      Endpoints::HttpEndpoint
+    when 'https'
+      Endpoints::HttpsEndpoint
+    else
+      Endpoint
+    end
   end
 
   def transform_filter_params

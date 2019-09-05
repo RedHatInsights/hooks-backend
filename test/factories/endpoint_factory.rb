@@ -4,7 +4,7 @@
 FactoryBot.define do
   factory :endpoint, :class => ::Endpoint do
     sequence(:name) { |i| "endpoint#{i}" }
-    sequence(:url) { |i| "https://something.somewhere.com?foo=#{i}" }
+    sequence(:url) { |i| "http://something.somewhere.com?foo=#{i}" }
     type { ::Endpoint.name }
 
     trait :with_account do
@@ -17,6 +17,7 @@ FactoryBot.define do
 
     factory :https_endpoint, class: Endpoints::HttpsEndpoint do
       type { Endpoints::HttpsEndpoint.name }
+      sequence(:url) { |i| "https://something.somewhere.com?foo=#{i}" }
 
       trait :with_certificate do
         server_ca_certificate do

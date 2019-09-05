@@ -89,10 +89,13 @@ ERROR
     assert_equal 'TEST', actual.server_ca_certificate
   end
 
-  it 'fails validation without server_ca_certificate key' do
+  it 'passes validation without server_ca_certificate key' do
+    endpoint.account_id
     params = ActionController::Parameters.new(
       endpoint: {
-        type: 'Endpoints::HttpsEndpoint',
+        name: 'Endpoint',
+        url: 'https://something.somewhere.com',
+        type: '::Endpoints::HttpsEndpoint',
         data: {
           foo: 'FAIL'
         }
@@ -100,13 +103,10 @@ ERROR
     )
 
     actual = Endpoints::HttpsEndpoint.new(endpoint_params(params))
+    actual.account = endpoint.account
 
+    assert actual.valid?
     assert_nil actual.data[:foo]
-    assert_not actual.valid?
     assert_nil actual.server_ca_certificate
-    assert_includes(
-      actual.errors.full_messages,
-      'Data must contain server_ca_certificate attribute'
-    )
   end
 end

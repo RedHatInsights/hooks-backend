@@ -38,14 +38,19 @@ module Endpoints
 
     def ca_cert_store
       store = OpenSSL::X509::Store.new
-      certificates_chain&.each do |cert|
-        store.add_cert(cert)
+      if server_ca_certificate.blank?
+        store.set_default_paths
+      else
+        certificates_chain&.each do |cert|
+          store.add_cert(cert)
+        end
       end
       store
     end
 
     def server_ca_certificate_is_a_valid_chain
-      errors.add(:data, 'must contain server_ca_certificate attribute') unless certificates_chain
+      certificates_chain
+      true
     rescue OpenSSL::X509::CertificateError => e
       errors.add(:data, "attribute server_ca_certificate contains invalid certificate: #{e.message}")
     end
