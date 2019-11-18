@@ -8,7 +8,7 @@ class DispatcherTest < ActiveSupport::TestCase
   let(:filter) { FactoryBot.create(:filter, endpoint: endpoint, account: endpoint.account) }
   let(:msg) do
     Message.new(
-      account_id: endpoint.account_id,
+      account_id: endpoint.account.account_number,
       application: 'app',
       event_type: 'something',
       level: 'low',

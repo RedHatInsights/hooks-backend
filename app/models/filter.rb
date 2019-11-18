@@ -17,8 +17,9 @@ class Filter < ApplicationRecord
   has_many :event_types, :through => :event_type_filters, :dependent => :destroy, :inverse_of => :filters
 
   scope(:matching_message, lambda do |message|
-    left_outer_joins(:apps, :event_types, :levels)
-      .where(:enabled => true, :account_id => message.account_id)
+    left_outer_joins(:apps, :event_types, :levels, :account)
+      .where(:enabled => true)
+      .merge(Account.where(:account_number => message.account_id))
       .merge(App.where(:name => [message.application, nil]))
       .merge(EventType.where(:external_id => [message.event_type, nil]))
       .merge(Level.where(:external_id => [message.level, nil]))

@@ -27,8 +27,8 @@ class FilterTest < ActiveSupport::TestCase
   let(:account) { FactoryBot.create(:account) }
   let(:msg) do
     Message.new :application => app.name, :event_type => app.event_types.first.external_id,
-                :level => 'critical', :account_id => account.id, :timestamp => Time.zone.now,
-                :message => 'hello'
+                :level => 'critical', :account_id => account.account_number,
+                :timestamp => Time.zone.now, :message => 'hello'
   end
   let(:event_types) { %w[something something-else yet-something-else] }
   let(:levels) { %w[low medium high critical] }
